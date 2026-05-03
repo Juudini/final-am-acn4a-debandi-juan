@@ -16,9 +16,10 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:padding="@dimen/spacing_6"
+        android:elevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" >
         <TextView
             android:id="@+id/topHeader_Label"
             android:layout_width="match_parent"
@@ -34,8 +35,7 @@
             android:layout_width="@dimen/icon_base"
             android:layout_height="@dimen/icon_base"
             android:src="@drawable/ic_search"
-            app:tint="@color/text_secondary"
-            />
+            app:tint="@color/text_secondary" />
     </LinearLayout>
 
     <com.google.android.material.card.MaterialCardView
@@ -50,16 +50,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:strokeWidth="0dp">
-
         <LinearLayout
             android:id="@+id/bottomNavbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/size_20"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/spacing_4"
             android:paddingVertical="@dimen/spacing_2">
-
             <Button
                 android:id="@+id/bottomNavbar_BtnHome"
                 android:layout_width="match_parent"
@@ -68,9 +66,6 @@
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:padding="@dimen/spacing_1"
-                android:paddingLeft="@dimen/spacing_0"
-                android:paddingTop="@dimen/spacing_0"
-                android:paddingRight="@dimen/spacing_0"
                 android:paddingBottom="@dimen/spacing_0"
                 android:text="@string/bottomNavbar_BtnHomeLabel"
                 android:textColor="@color/text_selected"
@@ -96,10 +91,6 @@
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:padding="@dimen/spacing_1"
-                android:paddingLeft="@dimen/spacing_0"
-                android:paddingTop="@dimen/spacing_0"
-                android:paddingRight="@dimen/spacing_0"
-                android:paddingBottom="@dimen/spacing_0"
                 android:text="@string/bottomNavbar_BtnWatchlistLabel"
                 android:textColor="@color/text_primary"
                 android:textSize="@dimen/text_xs"
@@ -124,10 +115,6 @@
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:padding="@dimen/spacing_1"
-                android:paddingLeft="@dimen/spacing_0"
-                android:paddingTop="@dimen/spacing_0"
-                android:paddingRight="@dimen/spacing_0"
-                android:paddingBottom="@dimen/spacing_0"
                 android:text="@string/bottomNavbar_BtnCategoriesLabel"
                 android:textColor="@color/text_primary"
                 android:textSize="@dimen/text_xs"
@@ -145,18 +132,140 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_0"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavbarWrapper"
-        app:layout_constraintTop_toTopOf="@id/topHeader">
-
+        app:layout_constraintTop_toTopOf="@id/topHeader"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavbarWrapper">
         <LinearLayout
             android:id="@+id/mainScrollView"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/size_0"
+            android:layout_height="wrap_content"
             android:background="@color/bg_surface"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"></LinearLayout>
+            android:orientation="vertical">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+               <ImageView
+                    android:id="@+id/hero_BgImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_echoes_eternity"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+               <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:cardBackgroundColor="@color/bg_shadow"
+                    app:cardCornerRadius="@dimen/radius_none"
+                    app:layout_constraintTop_toTopOf="@id/hero_BgImage"
+                    app:layout_constraintBottom_toBottomOf="@id/hero_BgImage"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/spacing_4"
+                        android:layout_gravity="bottom">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/spacing_2"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:letterSpacing="@dimen/ls_wider"
+                                android:text="PREMIERE"
+                                android:textAllCaps="true"
+                                android:textColor="@color/text_primary"
+                                android:textSize="@dimen/text_xs" />
+
+                            <Space
+                                android:layout_width="@dimen/spacing_4"
+                                android:layout_height="wrap_content" />
+
+                            <ImageView
+                                android:layout_width="@dimen/icon_base"
+                                android:layout_height="@dimen/icon_base"
+                                android:src="@drawable/ic_star_rate"
+                                app:tint="@color/bg_selected" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/spacing_1"
+                                android:text="9.4"
+                                android:textColor="@color/text_primary"
+                                android:textSize="@dimen/text_xs"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/heroSection_Label"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/spacing_3"
+                            android:lineSpacingExtra="-8dp"
+                            android:text="@string/heroSection_Label"
+                            android:textColor="@color/text_primary"
+                            android:textSize="@dimen/text_5xl"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/heroSection_Description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/spacing_4"
+                            android:text="@string/heroSection_Description"
+                            android:textColor="@color/text_primary"
+                            android:textSize="@dimen/text_lg" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/heroSection_BtnPlay"
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/icon_xl"
+                                android:layout_weight="1"
+                                android:letterSpacing="@dimen/ls_wide"
+                                android:text="@string/heroSection_BtnPlayLabel"
+                                android:textColor="@color/text_selected"
+                                android:textStyle="bold"
+                                android:textAllCaps="true"
+                                app:backgroundTint="@color/bg_selected"
+                                app:cornerRadius="@dimen/radius_md"
+                                app:icon="@drawable/ic_play"
+                                app:iconGravity="textStart"
+                                app:iconTint="@color/icon_selected" />
+
+                            <Space
+                                android:layout_width="@dimen/spacing_3"
+                                android:layout_height="wrap_content" />
+
+                            <Button
+                                android:id="@+id/hero_BtnBookmark"
+                                android:layout_width="@dimen/icon_xl"
+                                android:layout_height="@dimen/icon_xl"
+                                app:backgroundTint="@android:color/transparent"
+                                app:cornerRadius="@dimen/radius_md"
+                                app:icon="@drawable/ic_add_to_watchlist"
+                                app:iconGravity="textStart"
+                                app:iconPadding="0dp"
+                                app:iconTint="@color/bg_selected"
+                                app:strokeColor="@color/border_default"
+                                app:strokeWidth="1dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">parcial-1-am-acn4a-debandi-juan</string>
     <string name="headerLabel">Cinemapedia</string>
+    <string name="heroSection_Label">ECHOES\nOF ETERNITY</string>
+    <string name="heroSection_Description">A rogue archivist uncovers a temporal anomaly hidden within a silent film from 1927, triggering a race against time to prevent the erasure of modern history.</string>
     <string name="bottomNavbar_BtnHomeLabel">Home</string>
+    <string name="heroSection_BtnPlayLabel">Watch Trailer</string>
     <string name="bottomNavbar_BtnSearchLabel">Search</string>
     <string name="bottomNavbar_BtnCategoriesLabel">Categories</string>
     <string name="bottomNavbar_BtnWatchlistLabel">Watchlist</string>

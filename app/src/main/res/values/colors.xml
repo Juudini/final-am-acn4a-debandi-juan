@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="bg_lowest">#000000</color>
+    <color name="bg_shadow">#A6000000</color>
     <color name="bg_default">#0E0E0E</color>
     <color name="bg_surface">#131313</color>
     <color name="bg_surface_raised">#1A1919</color>
