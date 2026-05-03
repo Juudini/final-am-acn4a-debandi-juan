@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="@dimen/spacing_6"
+        android:padding="@dimen/spacing_3"
         android:elevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -130,12 +130,12 @@
     </com.google.android.material.card.MaterialCardView>
 
     <ScrollView
+        android:id="@+id/mainScrollView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_0"
         app:layout_constraintTop_toTopOf="@id/topHeader"
         app:layout_constraintBottom_toTopOf="@id/bottomNavbarWrapper">
         <LinearLayout
-            android:id="@+id/mainScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/bg_surface"
@@ -182,7 +182,7 @@
                                 android:letterSpacing="@dimen/ls_wider"
                                 android:text="PREMIERE"
                                 android:textAllCaps="true"
-                                android:textColor="@color/text_primary"
+                                android:textColor="@color/text_title"
                                 android:textSize="@dimen/text_xs" />
 
                             <Space
@@ -200,7 +200,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/spacing_1"
                                 android:text="9.4"
-                                android:textColor="@color/text_primary"
+                                android:textColor="@color/text_title"
                                 android:textSize="@dimen/text_xs"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -212,7 +212,7 @@
                             android:layout_marginBottom="@dimen/spacing_3"
                             android:lineSpacingExtra="-8dp"
                             android:text="@string/heroSection_Label"
-                            android:textColor="@color/text_primary"
+                            android:textColor="@color/text_title"
                             android:textSize="@dimen/text_5xl"
                             android:textStyle="bold" />
 
@@ -266,6 +266,7 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -285,7 +286,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Trending Now"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/text_title"
                         android:textSize="@dimen/text_xl"
                         android:textStyle="bold" />
 
@@ -312,6 +313,48 @@
                         android:orientation="horizontal">
                     </LinearLayout>
                 </HorizontalScrollView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/spacing_6"
+                android:paddingBottom="@dimen/spacing_6">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/spacing_4"
+                    android:layout_marginBottom="@dimen/spacing_4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="New Releases"
+                        android:textColor="@color/text_title"
+                        android:textSize="@dimen/text_xl"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="VIEW ALL"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="@dimen/text_xs"
+                        android:textStyle="bold"
+                        android:letterSpacing="@dimen/ls_wider" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/newReleasesContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="@dimen/spacing_4">
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

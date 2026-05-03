@@ -70,7 +70,10 @@
     <dimen name="icon_md">32dp</dimen>
     <dimen name="icon_lg">40dp</dimen>
     <dimen name="icon_xl">48dp</dimen>
+
     <!-- Movies cards -->
     <dimen name="movie_card_width">140dp</dimen>
     <dimen name="movie_card_height">200dp</dimen>
+    <dimen name="newRelease_card_width">100dp</dimen>
+    <dimen name="newRelease_card_height">140dp</dimen>
 </resources>
