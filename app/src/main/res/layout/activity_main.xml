@@ -27,7 +27,9 @@
             android:text="@string/headerLabel"
             android:textColor="@color/text_secondary"
             android:textSize="@dimen/text_3xl"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:letterSpacing="@dimen/ls_tighter"/>
         <ImageView
             android:layout_width="@dimen/icon_base"
             android:layout_height="@dimen/icon_base"
