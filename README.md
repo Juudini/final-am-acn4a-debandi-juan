@@ -50,6 +50,15 @@ Aplicación Android nativa (Java) de películas que consume datos en tiempo real
 
 4. Sincronizá Gradle y ejecutá en un emulador o dispositivo (API 24+).
 
+> ⚠️ **Importante:** el archivo `google-services.json` es obligatorio para compilar. El plugin `com.google.gms.google-services` está aplicado en `app/build.gradle`, por lo que **sin ese archivo en `app/` el build falla** en la tarea `processDebugGoogleServices`. De la misma forma, sin la `TMDB_API_KEY` en `local.properties` la app compila pero las llamadas a la API devuelven 401.
+
+## 🩹 Solución de problemas
+
+- **El build falla en `processDebugGoogleServices`:** falta `app/google-services.json`. Descargalo desde Firebase Console (app Android con package `com.example.parcial_2_am_acn4a_debandi_juan`) y colocalo en `app/`.
+- **Las películas no cargan / error 401:** revisá que `TMDB_API_KEY` en `local.properties` sea el *API Read Access Token* (v4) y volvé a sincronizar Gradle.
+- **`Cannot resolve symbol R` o `BuildConfig` en el IDE:** es caché de Android Studio. Hacé **File → Sync Project with Gradle Files** y, si persiste, **File → Invalidate Caches… → Invalidate and Restart**.
+- **El login o el watchlist no funcionan:** verificá que en Firebase estén habilitados **Authentication → Email/Password** y **Cloud Firestore Database**, con las reglas del watchlist aplicadas.
+
 ## 🌿 Flujo de trabajo (Git)
 
 Modelo de ramas: `main` → `develop` → ramas `feature/*` (una por funcionalidad), integradas a `develop` mediante Pull Requests, siguiendo **Conventional Commits**.
