@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
-    // app/google-services.json.
-    // alias(libs.plugins.google.services)
+    alias(libs.plugins.google.services)
 }
 
 // Cargamos secretos
