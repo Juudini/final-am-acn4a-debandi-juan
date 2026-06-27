@@ -22,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.Movie;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.MovieResponse;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.network.RetrofitClient;
+import com.example.parcial_2_am_acn4a_debandi_juan.data.WatchlistRepository;
 import com.example.parcial_2_am_acn4a_debandi_juan.util.AuthManager;
 import com.example.parcial_2_am_acn4a_debandi_juan.util.ImageLoader;
 import com.example.parcial_2_am_acn4a_debandi_juan.util.MovieViewFactory;
@@ -82,10 +83,24 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.bottomNavbar_BtnWatchlist).setOnClickListener(v -> {
             if (AuthManager.isLoggedIn()) {
-                Toast.makeText(this, AuthManager.getEmail(), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, WatchlistActivity.class));
             } else {
                 startActivity(new Intent(this, LoginActivity.class));
             }
+        });
+
+        findViewById(R.id.hero_BtnBookmark).setOnClickListener(v -> {
+            if (!AuthManager.isLoggedIn()) {
+                startActivity(new Intent(this, LoginActivity.class));
+                return;
+            }
+            if (heroMovie == null) {
+                return;
+            }
+            WatchlistRepository.add(heroMovie, success ->
+                    Toast.makeText(this,
+                            success ? R.string.watchlist_added : R.string.error_network,
+                            Toast.LENGTH_SHORT).show());
         });
 
         trendingMoviesContainer = findViewById(R.id.trendingMoviesContainer);
