@@ -76,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.topHeader_BtnSearch).setOnClickListener(v ->
                 startActivity(new Intent(this, SearchActivity.class)));
 
+        findViewById(R.id.bottomNavbar_BtnCategories).setOnClickListener(v ->
+                startActivity(new Intent(this, CategoriesActivity.class)));
+
         trendingMoviesContainer = findViewById(R.id.trendingMoviesContainer);
         newReleasesContainer = findViewById(R.id.newReleasesContainer);
 
