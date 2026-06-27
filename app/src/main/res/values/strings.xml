@@ -27,4 +27,14 @@
 
     <string name="categories_title">Categories</string>
     <string name="categories_empty">No movies in this category</string>
+
+    <string name="login_title">Sign in</string>
+    <string name="login_subtitle">Log in to save movies to your watchlist</string>
+    <string name="login_emailHint">Email</string>
+    <string name="login_passwordHint">Password</string>
+    <string name="login_btnLogin">Log in</string>
+    <string name="login_btnRegister">Create account</string>
+    <string name="login_emptyFields">Enter email and password</string>
+    <string name="login_success">Welcome!</string>
+    <string name="login_error">Authentication failed</string>
 </resources>

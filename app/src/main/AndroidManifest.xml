@@ -43,6 +43,11 @@
             android:name="com.example.parcial_2_am_acn4a_debandi_juan.GenreMoviesActivity"
             android:exported="false"
             android:parentActivityName="com.example.parcial_2_am_acn4a_debandi_juan.CategoriesActivity" />
+
+        <activity
+            android:name="com.example.parcial_2_am_acn4a_debandi_juan.LoginActivity"
+            android:exported="false"
+            android:parentActivityName="com.example.parcial_2_am_acn4a_debandi_juan.MainActivity" />
     </application>
 
 </manifest>
