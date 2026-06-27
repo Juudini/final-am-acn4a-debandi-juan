@@ -76,4 +76,7 @@
     <dimen name="movie_card_height">200dp</dimen>
     <dimen name="newRelease_card_width">100dp</dimen>
     <dimen name="newRelease_card_height">140dp</dimen>
+
+    <!-- Hero -->
+    <dimen name="hero_height">480dp</dimen>
 </resources>
