@@ -37,4 +37,11 @@
     <string name="login_emptyFields">Enter email and password</string>
     <string name="login_success">Welcome!</string>
     <string name="login_error">Authentication failed</string>
+
+    <string name="watchlist_title">My Watchlist</string>
+    <string name="watchlist_logout">Log out</string>
+    <string name="watchlist_empty">Your watchlist is empty</string>
+    <string name="detail_inWatchlist">In Watchlist</string>
+    <string name="watchlist_added">Added to watchlist</string>
+    <string name="watchlist_removed">Removed from watchlist</string>
 </resources>
