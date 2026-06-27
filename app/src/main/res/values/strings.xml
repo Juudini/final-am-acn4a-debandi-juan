@@ -9,12 +9,15 @@
     <string name="bottomNavbar_BtnCategoriesLabel">Categories</string>
     <string name="bottomNavbar_BtnWatchlistLabel">Watchlist</string>
 
-    <!-- Secciones Home -->
+    <!-- Sections Home -->
     <string name="section_trending">Trending Now</string>
     <string name="section_newReleases">New Releases</string>
     <string name="action_viewAll">VIEW ALL</string>
     <string name="hero_premiere">PREMIERE</string>
 
-    <!-- Estados / mensajes -->
+    <!-- Err messages -->
     <string name="error_network">No se pudo cargar el contenido. Revisa tu conexión.</string>
+
+    <!-- Details -->
+    <string name="detail_addToWatchlist">Add to Watchlist</string>
 </resources>

@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
-    // El plugin google-services se aplica en la Task 7 (Firebase), cuando exista
-    // app/google-services.json. Aplicarlo sin ese archivo rompe el build.
+    // app/google-services.json.
     // alias(libs.plugins.google.services)
 }
 
