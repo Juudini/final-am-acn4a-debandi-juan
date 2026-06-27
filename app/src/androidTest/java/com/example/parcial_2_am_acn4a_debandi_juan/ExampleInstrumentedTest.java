@@ -1,4 +1,4 @@
-package com.example.parcial_1_am_acn4a_debandi_juan;
+package com.example.parcial_2_am_acn4a_debandi_juan;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.example.parcial_1_am_acn4a_debandi_juan", appContext.getPackageName());
+        assertEquals("com.example.parcial_2_am_acn4a_debandi_juan", appContext.getPackageName());
     }
 }
