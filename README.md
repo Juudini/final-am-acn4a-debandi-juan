@@ -1,28 +1,58 @@
-# 🎬 Parcial 1 - UI de rating de Peliculas
-**Autor:** Juan Debandi  
-**Materia:** Aplicaciones Móviles (ACN4A)  
+# 🎬 Parcial 2 - Cinemapedia
 
-Este proyecto es un prototipo funcional de la interfaz principal (Home) para una aplicación móvil de películas y series, desarrollado de forma nativa para Android utilizando Java y XML.
+**Autor:** Juan Debandi
+**Materia:** Aplicaciones Móviles (ACN4A) - Escuela Da Vinci
 
-## 🎨 Diseño en Figma
-El desarrollo de esta interfaz gráfica está basado en el prototipo de alta fidelidad diseñado de manera previa, respetando paletas de colores, espaciados y jerarquías tipográficas.
+Aplicación Android nativa (Java) de películas que consume datos en tiempo real desde **TheMovieDB**. Evolución del Parcial 1 (UI estática) hacia una app multi-pantalla con datos dinámicos, imágenes remotas, autenticación y persistencia en la nube.
 
-🔗 **[Ver el diseño interactivo en Figma aquí](https://www.figma.com/design/f6VjxW4JTYsKf2DLqvNBJo/parcial-1-am-acn4a-debandi_juan?node-id=1-2&t=kFuZIx6OQgKYPo1l-1)**
+## ✨ Funcionalidades
 
-## 📱 Arquitectura de la Pantalla y Experiencia de Usuario (UX)
-La pantalla principal fue estructurada siguiendo estándares de diseño y priorizando la inmersión visual y la facilidad de navegación.
+- **Home dinámico:** secciones *Trending* (`/trending/movie/week`) y *New Releases* (`/movie/now_playing`) traídas de la API, con un *hero* destacado.
+- **Detalle:** ficha completa de cada película (`/movie/{id}`) con backdrop, rating, géneros, duración y sinopsis. Navegación con `Intent` + `Extras`.
+- **Búsqueda:** búsqueda de títulos en vivo (`/search/movie`).
+- **Categorías:** listado de géneros (`/genre/movie/list`) y películas por género (`/discover/movie`).
+- **Autenticación:** registro e inicio de sesión con **Firebase Auth** (email/password).
+- **Watchlist:** guardado de películas por usuario en **Cloud Firestore**. El navegar es libre; guardar requiere sesión iniciada.
 
-* **Top Header (Sticky & Dinámico):** Contiene el título de la vista y la herramienta de búsqueda. Comienza siendo transparente (para no interrumpir la imagen de portada) y luego se transforma a un fondo oscuro sólido al hacer scroll hacia abajo.
-* **Hero Section (Estreno Principal):** Ocupa la parte superior empleando un diseño de borde a borde en conjunto con un alto contraste para los textos de la sinopsis y los botones de llamado a la acción principal ("Watch Trailer" y "Bookmark").
-* **Trending Now (Scroll Horizontal):** Una carousel con cards. Permite al usuario ver contenido destacado rápidamente sin sacrificar demasiado espacio vertical en la pantalla.
-* **New Releases (Lista Vertical):** Una lista tradicional que provee mayor detalle por cada película (título, calificación, género, duración y una breve sinopsis).
-* **Bottom Navigation Bar:** Barra de navegación en la parte inferior para facilitar el uso a una sola mano.
+## 🛠️ Stack técnico
+
+- **Lenguaje:** Java
+- **Red:** Retrofit + Gson + OkHttp (logging interceptor)
+- **Imágenes:** Glide
+- **Cloud:** Firebase Authentication + Cloud Firestore
+- **UI:** ConstraintLayout / LinearLayout, Material Components
+- **minSdk:** 24 · **targetSdk:** 36
 
 ## 🚀 Cómo ejecutar el proyecto
-1. Clonar este repositorio en tu entorno local.
-2. Abrir el proyecto desde **Android Studio**.
-3. Esperar la sincronización automática de Gradle.
-4. Ejecutar en un emulador o dispositivo físico (Se recomienda API 24 o superior).
+
+1. Cloná el repositorio y abrilo en **Android Studio**.
+
+2. **Clave de TheMovieDB:** agregá tu *API Read Access Token* (v4) en `local.properties` (archivo ignorado por git):
+
+   ```properties
+   TMDB_API_KEY=tu_token_v4_de_themoviedb
+   TMDB_BASE_URL=https://api.themoviedb.org/3/
+   TMDB_IMAGE_BASE_URL=https://image.tmdb.org/t/p/w500
+   ```
+
+   La clave se inyecta en tiempo de compilación vía `BuildConfig`.
+
+3. **Firebase:** creá un proyecto en [Firebase Console](https://console.firebase.google.com), agregá una app Android con el package `com.example.parcial_2_am_acn4a_debandi_juan` y descargá el archivo `google-services.json` dentro de la carpeta `app/`. Luego:
+   - Habilitá **Authentication → Sign-in method → Email/Password**.
+   - Creá una **Cloud Firestore Database**.
+   - Reglas sugeridas para el watchlist:
+
+     ```
+     match /users/{userId}/watchlist/{movieId} {
+       allow read, write: if request.auth != null && request.auth.uid == userId;
+     }
+     ```
+
+4. Sincronizá Gradle y ejecutá en un emulador o dispositivo (API 24+).
+
+## 🌿 Flujo de trabajo (Git)
+
+Modelo de ramas: `main` → `develop` → ramas `feature/*` (una por funcionalidad), integradas a `develop` mediante Pull Requests, siguiendo **Conventional Commits**.
 
 ## 🔗 Links
 

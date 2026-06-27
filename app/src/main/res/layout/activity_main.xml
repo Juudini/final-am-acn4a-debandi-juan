@@ -150,7 +150,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/hero_height"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/img_echoes_eternity"
+                    android:src="@drawable/img_poster_placeholder"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -181,7 +181,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:letterSpacing="@dimen/ls_wider"
-                                android:text="PREMIERE"
+                                android:text="@string/hero_premiere"
                                 android:textAllCaps="true"
                                 android:textColor="@color/text_title"
                                 android:textSize="@dimen/text_xs" />
@@ -201,10 +201,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/spacing_1"
-                                android:text="9.4"
                                 android:textColor="@color/text_title"
                                 android:textSize="@dimen/text_xs"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                tools:text="9.4" />
                         </LinearLayout>
 
                         <TextView
@@ -287,7 +287,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Trending Now"
+                        android:text="@string/section_trending"
                         android:textColor="@color/text_title"
                         android:textSize="@dimen/text_xl"
                         android:textStyle="bold" />
@@ -295,7 +295,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="VIEW ALL"
+                        android:text="@string/action_viewAll"
                         android:textColor="@color/text_secondary"
                         android:textSize="@dimen/text_xs"
                         android:textStyle="bold"
@@ -335,7 +335,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="New Releases"
+                        android:text="@string/section_newReleases"
                         android:textColor="@color/text_title"
                         android:textSize="@dimen/text_xl"
                         android:textStyle="bold" />
@@ -343,7 +343,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="VIEW ALL"
+                        android:text="@string/action_viewAll"
                         android:textColor="@color/text_secondary"
                         android:textSize="@dimen/text_xs"
                         android:textStyle="bold"
