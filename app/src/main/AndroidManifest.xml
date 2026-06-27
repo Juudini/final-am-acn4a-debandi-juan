@@ -23,6 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.example.parcial_2_am_acn4a_debandi_juan.MovieDetailActivity"
+            android:exported="false"
+            android:parentActivityName="com.example.parcial_2_am_acn4a_debandi_juan.MainActivity" />
     </application>
 
 </manifest>

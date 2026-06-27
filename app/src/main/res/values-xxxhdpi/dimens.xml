@@ -79,4 +79,7 @@
 
     <!-- Hero -->
     <dimen name="hero_height">480dp</dimen>
+
+    <!-- Home -->
+    <dimen name="header_scroll_threshold">120dp</dimen>
 </resources>

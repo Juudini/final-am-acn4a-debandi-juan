@@ -25,7 +25,6 @@ import com.google.android.material.card.MaterialCardView;
  */
 public final class MovieViewFactory {
 
-    /** Callback cuando el usuario toca una card de película. */
     public interface OnMovieClickListener {
         void onMovieClick(Movie movie);
     }
@@ -34,7 +33,7 @@ public final class MovieViewFactory {
     }
 
     /**
-     * Card vertical con poster grande (estilo "Trending Now"): poster + título + año.
+     * Cards verticales (poster + title + año).
      */
     public static View createPosterCard(Context context, Movie movie, OnMovieClickListener listener) {
         int cardWidth = dp(context, R.dimen.movie_card_width);
@@ -67,7 +66,7 @@ public final class MovieViewFactory {
         tvTitle.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         tvTitle.setText(movie.getTitle());
         tvTitle.setTextColor(ContextCompat.getColor(context, R.color.text_title));
-        tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_base));
         tvTitle.setTypeface(null, Typeface.BOLD);
         tvTitle.setMaxLines(1);
         tvTitle.setEllipsize(TextUtils.TruncateAt.END);
@@ -76,7 +75,7 @@ public final class MovieViewFactory {
         tvSubtitle.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         tvSubtitle.setText(movie.getReleaseYear());
         tvSubtitle.setTextColor(ContextCompat.getColor(context, R.color.text_primary));
-        tvSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        tvSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_xs));
         tvSubtitle.setLetterSpacing(0.05f);
 
         cardLayout.addView(imageCard);
@@ -90,7 +89,7 @@ public final class MovieViewFactory {
     }
 
     /**
-     * Card horizontal en lista (estilo "New Releases"): poster + título/rating + año + sinopsis.
+     * Card horizontal en lista (poster + title/rating + año + sinopsis)
      */
     public static View createListCard(Context context, Movie movie, OnMovieClickListener listener) {
         int posterWidth = dp(context, R.dimen.newRelease_card_width);
@@ -133,7 +132,7 @@ public final class MovieViewFactory {
         tvTitle.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
         tvTitle.setText(movie.getTitle());
         tvTitle.setTextColor(ContextCompat.getColor(context, R.color.text_title));
-        tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_lg));
         tvTitle.setTypeface(null, Typeface.BOLD);
         tvTitle.setMaxLines(2);
         tvTitle.setEllipsize(TextUtils.TruncateAt.END);
@@ -150,7 +149,7 @@ public final class MovieViewFactory {
         tvRating.setLayoutParams(ratingParams);
         tvRating.setText(movie.getFormattedRating());
         tvRating.setTextColor(ContextCompat.getColor(context, R.color.text_title));
-        tvRating.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        tvRating.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_sm));
         tvRating.setTypeface(null, Typeface.BOLD);
 
         titleRow.addView(tvTitle);
@@ -163,7 +162,7 @@ public final class MovieViewFactory {
         tvSubtitle.setLayoutParams(subParams);
         tvSubtitle.setText(movie.getReleaseYear());
         tvSubtitle.setTextColor(ContextCompat.getColor(context, R.color.text_primary));
-        tvSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        tvSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_xs));
         tvSubtitle.setLetterSpacing(0.05f);
 
         TextView tvDesc = new TextView(context);
@@ -172,7 +171,7 @@ public final class MovieViewFactory {
         tvDesc.setLayoutParams(descParams);
         tvDesc.setText(movie.getOverview());
         tvDesc.setTextColor(ContextCompat.getColor(context, R.color.text_primary));
-        tvDesc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        tvDesc.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_sm));
         tvDesc.setMaxLines(3);
         tvDesc.setEllipsize(TextUtils.TruncateAt.END);
 
@@ -191,5 +190,10 @@ public final class MovieViewFactory {
 
     private static int dp(Context context, int dimenRes) {
         return context.getResources().getDimensionPixelSize(dimenRes);
+    }
+
+    /** Tamaño de texto (sp) definido como dimen, en px ya escalado por fuente. */
+    private static float sp(Context context, int dimenRes) {
+        return context.getResources().getDimension(dimenRes);
     }
 }
