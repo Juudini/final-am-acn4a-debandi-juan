@@ -1,9 +1,22 @@
 plugins {
     alias(libs.plugins.android.application)
+    // El plugin google-services se aplica en la Task 7 (Firebase), cuando exista
+    // app/google-services.json. Aplicarlo sin ese archivo rompe el build.
+    // alias(libs.plugins.google.services)
 }
 
+// Cargamos secretos
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { localProperties.load(it) }
+}
+def tmdbApiKey = localProperties.getProperty('TMDB_API_KEY', '')
+def tmdbBaseUrl = localProperties.getProperty('TMDB_BASE_URL', 'https://api.themoviedb.org/3/')
+def tmdbImageBaseUrl = localProperties.getProperty('TMDB_IMAGE_BASE_URL', 'https://image.tmdb.org/t/p/w500')
+
 android {
-    namespace 'com.example.parcial_1_am_acn4a_debandi_juan'
+    namespace 'com.example.parcial_2_am_acn4a_debandi_juan'
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -11,13 +24,17 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.parcial_1_am_acn4a_debandi_juan"
+        applicationId "com.example.parcial_2_am_acn4a_debandi_juan"
         minSdk 24
         targetSdk 36
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "TMDB_API_KEY", "\"${tmdbApiKey}\""
+        buildConfigField "String", "TMDB_BASE_URL", "\"${tmdbBaseUrl}\""
+        buildConfigField "String", "TMDB_IMAGE_BASE_URL", "\"${tmdbImageBaseUrl}\""
     }
 
     buildTypes {
@@ -30,6 +47,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+    buildFeatures {
+        buildConfig true
+    }
 }
 
 dependencies {
@@ -37,6 +57,21 @@ dependencies {
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
+
+    // Fetch
+    implementation libs.retrofit
+    implementation libs.retrofit.converter.gson
+    implementation libs.okhttp.logging.interceptor
+
+    // Images
+    implementation libs.glide
+    annotationProcessor libs.glide.compiler
+
+    // Firebase
+    implementation platform(libs.firebase.bom)
+    implementation libs.firebase.auth
+    implementation libs.firebase.firestore
+
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
