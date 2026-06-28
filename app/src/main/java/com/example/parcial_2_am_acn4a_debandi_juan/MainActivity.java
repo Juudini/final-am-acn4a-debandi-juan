@@ -1,6 +1,7 @@
 package com.example.parcial_2_am_acn4a_debandi_juan;
 
 import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -51,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
         mainScrollView = findViewById(R.id.mainScrollView);
         LinearLayout topHeader = findViewById(R.id.topHeader);
+        int scrollThreshold = getResources().getDimensionPixelSize(R.dimen.header_scroll_threshold);
         mainScrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if (scrollY > 120) {
+            if (scrollY > scrollThreshold) {
                 topHeader.setBackgroundColor(ContextCompat.getColor(this, R.color.bg_shadow));
             } else {
                 topHeader.setBackgroundColor(Color.TRANSPARENT);
@@ -133,8 +135,7 @@ public class MainActivity extends AppCompatActivity {
         heroLabel.setText(movie.getTitle());
         heroDescription.setText(movie.getOverview());
         heroRating.setText(movie.getFormattedRating());
-        ImageLoader.load(heroBgImage, movie.getBackdropPath() != null
-                ? movie.getBackdropPath() : movie.getPosterPath());
+        ImageLoader.load(heroBgImage, movie.getBackdropPath() != null ? movie.getBackdropPath() : movie.getPosterPath());
     }
 
     private void renderTrending(List<Movie> movies) {
@@ -154,7 +155,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openDetail(Movie movie) {
-        Toast.makeText(this, movie.getTitle(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra(MovieDetailActivity.EXTRA_MOVIE_ID, movie.getId());
+        intent.putExtra(MovieDetailActivity.EXTRA_MOVIE_TITLE, movie.getTitle());
+        startActivity(intent);
     }
 
     private void showError() {

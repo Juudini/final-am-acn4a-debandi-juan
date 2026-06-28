@@ -58,7 +58,7 @@ public final class MovieViewFactory {
         tvTitle.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         tvTitle.setText(movie.getTitle());
         tvTitle.setTextColor(ContextCompat.getColor(context, R.color.text_title));
-        tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_base));
         tvTitle.setTypeface(null, Typeface.BOLD);
         tvTitle.setMaxLines(1);
         tvTitle.setEllipsize(TextUtils.TruncateAt.END);
@@ -67,7 +67,7 @@ public final class MovieViewFactory {
         tvSubtitle.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         tvSubtitle.setText(movie.getReleaseYear());
         tvSubtitle.setTextColor(ContextCompat.getColor(context, R.color.text_primary));
-        tvSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        tvSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_base));
         tvSubtitle.setLetterSpacing(0.05f);
 
         cardLayout.addView(imageCard);
@@ -124,7 +124,7 @@ public final class MovieViewFactory {
         tvTitle.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
         tvTitle.setText(movie.getTitle());
         tvTitle.setTextColor(ContextCompat.getColor(context, R.color.text_title));
-        tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_lg));
         tvTitle.setTypeface(null, Typeface.BOLD);
         tvTitle.setMaxLines(2);
         tvTitle.setEllipsize(TextUtils.TruncateAt.END);
@@ -141,7 +141,7 @@ public final class MovieViewFactory {
         tvRating.setLayoutParams(ratingParams);
         tvRating.setText(movie.getFormattedRating());
         tvRating.setTextColor(ContextCompat.getColor(context, R.color.text_title));
-        tvRating.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        tvRating.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_sm) );
         tvRating.setTypeface(null, Typeface.BOLD);
 
         titleRow.addView(tvTitle);
@@ -154,7 +154,7 @@ public final class MovieViewFactory {
         tvSubtitle.setLayoutParams(subParams);
         tvSubtitle.setText(movie.getReleaseYear());
         tvSubtitle.setTextColor(ContextCompat.getColor(context, R.color.text_primary));
-        tvSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        tvSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_xs));
         tvSubtitle.setLetterSpacing(0.05f);
 
         TextView tvDesc = new TextView(context);
@@ -163,7 +163,7 @@ public final class MovieViewFactory {
         tvDesc.setLayoutParams(descParams);
         tvDesc.setText(movie.getOverview());
         tvDesc.setTextColor(ContextCompat.getColor(context, R.color.text_primary));
-        tvDesc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        tvDesc.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_sm));
         tvDesc.setMaxLines(3);
         tvDesc.setEllipsize(TextUtils.TruncateAt.END);
 
@@ -182,5 +182,8 @@ public final class MovieViewFactory {
 
     private static int dp(Context context, int dimenRes) {
         return context.getResources().getDimensionPixelSize(dimenRes);
+    }
+    private static float sp(Context context, int dimenRes) {
+        return context.getResources().getDimension(dimenRes);
     }
 }
