@@ -105,7 +105,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_4"
-                    android:lineSpacingExtra="2dp"
+                    android:lineSpacingExtra="@dimen/spacing_0_5"
                     android:textColor="@color/text_primary"
                     android:textSize="@dimen/text_base"
                     tools:text="Overview..." />

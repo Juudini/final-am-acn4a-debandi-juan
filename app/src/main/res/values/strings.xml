@@ -8,6 +8,7 @@
     <string name="bottomNavbar_BtnSearchLabel">Search</string>
     <string name="bottomNavbar_BtnCategoriesLabel">Categories</string>
     <string name="bottomNavbar_BtnWatchlistLabel">Watchlist</string>
+    <string name="bottomNavbar_BtnAccountLabel">Account</string>
     <string name="detail_addToWatchlist">Add to Watchlist</string>
     <!-- Home sections -->
     <string name="section_trending">Trending Now</string>
@@ -26,4 +27,35 @@
     <!-- Categories -->
     <string name="categories_title">Categories</string>
     <string name="categories_empty">No movies in this category</string>
+
+    <!-- Auth -->
+    <string name="signin_title">Sign in</string>
+    <string name="signin_subtitle">Log in to save movies to your watchlist</string>
+    <string name="signin_emailHint">Email</string>
+    <string name="signin_passwordHint">Password</string>
+    <string name="signin_btnSignin">Log in</string>
+    <string name="signin_btnSignup">Create account</string>
+    <string name="signin_emptyFields">Enter email and password</string>
+    <string name="signin_success">Welcome!</string>
+    <string name="signin_error">Authentication failed</string>
+
+    <!-- Sign up -->
+    <string name="signup_title">Create account</string>
+    <string name="signup_subtitle">Sign up to save movies to your watchlist</string>
+    <string name="signup_emailHint">Email</string>
+    <string name="signup_passwordHint">Password</string>
+    <string name="signup_confirmHint">Confirm password</string>
+    <string name="signup_btnCreate">Create account</string>
+    <string name="signup_btnHaveAccount">I already have an account</string>
+    <string name="signup_emptyFields">Complete all fields</string>
+    <string name="signup_passwordMismatch">Passwords do not match</string>
+    <string name="signup_success">Account created!</string>
+    <string name="signup_error">Could not create account</string>
+
+    <!-- Account -->
+    <string name="account_title">My account</string>
+    <string name="account_emailLabel">Email</string>
+    <string name="account_notAvailable">Not available</string>
+    <string name="account_btnSignout">Sign out</string>
+    <string name="account_signedOut">Signed out</string>
 </resources>

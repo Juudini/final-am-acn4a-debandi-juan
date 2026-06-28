@@ -16,7 +16,7 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:padding="@dimen/spacing_3"
-        android:elevation="10dp"
+        android:elevation="@dimen/elevation_header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
@@ -127,6 +127,30 @@
                 app:iconPadding="@dimen/spacing_1"
                 app:iconSize="@dimen/icon_base"
                 app:iconTint="@color/icon_default" />
+
+            <Space
+                android:layout_width="@dimen/spacing_2"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/bottomNavbar_BtnAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:padding="@dimen/spacing_1"
+                android:text="@string/bottomNavbar_BtnAccountLabel"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_xs"
+                android:textStyle="bold"
+                app:backgroundTint="@android:color/transparent"
+                app:cornerRadius="@dimen/radius_md"
+                app:icon="@drawable/ic_account"
+                app:iconGravity="textTop"
+                app:iconPadding="@dimen/spacing_1"
+                app:iconSize="@dimen/icon_base"
+                app:iconTint="@color/icon_default" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -156,7 +180,7 @@
 
                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="@dimen/size_0"
                     app:cardBackgroundColor="@color/bg_shadow"
                     app:cardCornerRadius="@dimen/radius_none"
                     app:layout_constraintTop_toTopOf="@id/hero_BgImage"
@@ -181,7 +205,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:letterSpacing="@dimen/ls_wider"
-                                android:text="PREMIERE"
+                                android:text="@string/hero_premiere"
                                 android:textAllCaps="true"
                                 android:textColor="@color/text_title"
                                 android:textSize="@dimen/text_xs" />
@@ -201,7 +225,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/spacing_1"
-                                android:text="9.4"
+                                tools:text="9.4"
                                 android:textColor="@color/text_title"
                                 android:textSize="@dimen/text_xs"
                                 android:textStyle="bold" />
@@ -212,7 +236,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/spacing_3"
-                            android:lineSpacingExtra="-8dp"
+                            android:lineSpacingExtra="@dimen/hero_label_line_spacing"
                             android:text="@string/heroSection_Label"
                             android:textColor="@color/text_title"
                             android:textSize="@dimen/text_5xl"
@@ -234,7 +258,7 @@
 
                             <Button
                                 android:id="@+id/heroSection_BtnPlay"
-                                android:layout_width="0dp"
+                                android:layout_width="@dimen/size_0"
                                 android:layout_height="@dimen/icon_xl"
                                 android:layout_weight="1"
                                 android:letterSpacing="@dimen/ls_wide"
@@ -263,7 +287,7 @@
                                 app:iconPadding="0dp"
                                 app:iconTint="@color/bg_selected"
                                 app:strokeColor="@color/border_default"
-                                app:strokeWidth="1dp" />
+                                app:strokeWidth="@dimen/stroke_width" />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -284,10 +308,10 @@
                     android:layout_marginBottom="@dimen/spacing_4">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/size_0"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Trending Now"
+                        android:text="@string/section_trending"
                         android:textColor="@color/text_title"
                         android:textSize="@dimen/text_xl"
                         android:textStyle="bold" />
@@ -295,7 +319,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="VIEW ALL"
+                        android:text="@string/action_viewAll"
                         android:textColor="@color/text_secondary"
                         android:textSize="@dimen/text_xs"
                         android:textStyle="bold"
@@ -332,10 +356,10 @@
                     android:layout_marginBottom="@dimen/spacing_4">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/size_0"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="New Releases"
+                        android:text="@string/section_newReleases"
                         android:textColor="@color/text_title"
                         android:textSize="@dimen/text_xl"
                         android:textStyle="bold" />
@@ -343,7 +367,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="VIEW ALL"
+                        android:text="@string/action_viewAll"
                         android:textColor="@color/text_secondary"
                         android:textSize="@dimen/text_xs"
                         android:textStyle="bold"
