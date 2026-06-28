@@ -16,7 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.MovieDetail;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.network.RetrofitClient;
-import com.example.parcial_2_am_acn4a_debandi_juan.data.utils.ImageLoader;
+import com.example.parcial_2_am_acn4a_debandi_juan.utils.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;

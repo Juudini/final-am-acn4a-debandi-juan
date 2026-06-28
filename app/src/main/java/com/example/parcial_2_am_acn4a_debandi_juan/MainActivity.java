@@ -22,8 +22,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.Movie;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.MovieResponse;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.network.RetrofitClient;
-import com.example.parcial_2_am_acn4a_debandi_juan.data.utils.ImageLoader;
-import com.example.parcial_2_am_acn4a_debandi_juan.data.utils.MovieViewFactory;
+import com.example.parcial_2_am_acn4a_debandi_juan.utils.ImageLoader;
+import com.example.parcial_2_am_acn4a_debandi_juan.utils.MovieViewFactory;
 
 import java.util.List;
 
@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         findViewById(R.id.topHeader_BtnSearch).setOnClickListener(v -> startActivity(new Intent(this, SearchActivity.class)));
+        findViewById(R.id.bottomNavbar_BtnCategories).setOnClickListener(v -> startActivity(new Intent(this, CategoriesActivity.class)));
         trendingMoviesContainer = findViewById(R.id.trendingMoviesContainer);
         newReleasesContainer = findViewById(R.id.newReleasesContainer);
 

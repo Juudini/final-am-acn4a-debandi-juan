@@ -1,4 +1,4 @@
-package com.example.parcial_2_am_acn4a_debandi_juan.data.utils;
+package com.example.parcial_2_am_acn4a_debandi_juan.utils;
 
 import android.content.Context;
 import android.graphics.Color;
