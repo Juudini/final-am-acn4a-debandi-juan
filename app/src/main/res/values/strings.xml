@@ -8,4 +8,12 @@
     <string name="bottomNavbar_BtnSearchLabel">Search</string>
     <string name="bottomNavbar_BtnCategoriesLabel">Categories</string>
     <string name="bottomNavbar_BtnWatchlistLabel">Watchlist</string>
+    <!-- Home sections -->
+    <string name="section_trending">Trending Now</string>
+    <string name="section_newReleases">New Releases</string>
+    <string name="action_viewAll">VIEW ALL</string>
+    <string name="hero_premiere">PREMIERE</string>
+
+    <!-- Err messages -->
+    <string name="error_network">Something went wrong! Check your network connection</string>
 </resources>
