@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.parcial_1_am_acn4a_debandi_juan'
+    namespace 'com.example.parcial_2_am_acn4a_debandi_juan'
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -11,7 +11,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.parcial_1_am_acn4a_debandi_juan"
+        applicationId "com.example.parcial_2_am_acn4a_debandi_juan"
         minSdk 24
         targetSdk 36
         versionCode 1
