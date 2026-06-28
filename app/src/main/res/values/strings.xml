@@ -58,4 +58,13 @@
     <string name="account_notAvailable">Not available</string>
     <string name="account_btnSignout">Sign out</string>
     <string name="account_signedOut">Signed out</string>
+
+    <!-- Watchlist -->
+    <string name="watchlist_title">My Watchlist</string>
+    <string name="watchlist_signout">Log out</string>
+    <string name="watchlist_empty">Your watchlist is empty</string>
+    <string name="detail_inWatchlist">In Watchlist</string>
+    <string name="watchlist_added">Added to Watchlist</string>
+    <string name="watchlist_removed">Removed from Watchlist</string>
+    <string name="watchlist_undo">Undo</string>
 </resources>

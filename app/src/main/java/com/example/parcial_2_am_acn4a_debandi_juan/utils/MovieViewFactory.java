@@ -1,6 +1,7 @@
 package com.example.parcial_2_am_acn4a_debandi_juan.utils;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.TextUtils;
@@ -14,11 +15,16 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import com.example.parcial_2_am_acn4a_debandi_juan.R;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.Movie;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
 public final class MovieViewFactory {
     public interface OnMovieClickListener {
         void onMovieClick(Movie movie);
+    }
+
+    public interface OnWatchlistToggleListener {
+        void onWatchlistToggle(Movie movie, boolean nowInWatchlist);
     }
 
     private MovieViewFactory() {
@@ -84,6 +90,20 @@ public final class MovieViewFactory {
      * Card horizontal
      */
     public static View createListCard(Context context, Movie movie, OnMovieClickListener listener) {
+        return buildListCard(context, movie, listener, true, false, false, null);
+    }
+
+    /**
+     * Card horizontal con botón de watchlist (sin descripción).
+     */
+    public static View createWatchlistCard(Context context, Movie movie, OnMovieClickListener listener,
+                                           boolean inWatchlist, OnWatchlistToggleListener toggleListener) {
+        return buildListCard(context, movie, listener, false, true, inWatchlist, toggleListener);
+    }
+
+    private static View buildListCard(Context context, Movie movie, OnMovieClickListener listener,
+                                      boolean showDescription, boolean showBookmark,
+                                      boolean inWatchlist, OnWatchlistToggleListener toggleListener) {
         int posterWidth = dp(context, R.dimen.newRelease_card_width);
         int posterHeight = dp(context, R.dimen.newRelease_card_height);
         int marginStart = dp(context, R.dimen.spacing_4);
@@ -157,27 +177,69 @@ public final class MovieViewFactory {
         tvSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_xs));
         tvSubtitle.setLetterSpacing(0.05f);
 
-        TextView tvDesc = new TextView(context);
-        LinearLayout.LayoutParams descParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        descParams.topMargin = dp(context, R.dimen.spacing_2);
-        tvDesc.setLayoutParams(descParams);
-        tvDesc.setText(movie.getOverview());
-        tvDesc.setTextColor(ContextCompat.getColor(context, R.color.text_primary));
-        tvDesc.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_sm));
-        tvDesc.setMaxLines(3);
-        tvDesc.setEllipsize(TextUtils.TruncateAt.END);
-
         textContainer.addView(titleRow);
         textContainer.addView(tvSubtitle);
-        textContainer.addView(tvDesc);
+
+        if (showDescription) {
+            TextView tvDesc = new TextView(context);
+            LinearLayout.LayoutParams descParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            descParams.topMargin = dp(context, R.dimen.spacing_2);
+            tvDesc.setLayoutParams(descParams);
+            tvDesc.setText(movie.getOverview());
+            tvDesc.setTextColor(ContextCompat.getColor(context, R.color.text_primary));
+            tvDesc.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_sm));
+            tvDesc.setMaxLines(3);
+            tvDesc.setEllipsize(TextUtils.TruncateAt.END);
+            textContainer.addView(tvDesc);
+        }
 
         rowLayout.addView(imageCard);
         rowLayout.addView(textContainer);
+
+        if (showBookmark) {
+            int btnSize = dp(context, R.dimen.icon_xl);
+            MaterialButton bookmark = new MaterialButton(context);
+            LinearLayout.LayoutParams bookmarkParams = new LinearLayout.LayoutParams(btnSize, btnSize);
+            bookmarkParams.gravity = Gravity.CENTER_VERTICAL;
+            bookmarkParams.setMarginStart(dp(context, R.dimen.spacing_2));
+            bookmark.setLayoutParams(bookmarkParams);
+            bookmark.setInsetTop(0);
+            bookmark.setInsetBottom(0);
+            bookmark.setIconResource(R.drawable.ic_add_to_watchlist);
+            bookmark.setIconPadding(0);
+            bookmark.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_START);
+            bookmark.setCornerRadius(dp(context, R.dimen.radius_md));
+
+            final boolean[] state = {inWatchlist};
+            styleBookmark(context, bookmark, state[0]);
+            bookmark.setOnClickListener(v -> {
+                state[0] = !state[0];
+                styleBookmark(context, bookmark, state[0]);
+                if (toggleListener != null) {
+                    toggleListener.onWatchlistToggle(movie, state[0]);
+                }
+            });
+            rowLayout.addView(bookmark);
+        }
 
         if (listener != null) {
             rowLayout.setOnClickListener(v -> listener.onMovieClick(movie));
         }
         return rowLayout;
+    }
+
+    private static void styleBookmark(Context context, MaterialButton button, boolean inWatchlist) {
+        int yellow = ContextCompat.getColor(context, R.color.bg_selected);
+        if (inWatchlist) {
+            button.setBackgroundTintList(ColorStateList.valueOf(yellow));
+            button.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.icon_selected)));
+            button.setStrokeWidth(0);
+        } else {
+            button.setBackgroundTintList(ColorStateList.valueOf(Color.TRANSPARENT));
+            button.setIconTint(ColorStateList.valueOf(yellow));
+            button.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.border_default)));
+            button.setStrokeWidth(dp(context, R.dimen.stroke_width));
+        }
     }
 
     private static int dp(Context context, int dimenRes) {

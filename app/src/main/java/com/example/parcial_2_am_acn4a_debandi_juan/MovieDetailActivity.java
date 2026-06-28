@@ -1,7 +1,9 @@
 package com.example.parcial_2_am_acn4a_debandi_juan;
 
 import android.os.Bundle;
+import android.content.Intent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -13,11 +15,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
+import com.example.parcial_2_am_acn4a_debandi_juan.data.WatchlistRepository;
+import com.example.parcial_2_am_acn4a_debandi_juan.data.model.Movie;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.MovieDetail;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.network.RetrofitClient;
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.ImageLoader;
-
+import com.example.parcial_2_am_acn4a_debandi_juan.utils.AuthService;
+import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +30,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MovieDetailActivity extends AppCompatActivity {
-
     public static final String EXTRA_MOVIE_ID = "extra_movie_id";
     public static final String EXTRA_MOVIE_TITLE = "extra_movie_title";
 
@@ -36,6 +39,10 @@ public class MovieDetailActivity extends AppCompatActivity {
     private TextView meta;
     private TextView overview;
     private ProgressBar progress;
+    private Button bookmarkButton;
+    private int movieId;
+    private MovieDetail currentDetail;
+    private boolean inWatchlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +56,10 @@ public class MovieDetailActivity extends AppCompatActivity {
         meta = findViewById(R.id.detail_meta);
         overview = findViewById(R.id.detail_overview);
         progress = findViewById(R.id.detail_progress);
+        bookmarkButton = findViewById(R.id.detail_BtnBookmark);
 
         findViewById(R.id.detail_BtnBack).setOnClickListener(v -> finish());
+        bookmarkButton.setOnClickListener(v -> onBookmarkClick());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail_root), (v, insets) -> {
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -63,13 +72,76 @@ public class MovieDetailActivity extends AppCompatActivity {
             title.setText(initialTitle);
         }
 
-        int movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, -1);
+        movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, -1);
         if (movieId <= 0) {
             Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
         loadDetail(movieId);
+        refreshWatchlistState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshWatchlistState();
+    }
+
+    private void refreshWatchlistState() {
+        if (!AuthService.isLoggedIn()) {
+            inWatchlist = false;
+            updateBookmarkUi();
+            return;
+        }
+        WatchlistRepository.isInWatchlist(movieId, result -> {
+            inWatchlist = result;
+            updateBookmarkUi();
+        });
+    }
+
+    private void updateBookmarkUi() {
+        bookmarkButton.setText(inWatchlist ? R.string.detail_inWatchlist : R.string.detail_addToWatchlist);
+    }
+
+    private void onBookmarkClick() {
+        if (!AuthService.isLoggedIn()) {
+            startActivity(new Intent(this, SigninActivity.class));
+            return;
+        }
+        if (currentDetail == null) {
+            return;
+        }
+        if (inWatchlist) {
+            WatchlistRepository.remove(movieId, success -> {
+                if (success) {
+                    inWatchlist = false;
+                    updateBookmarkUi();
+                    Toast.makeText(this, R.string.watchlist_removed, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Movie movie = new Movie(
+                    currentDetail.getId(),
+                    currentDetail.getTitle(),
+                    currentDetail.getOverview(),
+                    currentDetail.getPosterPath(),
+                    currentDetail.getBackdropPath(),
+                    currentDetail.getVoteAverage(),
+                    currentDetail.getReleaseDate());
+            WatchlistRepository.add(movie, success -> {
+                if (success) {
+                    inWatchlist = true;
+                    updateBookmarkUi();
+                    Snackbar.make(findViewById(android.R.id.content),
+                            R.string.watchlist_added, Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void loadDetail(int movieId) {
@@ -94,6 +166,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void bind(MovieDetail detail) {
+        currentDetail = detail;
         title.setText(detail.getTitle());
         rating.setText(detail.getFormattedRating());
         overview.setText(detail.getOverview());
