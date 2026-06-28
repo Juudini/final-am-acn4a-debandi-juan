@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 openDetail(heroMovie);
             }
         });
-
+        findViewById(R.id.topHeader_BtnSearch).setOnClickListener(v -> startActivity(new Intent(this, SearchActivity.class)));
         trendingMoviesContainer = findViewById(R.id.trendingMoviesContainer);
         newReleasesContainer = findViewById(R.id.newReleasesContainer);
 
