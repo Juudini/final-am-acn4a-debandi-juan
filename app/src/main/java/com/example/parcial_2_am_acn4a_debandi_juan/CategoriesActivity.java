@@ -21,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.Genre;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.GenreResponse;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.network.RetrofitClient;
+import com.example.parcial_2_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
 import com.google.android.material.card.MaterialCardView;
 import java.util.List;
 import retrofit2.Call;
@@ -40,8 +41,8 @@ public class CategoriesActivity extends AppCompatActivity {
         container = findViewById(R.id.categories_Container);
         progress = findViewById(R.id.categories_Progress);
 
-        findViewById(R.id.categories_BtnBack).setOnClickListener(v -> finish());
         findViewById(R.id.categories_BtnSearch).setOnClickListener(v-> startActivity(new Intent(this, SearchActivity.class)));
+        BottomNavbarHelper.setup(this, BottomNavbarHelper.TAB_CATEGORIES);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.categories_root), (v, insets) -> {
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(bars.left, bars.top, bars.right, bars.bottom);

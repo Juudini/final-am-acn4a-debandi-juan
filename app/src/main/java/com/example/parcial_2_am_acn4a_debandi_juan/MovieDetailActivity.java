@@ -32,6 +32,7 @@ import com.example.parcial_2_am_acn4a_debandi_juan.data.model.MovieDetail;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.network.RetrofitClient;
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.ImageLoader;
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.AuthService;
+import com.example.parcial_2_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -81,6 +82,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         findViewById(R.id.detail_BtnBack).setOnClickListener(v -> finish());
         bookmarkButton.setOnClickListener(v -> onBookmarkClick());
+        BottomNavbarHelper.setup(this, BottomNavbarHelper.TAB_NONE);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail_root), (v, insets) -> {
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.WatchlistRepository;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.Movie;
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.AuthService;
+import com.example.parcial_2_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.MovieViewFactory;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -38,8 +39,8 @@ public class WatchlistActivity extends AppCompatActivity {
         message = findViewById(R.id.watchlist_Message);
         progress = findViewById(R.id.watchlist_Progress);
 
-        findViewById(R.id.watchlist_BtnBack).setOnClickListener(v -> finish());
         findViewById(R.id.watchlist_BtnSearch).setOnClickListener(v -> startActivity(new Intent(this, SearchActivity.class)));
+        BottomNavbarHelper.setup(this, BottomNavbarHelper.TAB_WATCHLIST);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.watchlist_root), (v, insets) -> {
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

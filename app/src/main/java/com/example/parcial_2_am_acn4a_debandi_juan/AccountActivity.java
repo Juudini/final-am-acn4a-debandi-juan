@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.AuthService;
+import com.example.parcial_2_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
 
 public class AccountActivity extends AppCompatActivity {
 
@@ -27,7 +28,7 @@ public class AccountActivity extends AppCompatActivity {
         emailText = findViewById(R.id.account_Email);
         btnSignout = findViewById(R.id.account_BtnSignout);
 
-        findViewById(R.id.account_BtnBack).setOnClickListener(v -> finish());
+        BottomNavbarHelper.setup(this, BottomNavbarHelper.TAB_ACCOUNT);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.account_root), (v, insets) -> {
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

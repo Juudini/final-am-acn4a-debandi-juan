@@ -25,6 +25,7 @@ import com.example.parcial_2_am_acn4a_debandi_juan.data.model.Movie;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.MovieResponse;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.network.RetrofitClient;
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.AuthService;
+import com.example.parcial_2_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.ImageLoader;
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.MovieViewFactory;
 
@@ -82,21 +83,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         findViewById(R.id.topHeader_BtnSearch).setOnClickListener(v -> startActivity(new Intent(this, SearchActivity.class)));
-        findViewById(R.id.bottomNavbar_BtnCategories).setOnClickListener(v -> startActivity(new Intent(this, CategoriesActivity.class)));
-        findViewById(R.id.bottomNavbar_BtnAccount).setOnClickListener(v -> {
-            if (AuthService.isLoggedIn()) {
-                startActivity(new Intent(this, AccountActivity.class));
-            } else {
-                startActivity(new Intent(this, SigninActivity.class));
-            }
-        });
-        findViewById(R.id.bottomNavbar_BtnWatchlist).setOnClickListener(v -> {
-            if (AuthService.isLoggedIn()) {
-                startActivity(new Intent(this, WatchlistActivity.class));
-            } else {
-                startActivity(new Intent(this, SigninActivity.class));
-            }
-        });
+        BottomNavbarHelper.setup(this, BottomNavbarHelper.TAB_HOME);
 
         findViewById(R.id.hero_BtnBookmark).setOnClickListener(v -> {
             if (!AuthService.isLoggedIn()) {

@@ -6,23 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/bg_surface"
     android:fitsSystemWindows="true">
-
-    <Button
-        android:id="@+id/account_BtnBack"
-        android:layout_width="@dimen/icon_xl"
-        android:layout_height="@dimen/icon_xl"
-        android:layout_margin="@dimen/spacing_3"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        app:backgroundTint="@android:color/transparent"
-        app:cornerRadius="@dimen/radius_full"
-        app:icon="@drawable/ic_arrow_back"
-        app:iconGravity="textStart"
-        app:iconPadding="0dp"
-        app:iconTint="@color/text_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -87,5 +70,5 @@
             app:backgroundTint="@color/bg_selected"
             app:cornerRadius="@dimen/radius_md" />
     </LinearLayout>
-
+    <include layout="@layout/layout_bottom_navbar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,24 +18,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/watchlist_BtnBack"
-            android:layout_width="@dimen/icon_xl"
-            android:layout_height="@dimen/icon_xl"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            app:backgroundTint="@android:color/transparent"
-            app:cornerRadius="@dimen/radius_full"
-            app:icon="@drawable/ic_arrow_back"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp"
-            app:iconTint="@color/text_title" />
-
         <TextView
             android:layout_width="@dimen/size_0"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="@dimen/spacing_2"
             android:text="@string/watchlist_title"
             android:textColor="@color/text_title"
             android:textSize="@dimen/text_2xl"
@@ -80,7 +66,7 @@
         android:clipToPadding="false"
         android:paddingHorizontal="@dimen/spacing_4"
         android:paddingTop="@dimen/spacing_4"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavbarWrapper"
         app:layout_constraintTop_toBottomOf="@id/watchlist_topBar">
 
         <LinearLayout
@@ -89,5 +75,5 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
-
+    <include layout="@layout/layout_bottom_navbar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

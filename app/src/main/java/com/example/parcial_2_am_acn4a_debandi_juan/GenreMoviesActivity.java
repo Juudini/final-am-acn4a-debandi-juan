@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.Movie;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.MovieResponse;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.network.RetrofitClient;
+import com.example.parcial_2_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.MovieViewFactory;
 import java.util.List;
 import retrofit2.Call;
@@ -41,6 +42,7 @@ public class GenreMoviesActivity extends AppCompatActivity {
         progress = findViewById(R.id.genre_Progress);
 
         findViewById(R.id.genre_BtnBack).setOnClickListener(v -> finish());
+        BottomNavbarHelper.setup(this, BottomNavbarHelper.TAB_CATEGORIES);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.genre_root), (v, insets) -> {
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
