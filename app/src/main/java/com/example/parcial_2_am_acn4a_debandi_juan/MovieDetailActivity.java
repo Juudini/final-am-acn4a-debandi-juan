@@ -63,7 +63,23 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail_root), (v, insets) -> {
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(0, 0, 0, bars.bottom);
+            v.setPadding(bars.left, 0, bars.right, bars.bottom);
+
+            View btnBack = findViewById(R.id.detail_BtnBack);
+            if (btnBack != null) {
+                android.view.ViewGroup.MarginLayoutParams lp = (android.view.ViewGroup.MarginLayoutParams) btnBack.getLayoutParams();
+                int baseMargin = getResources().getDimensionPixelSize(R.dimen.spacing_3);
+                lp.topMargin = baseMargin + bars.top;
+                btnBack.setLayoutParams(lp);
+            }
+
+            View scrim = findViewById(R.id.detail_statusBarScrim);
+            if (scrim != null) {
+                android.view.ViewGroup.LayoutParams lp = scrim.getLayoutParams();
+                lp.height = bars.top + getResources().getDimensionPixelSize(R.dimen.spacing_6);
+                scrim.setLayoutParams(lp);
+            }
+
             return insets;
         });
 
