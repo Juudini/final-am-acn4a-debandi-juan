@@ -1,5 +1,6 @@
 package com.example.parcial_2_am_acn4a_debandi_juan.data.network;
 
+import com.example.parcial_2_am_acn4a_debandi_juan.data.model.CreditsResponse;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.GenreResponse;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.MovieDetail;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.MovieResponse;
@@ -31,4 +32,7 @@ public interface TmdbApi {
 
     @GET("movie/{movie_id}")
     Call<MovieDetail> getMovieDetail(@Path("movie_id") int movieId);
+
+    @GET("movie/{movie_id}/credits")
+    Call<CreditsResponse> getMovieCredits(@Path("movie_id") int movieId);
 }
