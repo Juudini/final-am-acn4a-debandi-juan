@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -56,10 +57,14 @@ public class MovieDetailActivity extends AppCompatActivity {
     private Button bookmarkButton;
     private LinearLayout castContainer;
     private View castSkeletonScroll;
-    private View castScroll;
+    private HorizontalScrollView castScroll;
     private int movieId;
     private MovieDetail currentDetail;
     private boolean inWatchlist;
+
+    private List<CastMember> fullCast = new ArrayList<>();
+    private int currentCastIndex = 0;
+    private static final int CAST_PAGE_SIZE = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +88,16 @@ public class MovieDetailActivity extends AppCompatActivity {
         findViewById(R.id.detail_BtnBack).setOnClickListener(v -> finish());
         bookmarkButton.setOnClickListener(v -> onBookmarkClick());
         BottomNavbarHelper.setup(this, BottomNavbarHelper.TAB_NONE);
+
+        castScroll.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            View child = castScroll.getChildAt(0);
+            if (child != null) {
+                int diff = (child.getRight() - (castScroll.getWidth() + scrollX));
+                if (diff <= 100) {
+                    loadMoreCast();
+                }
+            }
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.detail_root), (v, insets) -> {
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -218,8 +233,10 @@ public class MovieDetailActivity extends AppCompatActivity {
                     hideCastSkeleton();
                     return;
                 }
-                int limit = Math.min(cast.size(), 20);
-                renderCast(cast.subList(0, limit));
+                fullCast = cast;
+                currentCastIndex = 0;
+                castContainer.removeAllViews();
+                loadMoreCast();
             }
 
             @Override
@@ -229,8 +246,16 @@ public class MovieDetailActivity extends AppCompatActivity {
         });
     }
 
+    private void loadMoreCast() {
+        if (fullCast == null || currentCastIndex >= fullCast.size()) {
+            return;
+        }
+        int nextIndex = Math.min(currentCastIndex + CAST_PAGE_SIZE, fullCast.size());
+        renderCast(fullCast.subList(currentCastIndex, nextIndex));
+        currentCastIndex = nextIndex;
+    }
+
     private void renderCast(List<CastMember> cast) {
-        castContainer.removeAllViews();
         int cardSize = dp(72);
         int marginEnd = dp(16);
         int textPaddingTop = dp(8);

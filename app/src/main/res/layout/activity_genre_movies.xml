@@ -66,8 +66,10 @@
         app:layout_constraintTop_toBottomOf="@id/genre_topBar" />
 
     <ScrollView
+        android:id="@+id/genre_Scroll"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_0"
+        android:scrollbars="none"
         android:clipToPadding="false"
         android:paddingHorizontal="@dimen/spacing_4"
         android:paddingTop="@dimen/spacing_4"

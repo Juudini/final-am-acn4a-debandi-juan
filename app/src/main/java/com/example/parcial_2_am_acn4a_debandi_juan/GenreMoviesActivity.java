@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -31,6 +32,11 @@ public class GenreMoviesActivity extends AppCompatActivity {
     private TextView message;
     private ProgressBar progress;
 
+    private int genreId;
+    private int currentPage = 1;
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +46,7 @@ public class GenreMoviesActivity extends AppCompatActivity {
         resultsContainer = findViewById(R.id.genre_ResultsContainer);
         message = findViewById(R.id.genre_Message);
         progress = findViewById(R.id.genre_Progress);
+        ScrollView scrollView = findViewById(R.id.genre_Scroll);
 
         findViewById(R.id.genre_BtnBack).setOnClickListener(v -> finish());
         BottomNavbarHelper.setup(this, BottomNavbarHelper.TAB_CATEGORIES);
@@ -56,23 +63,43 @@ public class GenreMoviesActivity extends AppCompatActivity {
             title.setText(genreName);
         }
 
-        int genreId = getIntent().getIntExtra(EXTRA_GENRE_ID, -1);
+        genreId = getIntent().getIntExtra(EXTRA_GENRE_ID, -1);
         if (genreId <= 0) {
             finish();
             return;
         }
+
+        scrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            View child = scrollView.getChildAt(0);
+            if (child != null) {
+                int diff = (child.getBottom() - (scrollView.getHeight() + scrollY));
+                if (diff <= 0) {
+                    loadMovies(genreId);
+                }
+            }
+        });
+
         loadMovies(genreId);
     }
 
     private void loadMovies(int genreId) {
-        progress.setVisibility(View.VISIBLE);
-        message.setVisibility(View.GONE);
-        RetrofitClient.getApi().discoverByGenre(genreId, SORT_BY, 1).enqueue(new Callback<MovieResponse>() {
+        if (isLoading || isLastPage) {
+            return;
+        }
+        isLoading = true;
+        if (currentPage == 1) {
+            progress.setVisibility(View.VISIBLE);
+            message.setVisibility(View.GONE);
+        }
+        RetrofitClient.getApi().discoverByGenre(genreId, SORT_BY, currentPage).enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
+                isLoading = false;
                 progress.setVisibility(View.GONE);
                 if (!response.isSuccessful() || response.body() == null) {
-                    showMessage(getString(R.string.error_network));
+                    if (currentPage == 1) {
+                        showMessage(getString(R.string.error_network));
+                    }
                     return;
                 }
                 renderResults(response.body().getResults());
@@ -80,16 +107,26 @@ public class GenreMoviesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<MovieResponse> call, @NonNull Throwable t) {
+                isLoading = false;
                 progress.setVisibility(View.GONE);
-                showMessage(getString(R.string.error_network));
+                if (currentPage == 1) {
+                    showMessage(getString(R.string.error_network));
+                }
             }
         });
     }
 
     private void renderResults(List<Movie> movies) {
-        resultsContainer.removeAllViews();
+        if (currentPage == 1) {
+            resultsContainer.removeAllViews();
+            if (movies == null || movies.isEmpty()) {
+                showMessage(getString(R.string.categories_empty));
+                isLastPage = true;
+                return;
+            }
+        }
         if (movies == null || movies.isEmpty()) {
-            showMessage(getString(R.string.categories_empty));
+            isLastPage = true;
             return;
         }
         message.setVisibility(View.GONE);
@@ -97,6 +134,7 @@ public class GenreMoviesActivity extends AppCompatActivity {
             View card = MovieViewFactory.createListCard(this, movie, this::openDetail);
             resultsContainer.addView(card);
         }
+        currentPage++;
     }
 
     private void openDetail(Movie movie) {

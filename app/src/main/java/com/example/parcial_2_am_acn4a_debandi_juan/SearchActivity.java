@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -42,6 +43,11 @@ public class SearchActivity extends AppCompatActivity {
     private final Handler searchHandler = new Handler(Looper.getMainLooper());
     private Runnable searchRunnable;
 
+    private int currentPage = 1;
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
+    private String currentQuery = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +59,7 @@ public class SearchActivity extends AppCompatActivity {
         message = findViewById(R.id.search_Message);
         progress = findViewById(R.id.search_Progress);
         View btnClear = findViewById(R.id.search_BtnClear);
+        ScrollView scrollView = findViewById(R.id.search_Scroll);
 
         findViewById(R.id.search_BtnBack).setOnClickListener(v -> finish());
 
@@ -76,6 +83,10 @@ public class SearchActivity extends AppCompatActivity {
                     resultsContainer.removeAllViews();
                     progress.setVisibility(View.GONE);
                     showMessage(getString(R.string.search_prompt));
+                    currentPage = 1;
+                    isLastPage = false;
+                    isLoading = false;
+                    currentQuery = "";
                 } else {
                     searchRunnable = () -> performSearch(false);
                     searchHandler.postDelayed(searchRunnable, 600);
@@ -105,6 +116,20 @@ public class SearchActivity extends AppCompatActivity {
             resultsContainer.removeAllViews();
             progress.setVisibility(View.GONE);
             showMessage(getString(R.string.search_prompt));
+            currentPage = 1;
+            isLastPage = false;
+            isLoading = false;
+            currentQuery = "";
+        });
+
+        scrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            View child = scrollView.getChildAt(0);
+            if (child != null) {
+                int diff = (child.getBottom() - (scrollView.getHeight() + scrollY));
+                if (diff <= 0) {
+                    performSearch(false);
+                }
+            }
         });
 
         input.requestFocus();
@@ -116,21 +141,45 @@ public class SearchActivity extends AppCompatActivity {
             resultsContainer.removeAllViews();
             progress.setVisibility(View.GONE);
             showMessage(getString(R.string.search_prompt));
+            currentPage = 1;
+            isLastPage = false;
+            isLoading = false;
+            currentQuery = "";
             return;
         }
+
+        if (!query.equals(currentQuery)) {
+            currentPage = 1;
+            isLastPage = false;
+            isLoading = false;
+            currentQuery = query;
+        }
+
+        if (isLoading || isLastPage) {
+            return;
+        }
+
+        isLoading = true;
+
         if (hideKeyboard) {
             hideKeyboard();
         }
-        resultsContainer.removeAllViews();
-        message.setVisibility(View.GONE);
-        progress.setVisibility(View.VISIBLE);
 
-        RetrofitClient.getApi().searchMovies(query, 1).enqueue(new Callback<MovieResponse>() {
+        if (currentPage == 1) {
+            resultsContainer.removeAllViews();
+            message.setVisibility(View.GONE);
+            progress.setVisibility(View.VISIBLE);
+        }
+
+        RetrofitClient.getApi().searchMovies(query, currentPage).enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
+                isLoading = false;
                 progress.setVisibility(View.GONE);
                 if (!response.isSuccessful() || response.body() == null) {
-                    showMessage(getString(R.string.error_network));
+                    if (currentPage == 1) {
+                        showMessage(getString(R.string.error_network));
+                    }
                     return;
                 }
                 renderResults(response.body().getResults());
@@ -138,16 +187,26 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<MovieResponse> call, @NonNull Throwable t) {
+                isLoading = false;
                 progress.setVisibility(View.GONE);
-                showMessage(getString(R.string.error_network));
+                if (currentPage == 1) {
+                    showMessage(getString(R.string.error_network));
+                }
             }
         });
     }
 
     private void renderResults(List<Movie> movies) {
-        resultsContainer.removeAllViews();
+        if (currentPage == 1) {
+            resultsContainer.removeAllViews();
+            if (movies == null || movies.isEmpty()) {
+                showMessage(getString(R.string.search_empty));
+                isLastPage = true;
+                return;
+            }
+        }
         if (movies == null || movies.isEmpty()) {
-            showMessage(getString(R.string.search_empty));
+            isLastPage = true;
             return;
         }
         message.setVisibility(View.GONE);
@@ -155,6 +214,7 @@ public class SearchActivity extends AppCompatActivity {
             View card = MovieViewFactory.createListCard(this, movie, this::openDetail);
             resultsContainer.addView(card);
         }
+        currentPage++;
     }
 
     private void openDetail(Movie movie) {

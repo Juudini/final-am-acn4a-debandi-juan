@@ -105,6 +105,7 @@
         android:id="@+id/search_Scroll"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_0"
+        android:scrollbars="none"
         android:clipToPadding="false"
         android:paddingHorizontal="@dimen/spacing_4"
         android:paddingTop="@dimen/spacing_4"
