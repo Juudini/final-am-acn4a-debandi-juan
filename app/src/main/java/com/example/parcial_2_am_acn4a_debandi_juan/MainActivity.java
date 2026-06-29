@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
         heroMovie = movie;
         heroLabel.setText(movie.getTitle());
         heroDescription.setText(movie.getOverview());
-        heroRating.setText(movie.getFormattedRating());
+        heroRating.setText(movie.getFormattedRating() + " / 5");
         ImageLoader.load(heroBgImage, movie.getBackdropPath() != null ? movie.getBackdropPath() : movie.getPosterPath());
 
         heroSkeletonOverlay.setVisibility(android.view.View.GONE);

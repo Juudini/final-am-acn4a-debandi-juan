@@ -32,6 +32,10 @@ public final class BottomNavbarHelper {
         Button btnCategories = activity.findViewById(R.id.bottomNavbar_BtnCategories);
         Button btnAccount = activity.findViewById(R.id.bottomNavbar_BtnAccount);
 
+        if (btnHome == null || btnWatchlist == null || btnCategories == null || btnAccount == null) {
+            return;
+        }
+
         btnHome.setOnClickListener(v -> {
             if (activeTab != TAB_HOME) {
                 Intent intent = new Intent(activity, MainActivity.class);

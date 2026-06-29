@@ -84,7 +84,7 @@ public class MovieDetail implements Serializable {
     }
 
     public String getFormattedRating() {
-        return String.format(Locale.US, "%.1f", voteAverage);
+        return String.format(Locale.US, "%.1f", voteAverage / 2.0);
     }
 
     public String getFormattedRuntime() {

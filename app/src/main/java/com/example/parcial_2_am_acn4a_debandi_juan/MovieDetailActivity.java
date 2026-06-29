@@ -61,6 +61,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private LinearLayout castContainer;
     private View castSkeletonScroll;
     private HorizontalScrollView castScroll;
+    private ImageView star1, star2, star3, star4, star5;
     private int movieId;
     private MovieDetail currentDetail;
     private boolean inWatchlist;
@@ -85,12 +86,16 @@ public class MovieDetailActivity extends AppCompatActivity {
         castContainer = findViewById(R.id.detail_castContainer);
         castSkeletonScroll = findViewById(R.id.detail_castSkeletonScroll);
         castScroll = findViewById(R.id.detail_castScroll);
+        star1 = findViewById(R.id.detail_star1);
+        star2 = findViewById(R.id.detail_star2);
+        star3 = findViewById(R.id.detail_star3);
+        star4 = findViewById(R.id.detail_star4);
+        star5 = findViewById(R.id.detail_star5);
 
         startSkeletonAnim(castSkeletonScroll);
 
         findViewById(R.id.detail_BtnBack).setOnClickListener(v -> finish());
         bookmarkButton.setOnClickListener(v -> onBookmarkClick());
-        BottomNavbarHelper.setup(this, BottomNavbarHelper.TAB_NONE);
 
         castScroll.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             View child = castScroll.getChildAt(0);
@@ -117,7 +122,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             View scrim = findViewById(R.id.detail_statusBarScrim);
             if (scrim != null) {
                 android.view.ViewGroup.LayoutParams lp = scrim.getLayoutParams();
-                lp.height = bars.top + getResources().getDimensionPixelSize(R.dimen.spacing_6);
+                lp.height = bars.top + getResources().getDimensionPixelSize(R.dimen.spacing_16);
                 scrim.setLayoutParams(lp);
             }
 
@@ -191,7 +196,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                     inWatchlist = false;
                     updateBookmarkUi();
                     Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.watchlist_removed, Snackbar.LENGTH_SHORT);
-                    View anchor = findViewById(R.id.bottomNavbarWrapper);
+                    View anchor = findViewById(R.id.detail_bottomBar);
                     if (anchor != null) {
                         snackbar.setAnchorView(anchor);
                     }
@@ -221,7 +226,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                     inWatchlist = true;
                     updateBookmarkUi();
                     Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.watchlist_added, Snackbar.LENGTH_SHORT);
-                    View anchor = findViewById(R.id.bottomNavbarWrapper);
+                    View anchor = findViewById(R.id.detail_bottomBar);
                     if (anchor != null) {
                         snackbar.setAnchorView(anchor);
                     }
@@ -370,10 +375,30 @@ public class MovieDetailActivity extends AppCompatActivity {
     private void bind(MovieDetail detail) {
         currentDetail = detail;
         title.setText(detail.getTitle());
-        rating.setText(detail.getFormattedRating());
+        
+        double rating5 = detail.getVoteAverage() / 2.0;
+        rating.setText(String.format(java.util.Locale.US, "%.1f / 5", rating5));
+        
+        setStarIcon(star1, rating5, 1);
+        setStarIcon(star2, rating5, 2);
+        setStarIcon(star3, rating5, 3);
+        setStarIcon(star4, rating5, 4);
+        setStarIcon(star5, rating5, 5);
+
         overview.setText(detail.getOverview());
         ImageLoader.load(backdrop, detail.getBackdropPath() != null ? detail.getBackdropPath() : detail.getPosterPath());
         meta.setText(buildMeta(detail));
+    }
+
+    private void setStarIcon(ImageView star, double rating, int position) {
+        if (star == null) return;
+        if (rating >= position) {
+            star.setImageResource(R.drawable.ic_star_rate);
+        } else if (rating >= position - 0.5) {
+            star.setImageResource(R.drawable.ic_star_rate_half);
+        } else {
+            star.setImageResource(R.drawable.ic_star_rate_outline);
+        }
     }
 
     private String buildMeta(MovieDetail detail) {

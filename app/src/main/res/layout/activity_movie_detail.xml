@@ -5,7 +5,7 @@
     android:id="@+id/detail_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_surface"
+    android:background="@color/bg_lowest"
     android:fitsSystemWindows="true">
 
     <ScrollView
@@ -15,7 +15,7 @@
         android:scrollbars="none"
         android:fillViewport="true"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavbarWrapper">
+        app:layout_constraintBottom_toTopOf="@id/detail_bottomBar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,31 +24,36 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="320dp">
 
                 <ImageView
                     android:id="@+id/detail_backdrop"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/size_64"
+                    android:layout_height="match_parent"
                     android:background="@color/bg_navbar"
                     android:scaleType="centerCrop"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
-                <Button
-                    android:id="@+id/detail_BtnBack"
-                    android:layout_width="@dimen/icon_xl"
-                    android:layout_height="@dimen/icon_xl"
-                    android:layout_margin="@dimen/spacing_3"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:backgroundTint="@color/bg_shadow"
-                    app:cornerRadius="@dimen/radius_full"
-                    app:icon="@drawable/ic_arrow_back"
-                    app:iconGravity="textStart"
-                    app:iconPadding="0dp"
-                    app:iconTint="@color/text_title"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <!-- Gradiente to black -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:background="@drawable/gradient_bottom_shadow"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <TextView
+                    android:id="@+id/detail_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/spacing_4"
+                    android:layout_marginBottom="@dimen/spacing_3"
+                    android:gravity="center"
+                    android:textColor="@color/text_title"
+                    android:textSize="@dimen/text_3xl"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:text="Movie Title" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
@@ -58,22 +63,59 @@
                 android:padding="@dimen/spacing_4">
 
                 <TextView
-                    android:id="@+id/detail_title"
+                    android:id="@+id/detail_meta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/text_title"
-                    android:textSize="@dimen/text_3xl"
-                    android:textStyle="bold"
-                    tools:text="Movie Title" />
+                    android:gravity="center"
+                    android:letterSpacing="@dimen/ls_wide"
+                    android:textAllCaps="true"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_xs"
+                    tools:text="ACTION • 2026" />
 
                 <LinearLayout
+                    android:id="@+id/detail_starsContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_2"
+                    android:layout_marginTop="@dimen/spacing_3"
+                    android:layout_gravity="center"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <ImageView
+                        android:id="@+id/detail_star1"
+                        android:layout_width="@dimen/icon_base"
+                        android:layout_height="@dimen/icon_base"
+                        android:layout_marginEnd="@dimen/spacing_0_5"
+                        android:src="@drawable/ic_star_rate"
+                        app:tint="@color/bg_selected" />
+
+                    <ImageView
+                        android:id="@+id/detail_star2"
+                        android:layout_width="@dimen/icon_base"
+                        android:layout_height="@dimen/icon_base"
+                        android:layout_marginEnd="@dimen/spacing_0_5"
+                        android:src="@drawable/ic_star_rate"
+                        app:tint="@color/bg_selected" />
+
+                    <ImageView
+                        android:id="@+id/detail_star3"
+                        android:layout_width="@dimen/icon_base"
+                        android:layout_height="@dimen/icon_base"
+                        android:layout_marginEnd="@dimen/spacing_0_5"
+                        android:src="@drawable/ic_star_rate"
+                        app:tint="@color/bg_selected" />
+
+                    <ImageView
+                        android:id="@+id/detail_star4"
+                        android:layout_width="@dimen/icon_base"
+                        android:layout_height="@dimen/icon_base"
+                        android:layout_marginEnd="@dimen/spacing_0_5"
+                        android:src="@drawable/ic_star_rate"
+                        app:tint="@color/bg_selected" />
+
+                    <ImageView
+                        android:id="@+id/detail_star5"
                         android:layout_width="@dimen/icon_base"
                         android:layout_height="@dimen/icon_base"
                         android:src="@drawable/ic_star_rate"
@@ -83,30 +125,20 @@
                         android:id="@+id/detail_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_1"
+                        android:layout_marginStart="@dimen/spacing_2"
                         android:textColor="@color/text_title"
                         android:textSize="@dimen/text_sm"
                         android:textStyle="bold"
-                        tools:text="8.1" />
+                        tools:text="4.1 / 5" />
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/detail_meta"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_2"
-                    android:letterSpacing="@dimen/ls_wide"
-                    android:textAllCaps="true"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/text_xs"
-                    tools:text="ACTION • 2H 11M • 2026" />
 
                 <TextView
                     android:id="@+id/detail_overview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_4"
+                    android:layout_marginTop="@dimen/spacing_5"
                     android:lineSpacingExtra="@dimen/spacing_0_5"
+                    android:gravity="center"
                     android:textColor="@color/text_primary"
                     android:textSize="@dimen/text_base"
                     tools:text="Overview..." />
@@ -121,6 +153,7 @@
                     android:textSize="@dimen/text_xl"
                     android:textStyle="bold" />
 
+                <!-- Cast Skeleton Loading -->
                 <HorizontalScrollView
                     android:id="@+id/detail_castSkeletonScroll"
                     android:layout_width="match_parent"
@@ -160,6 +193,7 @@
                     </LinearLayout>
                 </HorizontalScrollView>
 
+                <!-- Cast List Scroll -->
                 <HorizontalScrollView
                     android:id="@+id/detail_castScroll"
                     android:layout_width="match_parent"
@@ -173,25 +207,34 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal" />
                 </HorizontalScrollView>
-
-                <Button
-                    android:id="@+id/detail_BtnBookmark"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/icon_xl"
-                    android:layout_marginTop="@dimen/spacing_6"
-                    android:letterSpacing="@dimen/ls_wide"
-                    android:text="@string/detail_addToWatchlist"
-                    android:textColor="@color/text_selected"
-                    android:textStyle="bold"
-                    app:backgroundTint="@color/bg_selected"
-                    app:cornerRadius="@dimen/radius_md"
-                    app:icon="@drawable/ic_add_to_watchlist"
-                    app:iconGravity="textStart"
-                    app:iconTint="@color/icon_selected" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
+    <FrameLayout
+        android:id="@+id/detail_bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_lowest"
+        android:padding="@dimen/spacing_3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/detail_BtnBookmark"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/icon_xl"
+            android:letterSpacing="@dimen/ls_wide"
+            android:text="@string/detail_addToWatchlist"
+            android:textColor="@color/text_selected"
+            android:textStyle="bold"
+            app:backgroundTint="@color/bg_selected"
+            app:cornerRadius="@dimen/radius_md"
+            app:icon="@drawable/ic_add_to_watchlist"
+            app:iconGravity="textStart"
+            app:iconTint="@color/icon_selected" />
+    </FrameLayout>
     <ProgressBar
         android:id="@+id/detail_progress"
         android:layout_width="wrap_content"
@@ -205,10 +248,23 @@
     <View
         android:id="@+id/detail_statusBarScrim"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="140dp"
         android:background="@drawable/gradient_top_shadow"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-    <include layout="@layout/layout_bottom_navbar" />
+
+    <ImageView
+        android:id="@+id/detail_BtnBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="@dimen/spacing_3"
+        android:padding="12dp"
+        android:src="@drawable/ic_clear"
+        android:tint="@color/text_title"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

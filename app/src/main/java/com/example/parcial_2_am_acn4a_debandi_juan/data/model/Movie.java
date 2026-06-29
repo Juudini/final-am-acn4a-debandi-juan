@@ -88,6 +88,6 @@ public class Movie implements Serializable {
     }
 
     public String getFormattedRating() {
-        return String.format(java.util.Locale.US, "%.1f", voteAverage);
+        return String.format(java.util.Locale.US, "%.1f", voteAverage / 2.0);
     }
 }
