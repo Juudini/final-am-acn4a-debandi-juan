@@ -1,6 +1,7 @@
 package com.example.parcial_2_am_acn4a_debandi_juan;
 
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -46,6 +47,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView heroRating;
     private Movie heroMovie;
 
+    // Skeletons
+    private View heroSkeletonOverlay;
+    private View heroSkeletonTitleLines;
+    private View heroSkeletonDescLines;
+    private TextView heroPremiereBadge;
+    private View trendingSkeletonScroll;
+    private View newReleasesSkeletonContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +68,12 @@ public class MainActivity extends AppCompatActivity {
         heroLabel = findViewById(R.id.heroSection_Label);
         heroDescription = findViewById(R.id.heroSection_Description);
         heroRating = findViewById(R.id.heroSection_Rating);
+        heroSkeletonOverlay = findViewById(R.id.heroSkeletonOverlay);
+        heroSkeletonTitleLines = findViewById(R.id.heroSkeletonTitleLines);
+        heroSkeletonDescLines = findViewById(R.id.heroSkeletonDescLines);
+        heroPremiereBadge = findViewById(R.id.heroSection_PremiereBadge);
+        trendingSkeletonScroll = findViewById(R.id.trendingSkeletonScroll);
+        newReleasesSkeletonContainer = findViewById(R.id.newReleasesSkeletonContainer);
 
         Button btnPlay = findViewById(R.id.heroSection_BtnPlay);
         btnPlay.setOnClickListener(v -> {
@@ -98,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
         loadTrending();
         loadNowPlaying();
+        startSkeletonAnimations();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -155,6 +171,29 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void startSkeletonAnimations() {
+        startAnimOnView(heroSkeletonOverlay);
+        startAnimOnView(heroSkeletonTitleLines);
+        startAnimOnView(heroSkeletonDescLines);
+        startAnimOnView(trendingSkeletonScroll);
+        startAnimOnView(newReleasesSkeletonContainer);
+    }
+
+    private void startAnimOnView(View container) {
+        if (container == null) return;
+        if (container instanceof android.view.ViewGroup) {
+            android.view.ViewGroup vg = (android.view.ViewGroup) container;
+            for (int i = 0; i < vg.getChildCount(); i++) {
+                startAnimOnView(vg.getChildAt(i));
+            }
+        } else {
+            android.graphics.drawable.Drawable bg = container.getBackground();
+            if (bg instanceof AnimationDrawable) {
+                ((AnimationDrawable) bg).start();
+            }
+        }
+    }
+
     private void loadTrending() {
         RetrofitClient.getApi().getTrending().enqueue(new Callback<MovieResponse>() {
             @Override
@@ -205,6 +244,14 @@ public class MainActivity extends AppCompatActivity {
         heroDescription.setText(movie.getOverview());
         heroRating.setText(movie.getFormattedRating());
         ImageLoader.load(heroBgImage, movie.getBackdropPath() != null ? movie.getBackdropPath() : movie.getPosterPath());
+
+        heroSkeletonOverlay.setVisibility(android.view.View.GONE);
+        heroSkeletonTitleLines.setVisibility(android.view.View.GONE);
+        heroSkeletonDescLines.setVisibility(android.view.View.GONE);
+        heroBgImage.setVisibility(android.view.View.VISIBLE);
+        heroPremiereBadge.setVisibility(android.view.View.VISIBLE);
+        heroLabel.setVisibility(android.view.View.VISIBLE);
+        heroDescription.setVisibility(android.view.View.VISIBLE);
     }
 
     private void renderTrending(List<Movie> movies) {
@@ -213,6 +260,9 @@ public class MainActivity extends AppCompatActivity {
             View card = MovieViewFactory.createPosterCard(this, movie, this::openDetail);
             trendingMoviesContainer.addView(card);
         }
+
+        trendingSkeletonScroll.setVisibility(android.view.View.GONE);
+        trendingMoviesContainer.setVisibility(android.view.View.VISIBLE);
     }
 
     private void renderNewReleases(List<Movie> movies) {
@@ -221,6 +271,9 @@ public class MainActivity extends AppCompatActivity {
             View card = MovieViewFactory.createListCard(this, movie, this::openDetail);
             newReleasesContainer.addView(card);
         }
+
+        newReleasesSkeletonContainer.setVisibility(android.view.View.GONE);
+        newReleasesContainer.setVisibility(android.view.View.VISIBLE);
     }
 
     private void openDetail(Movie movie) {
