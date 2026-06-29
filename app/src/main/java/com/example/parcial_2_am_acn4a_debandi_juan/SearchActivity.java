@@ -3,6 +3,10 @@ package com.example.parcial_2_am_acn4a_debandi_juan;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -35,6 +39,9 @@ public class SearchActivity extends AppCompatActivity {
     private TextView message;
     private ProgressBar progress;
 
+    private final Handler searchHandler = new Handler(Looper.getMainLooper());
+    private Runnable searchRunnable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +52,7 @@ public class SearchActivity extends AppCompatActivity {
         resultsContainer = findViewById(R.id.search_ResultsContainer);
         message = findViewById(R.id.search_Message);
         progress = findViewById(R.id.search_Progress);
+        View btnClear = findViewById(R.id.search_BtnClear);
 
         findViewById(R.id.search_BtnBack).setOnClickListener(v -> finish());
 
@@ -54,23 +62,65 @@ public class SearchActivity extends AppCompatActivity {
             return insets;
         });
 
+        input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                btnClear.setVisibility(s.length() > 0 ? View.VISIBLE : View.GONE);
+                if (searchRunnable != null) {
+                    searchHandler.removeCallbacks(searchRunnable);
+                }
+                if (s.toString().trim().isEmpty()) {
+                    resultsContainer.removeAllViews();
+                    progress.setVisibility(View.GONE);
+                    showMessage(getString(R.string.search_prompt));
+                } else {
+                    searchRunnable = () -> performSearch(false);
+                    searchHandler.postDelayed(searchRunnable, 600);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         input.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                performSearch();
+                if (searchRunnable != null) {
+                    searchHandler.removeCallbacks(searchRunnable);
+                }
+                performSearch(true);
                 return true;
             }
             return false;
         });
 
+        btnClear.setOnClickListener(v -> {
+            input.setText("");
+            if (searchRunnable != null) {
+                searchHandler.removeCallbacks(searchRunnable);
+            }
+            resultsContainer.removeAllViews();
+            progress.setVisibility(View.GONE);
+            showMessage(getString(R.string.search_prompt));
+        });
+
         input.requestFocus();
     }
 
-    private void performSearch() {
+    private void performSearch(boolean hideKeyboard) {
         String query = input.getText().toString().trim();
         if (query.isEmpty()) {
+            resultsContainer.removeAllViews();
+            progress.setVisibility(View.GONE);
+            showMessage(getString(R.string.search_prompt));
             return;
         }
-        hideKeyboard();
+        if (hideKeyboard) {
+            hideKeyboard();
+        }
         resultsContainer.removeAllViews();
         message.setVisibility(View.GONE);
         progress.setVisibility(View.VISIBLE);

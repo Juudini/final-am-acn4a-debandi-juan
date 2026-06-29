@@ -47,26 +47,32 @@
                 android:orientation="horizontal"
                 android:paddingHorizontal="@dimen/spacing_3">
 
-                <ImageView
-                    android:layout_width="@dimen/icon_base"
-                    android:layout_height="@dimen/icon_base"
-                    android:src="@drawable/ic_search"
-                    app:tint="@color/icon_default" />
-
                 <EditText
                     android:id="@+id/search_Input"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:hint="@string/search_hint"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:paddingHorizontal="@dimen/spacing_2"
                     android:paddingVertical="@dimen/spacing_3"
                     android:textColor="@color/text_title"
                     android:textColorHint="@color/text_primary"
                     android:textSize="@dimen/text_base" />
+
+                <ImageView
+                    android:id="@+id/search_BtnClear"
+                    android:layout_width="@dimen/icon_base"
+                    android:layout_height="@dimen/icon_base"
+                    android:src="@drawable/ic_clear"
+                    app:tint="@color/icon_default"
+                    android:visibility="gone"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Clear search" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
