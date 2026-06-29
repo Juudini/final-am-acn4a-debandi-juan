@@ -13,7 +13,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import com.example.parcial_2_am_acn4a_debandi_juan.R;
+import com.example.parcial_2_am_acn4a_debandi_juan.data.GenreRepository;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.Movie;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -135,13 +140,9 @@ public final class MovieViewFactory {
         textParams.gravity = Gravity.CENTER_VERTICAL;
         textContainer.setLayoutParams(textParams);
 
-        LinearLayout titleRow = new LinearLayout(context);
-        titleRow.setOrientation(LinearLayout.HORIZONTAL);
-        titleRow.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        titleRow.setGravity(Gravity.CENTER_VERTICAL);
-
         TextView tvTitle = new TextView(context);
-        tvTitle.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
+        LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        tvTitle.setLayoutParams(titleParams);
         tvTitle.setText(movie.getTitle());
         tvTitle.setTextColor(ContextCompat.getColor(context, R.color.text_title));
         tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_lg));
@@ -149,36 +150,40 @@ public final class MovieViewFactory {
         tvTitle.setMaxLines(2);
         tvTitle.setEllipsize(TextUtils.TruncateAt.END);
 
-        ImageView starIcon = new ImageView(context);
-        int starSize = dp(context, R.dimen.spacing_4);
-        starIcon.setLayoutParams(new LinearLayout.LayoutParams(starSize, starSize));
-        starIcon.setImageResource(R.drawable.ic_star_rate);
-        starIcon.setColorFilter(ContextCompat.getColor(context, R.color.bg_selected));
+        String year = movie.getReleaseYear();
+        String rating = movie.getFormattedRating();
+        List<String> metaParts = new ArrayList<>();
+        if (movie.getVoteAverage() > 0) {
+            metaParts.add("★ " + rating);
+        }
+        if (year != null && !year.isEmpty()) {
+            metaParts.add(year);
+        }
+        String metaText = TextUtils.join("   •   ", metaParts);
 
-        TextView tvRating = new TextView(context);
-        LinearLayout.LayoutParams ratingParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        ratingParams.setMarginStart(dp(context, R.dimen.spacing_1));
-        tvRating.setLayoutParams(ratingParams);
-        tvRating.setText(movie.getFormattedRating());
-        tvRating.setTextColor(ContextCompat.getColor(context, R.color.text_title));
-        tvRating.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_sm) );
-        tvRating.setTypeface(null, Typeface.BOLD);
+        TextView tvMeta = new TextView(context);
+        LinearLayout.LayoutParams metaParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        metaParams.topMargin = dp(context, R.dimen.spacing_1);
+        tvMeta.setLayoutParams(metaParams);
+        tvMeta.setText(metaText);
+        tvMeta.setTextColor(ContextCompat.getColor(context, R.color.text_title));
+        tvMeta.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_xs));
+        tvMeta.setTypeface(null, Typeface.BOLD);
 
-        titleRow.addView(tvTitle);
-        titleRow.addView(starIcon);
-        titleRow.addView(tvRating);
 
-        TextView tvSubtitle = new TextView(context);
-        LinearLayout.LayoutParams subParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        subParams.topMargin = dp(context, R.dimen.spacing_2);
-        tvSubtitle.setLayoutParams(subParams);
-        tvSubtitle.setText(movie.getReleaseYear());
-        tvSubtitle.setTextColor(ContextCompat.getColor(context, R.color.text_primary));
-        tvSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_xs));
-        tvSubtitle.setLetterSpacing(0.05f);
+        String categoriesText = GenreRepository.getGenresLabel(movie.getGenreIds());
+        TextView tvCategories = new TextView(context);
+        LinearLayout.LayoutParams catParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        catParams.topMargin = dp(context, R.dimen.spacing_1);
+        tvCategories.setLayoutParams(catParams);
+        tvCategories.setText(categoriesText);
+        tvCategories.setTextColor(ContextCompat.getColor(context, R.color.text_primary));
+        tvCategories.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp(context, R.dimen.text_xs));
+        tvCategories.setVisibility(categoriesText.isEmpty() ? View.GONE : View.VISIBLE);
 
-        textContainer.addView(titleRow);
-        textContainer.addView(tvSubtitle);
+        textContainer.addView(tvTitle);
+        textContainer.addView(tvMeta);
+        textContainer.addView(tvCategories);
 
         if (showDescription) {
             TextView tvDesc = new TextView(context);
@@ -231,10 +236,12 @@ public final class MovieViewFactory {
     private static void styleBookmark(Context context, MaterialButton button, boolean inWatchlist) {
         int yellow = ContextCompat.getColor(context, R.color.bg_selected);
         if (inWatchlist) {
+            button.setIconResource(R.drawable.ic_watchlist);
             button.setBackgroundTintList(ColorStateList.valueOf(yellow));
             button.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.icon_selected)));
             button.setStrokeWidth(0);
         } else {
+            button.setIconResource(R.drawable.ic_add_to_watchlist);
             button.setBackgroundTintList(ColorStateList.valueOf(Color.TRANSPARENT));
             button.setIconTint(ColorStateList.valueOf(yellow));
             button.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.border_default)));

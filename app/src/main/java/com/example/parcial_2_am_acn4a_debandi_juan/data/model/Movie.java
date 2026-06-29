@@ -76,6 +76,10 @@ public class Movie implements Serializable {
         return genreIds;
     }
 
+    public void setGenreIds(List<Integer> genreIds) {
+        this.genreIds = genreIds;
+    }
+
     public String getReleaseYear() {
         if (releaseDate != null && releaseDate.length() >= 4) {
             return releaseDate.substring(0, 4);

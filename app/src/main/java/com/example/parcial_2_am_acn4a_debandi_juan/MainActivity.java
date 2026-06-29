@@ -1,5 +1,6 @@
 package com.example.parcial_2_am_acn4a_debandi_juan;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.content.Intent;
@@ -14,6 +15,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +26,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.parcial_2_am_acn4a_debandi_juan.data.GenreRepository;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.WatchlistRepository;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.Movie;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.MovieResponse;
@@ -49,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView heroDescription;
     private TextView heroRating;
     private Movie heroMovie;
+    private boolean heroInWatchlist;
 
     // Skeletons
     private View heroSkeletonOverlay;
@@ -63,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        GenreRepository.init(null);
 
         mainScrollView = findViewById(R.id.mainScrollView);
         setupHeaderScrollTransition();
@@ -94,7 +102,37 @@ public class MainActivity extends AppCompatActivity {
             if (heroMovie == null) {
                 return;
             }
-            WatchlistRepository.add(heroMovie, success -> Toast.makeText(this, success ? R.string.watchlist_added : R.string.error_network, Toast.LENGTH_SHORT).show());
+            if (heroInWatchlist) {
+                WatchlistRepository.remove(heroMovie.getId(), success -> {
+                    if (success) {
+                        heroInWatchlist = false;
+                        updateHeroBookmarkUi();
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.watchlist_removed, Snackbar.LENGTH_SHORT);
+                        View anchor = findViewById(R.id.bottomNavbarWrapper);
+                        if (anchor != null) {
+                            snackbar.setAnchorView(anchor);
+                        }
+                        snackbar.show();
+                    } else {
+                        Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                WatchlistRepository.add(heroMovie, success -> {
+                    if (success) {
+                        heroInWatchlist = true;
+                        updateHeroBookmarkUi();
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.watchlist_added, Snackbar.LENGTH_SHORT);
+                        View anchor = findViewById(R.id.bottomNavbarWrapper);
+                        if (anchor != null) {
+                            snackbar.setAnchorView(anchor);
+                        }
+                        snackbar.show();
+                    } else {
+                        Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         });
         trendingMoviesContainer = findViewById(R.id.trendingMoviesContainer);
         newReleasesContainer = findViewById(R.id.newReleasesContainer);
@@ -240,6 +278,49 @@ public class MainActivity extends AppCompatActivity {
         heroPremiereBadge.setVisibility(android.view.View.VISIBLE);
         heroLabel.setVisibility(android.view.View.VISIBLE);
         heroDescription.setVisibility(android.view.View.VISIBLE);
+
+        refreshHeroWatchlistState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshHeroWatchlistState();
+    }
+
+    private void refreshHeroWatchlistState() {
+        if (heroMovie == null) return;
+        if (AuthService.isLoggedIn()) {
+            WatchlistRepository.isInWatchlist(heroMovie.getId(), result -> {
+                heroInWatchlist = result;
+                updateHeroBookmarkUi();
+            });
+        } else {
+            heroInWatchlist = false;
+            updateHeroBookmarkUi();
+        }
+    }
+
+    private void updateHeroBookmarkUi() {
+        MaterialButton btn = findViewById(R.id.hero_BtnBookmark);
+        if (btn == null) return;
+
+        if (heroInWatchlist) {
+            btn.setText(R.string.detail_inWatchlist);
+            btn.setIconResource(R.drawable.ic_watchlist);
+            btn.setBackgroundTintList(ColorStateList.valueOf(Color.TRANSPARENT));
+            btn.setTextColor(ContextCompat.getColor(this, R.color.text_title));
+            btn.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.text_title)));
+            btn.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.border_default)));
+            btn.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.stroke_width));
+        } else {
+            btn.setText(R.string.detail_addToWatchlist);
+            btn.setIconResource(R.drawable.ic_add_to_watchlist);
+            btn.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.bg_selected)));
+            btn.setTextColor(ContextCompat.getColor(this, R.color.text_selected));
+            btn.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.icon_selected)));
+            btn.setStrokeWidth(0);
+        }
     }
 
     private void renderTrending(List<Movie> movies) {

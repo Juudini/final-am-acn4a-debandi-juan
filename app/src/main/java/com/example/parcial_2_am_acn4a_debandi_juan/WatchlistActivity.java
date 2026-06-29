@@ -9,19 +9,27 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.parcial_2_am_acn4a_debandi_juan.data.GenreRepository;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.WatchlistRepository;
 import com.example.parcial_2_am_acn4a_debandi_juan.data.model.Movie;
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.AuthService;
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.MovieViewFactory;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WatchlistActivity extends AppCompatActivity {
 
@@ -29,11 +37,16 @@ public class WatchlistActivity extends AppCompatActivity {
     private TextView message;
     private ProgressBar progress;
 
+    private final Handler watchlistHandler = new Handler(Looper.getMainLooper());
+    private final Map<Integer, Runnable> pendingRemovals = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_watchlist);
+
+        GenreRepository.init(null);
 
         container = findViewById(R.id.watchlist_Container);
         message = findViewById(R.id.watchlist_Message);
@@ -95,21 +108,87 @@ public class WatchlistActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        flushPendingRemovals();
+    }
+
+    private void flushPendingRemovals() {
+        if (pendingRemovals.isEmpty()) {
+            return;
+        }
+        List<Runnable> copy = new ArrayList<>(pendingRemovals.values());
+        pendingRemovals.clear();
+        for (Runnable runnable : copy) {
+            watchlistHandler.removeCallbacks(runnable);
+            runnable.run();
+        }
+    }
+
     private void onWatchlistToggle(Movie movie, boolean nowInWatchlist, View card) {
         if (nowInWatchlist) {
-            WatchlistRepository.add(movie, success -> showResult(success, R.string.watchlist_added));
+            Runnable pending = pendingRemovals.remove(movie.getId());
+            if (pending != null) {
+                watchlistHandler.removeCallbacks(pending);
+            } else {
+                WatchlistRepository.add(movie, success -> showResult(success, R.string.watchlist_added));
+            }
         } else {
+            final int index = container.indexOfChild(card);
             container.removeView(card);
             if (container.getChildCount() == 0) {
                 showMessage(getString(R.string.watchlist_empty));
             }
-            WatchlistRepository.remove(movie.getId(), success -> showResult(success, R.string.watchlist_removed));
+
+            Runnable removeRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    pendingRemovals.remove(movie.getId());
+                    WatchlistRepository.remove(movie.getId(), success -> {});
+                }
+            };
+
+            pendingRemovals.put(movie.getId(), removeRunnable);
+            watchlistHandler.postDelayed(removeRunnable, 3500);
+
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.watchlist_removed, 3500);
+            View anchor = findViewById(R.id.bottomNavbarWrapper);
+            if (anchor != null) {
+                snackbar.setAnchorView(anchor);
+            }
+            snackbar.setAction(R.string.watchlist_undo, v -> {
+                Runnable pending = pendingRemovals.remove(movie.getId());
+                if (pending != null) {
+                    watchlistHandler.removeCallbacks(pending);
+                }
+                if (index != -1 && index <= container.getChildCount()) {
+                    container.addView(card, index);
+                } else {
+                    container.addView(card);
+                }
+                message.setVisibility(View.GONE);
+
+                if (card instanceof ViewGroup) {
+                    ViewGroup vg = (ViewGroup) card;
+                    View lastChild = vg.getChildAt(vg.getChildCount() - 1);
+                    if (lastChild instanceof MaterialButton) {
+                        lastChild.performClick();
+                    }
+                }
+            });
+            snackbar.show();
         }
     }
 
     private void showResult(boolean success, int successMessageRes) {
         int messageRes = success ? successMessageRes : R.string.error_network;
-        Snackbar.make(findViewById(android.R.id.content), messageRes, Snackbar.LENGTH_SHORT).show();
+        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), messageRes, Snackbar.LENGTH_SHORT);
+        View anchor = findViewById(R.id.bottomNavbarWrapper);
+        if (anchor != null) {
+            snackbar.setAnchorView(anchor);
+        }
+        snackbar.show();
     }
 
     private void openDetail(Movie movie) {

@@ -1,5 +1,7 @@
 package com.example.parcial_2_am_acn4a_debandi_juan;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import com.example.parcial_2_am_acn4a_debandi_juan.data.network.RetrofitClient;
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.ImageLoader;
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.AuthService;
 import com.example.parcial_2_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -54,7 +57,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private TextView meta;
     private TextView overview;
     private ProgressBar progress;
-    private Button bookmarkButton;
+    private MaterialButton bookmarkButton;
     private LinearLayout castContainer;
     private View castSkeletonScroll;
     private HorizontalScrollView castScroll;
@@ -156,7 +159,22 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void updateBookmarkUi() {
-        bookmarkButton.setText(inWatchlist ? R.string.detail_inWatchlist : R.string.detail_addToWatchlist);
+        if (inWatchlist) {
+            bookmarkButton.setText(R.string.detail_inWatchlist);
+            bookmarkButton.setIconResource(R.drawable.ic_watchlist);
+            bookmarkButton.setBackgroundTintList(ColorStateList.valueOf(Color.TRANSPARENT));
+            bookmarkButton.setTextColor(ContextCompat.getColor(this, R.color.text_title));
+            bookmarkButton.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.text_title)));
+            bookmarkButton.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.border_default)));
+            bookmarkButton.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.stroke_width));
+        } else {
+            bookmarkButton.setText(R.string.detail_addToWatchlist);
+            bookmarkButton.setIconResource(R.drawable.ic_add_to_watchlist);
+            bookmarkButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.bg_selected)));
+            bookmarkButton.setTextColor(ContextCompat.getColor(this, R.color.text_selected));
+            bookmarkButton.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.icon_selected)));
+            bookmarkButton.setStrokeWidth(0);
+        }
     }
 
     private void onBookmarkClick() {
@@ -172,7 +190,12 @@ public class MovieDetailActivity extends AppCompatActivity {
                 if (success) {
                     inWatchlist = false;
                     updateBookmarkUi();
-                    Toast.makeText(this, R.string.watchlist_removed, Toast.LENGTH_SHORT).show();
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.watchlist_removed, Snackbar.LENGTH_SHORT);
+                    View anchor = findViewById(R.id.bottomNavbarWrapper);
+                    if (anchor != null) {
+                        snackbar.setAnchorView(anchor);
+                    }
+                    snackbar.show();
                 } else {
                     Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
                 }
@@ -186,12 +209,23 @@ public class MovieDetailActivity extends AppCompatActivity {
                     currentDetail.getBackdropPath(),
                     currentDetail.getVoteAverage(),
                     currentDetail.getReleaseDate());
+            List<Integer> genreIds = new ArrayList<>();
+            if (currentDetail.getGenres() != null) {
+                for (com.example.parcial_2_am_acn4a_debandi_juan.data.model.Genre g : currentDetail.getGenres()) {
+                    genreIds.add(g.getId());
+                }
+            }
+            movie.setGenreIds(genreIds);
             WatchlistRepository.add(movie, success -> {
                 if (success) {
                     inWatchlist = true;
                     updateBookmarkUi();
-                    Snackbar.make(findViewById(android.R.id.content),
-                            R.string.watchlist_added, Snackbar.LENGTH_SHORT).show();
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.watchlist_added, Snackbar.LENGTH_SHORT);
+                    View anchor = findViewById(R.id.bottomNavbarWrapper);
+                    if (anchor != null) {
+                        snackbar.setAnchorView(anchor);
+                    }
+                    snackbar.show();
                 } else {
                     Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
                 }

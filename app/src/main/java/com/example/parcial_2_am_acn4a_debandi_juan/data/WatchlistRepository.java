@@ -57,6 +57,7 @@ public final class WatchlistRepository {
         data.put("backdropPath", movie.getBackdropPath());
         data.put("voteAverage", movie.getVoteAverage());
         data.put("releaseDate", movie.getReleaseDate());
+        data.put("genreIds", movie.getGenreIds());
         ref.document(String.valueOf(movie.getId()))
                 .set(data)
                 .addOnSuccessListener(unused -> callback.onComplete(true))
@@ -107,7 +108,14 @@ public final class WatchlistRepository {
     private static Movie toMovie(DocumentSnapshot doc) {
         Long id = doc.getLong("id");
         Double vote = doc.getDouble("voteAverage");
-        return new Movie(
+        List<Long> ids = (List<Long>) doc.get("genreIds");
+        List<Integer> intIds = new ArrayList<>();
+        if (ids != null) {
+            for (Long idVal : ids) {
+                intIds.add(idVal.intValue());
+            }
+        }
+        Movie movie = new Movie(
                 id != null ? id.intValue() : 0,
                 doc.getString("title"),
                 doc.getString("overview"),
@@ -115,5 +123,7 @@ public final class WatchlistRepository {
                 doc.getString("backdropPath"),
                 vote != null ? vote : 0.0,
                 doc.getString("releaseDate"));
+        movie.setGenreIds(intIds);
+        return movie;
     }
 }
