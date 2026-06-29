@@ -3,7 +3,7 @@ package com.example.parcial_2_am_acn4a_debandi_juan.utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.widget.Button;
+import com.google.android.material.button.MaterialButton;
 
 import androidx.core.content.ContextCompat;
 
@@ -27,10 +27,10 @@ public final class BottomNavbarHelper {
     public static void setup(Activity activity, int activeTab) {
         activity.overridePendingTransition(0, 0);
 
-        Button btnHome = activity.findViewById(R.id.bottomNavbar_BtnHome);
-        Button btnWatchlist = activity.findViewById(R.id.bottomNavbar_BtnWatchlist);
-        Button btnCategories = activity.findViewById(R.id.bottomNavbar_BtnCategories);
-        Button btnAccount = activity.findViewById(R.id.bottomNavbar_BtnAccount);
+        MaterialButton btnHome = activity.findViewById(R.id.bottomNavbar_BtnHome);
+        MaterialButton btnWatchlist = activity.findViewById(R.id.bottomNavbar_BtnWatchlist);
+        MaterialButton btnCategories = activity.findViewById(R.id.bottomNavbar_BtnCategories);
+        MaterialButton btnAccount = activity.findViewById(R.id.bottomNavbar_BtnAccount);
 
         if (btnHome == null || btnWatchlist == null || btnCategories == null || btnAccount == null) {
             return;
@@ -90,11 +90,13 @@ public final class BottomNavbarHelper {
         if (activeTab == TAB_ACCOUNT) applySelected(activity, btnAccount);
     }
 
-    private static void applySelected(Activity activity, Button btn) {
+    private static void applySelected(Activity activity, MaterialButton btn) {
         int bgColor = ContextCompat.getColor(activity, R.color.bg_selected);
         int textColor = ContextCompat.getColor(activity, R.color.text_selected);
+        int iconColor = ContextCompat.getColor(activity, R.color.icon_selected);
 
         btn.setBackgroundTintList(ColorStateList.valueOf(bgColor));
         btn.setTextColor(textColor);
+        btn.setIconTint(ColorStateList.valueOf(iconColor));
     }
 }
