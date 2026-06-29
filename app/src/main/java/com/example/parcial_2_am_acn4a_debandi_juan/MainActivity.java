@@ -53,15 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mainScrollView = findViewById(R.id.mainScrollView);
-        LinearLayout topHeader = findViewById(R.id.topHeader);
-        int scrollThreshold = getResources().getDimensionPixelSize(R.dimen.header_scroll_threshold);
-        mainScrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if (scrollY > scrollThreshold) {
-                topHeader.setBackgroundColor(ContextCompat.getColor(this, R.color.bg_shadow));
-            } else {
-                topHeader.setBackgroundColor(Color.TRANSPARENT);
-            }
-        });
+        setupHeaderScrollTransition();
 
         heroBgImage = findViewById(R.id.hero_BgImage);
         heroLabel = findViewById(R.id.heroSection_Label);
@@ -109,8 +101,57 @@ public class MainActivity extends AppCompatActivity {
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom);
+
+            View topHeaderView = findViewById(R.id.topHeader);
+            if (topHeaderView != null) {
+                int paddingBase = getResources().getDimensionPixelSize(R.dimen.spacing_3);
+                topHeaderView.setPadding(paddingBase, paddingBase + systemBars.top, paddingBase, paddingBase);
+            }
+
             return insets;
+        });
+    }
+
+    private void setupHeaderScrollTransition() {
+        LinearLayout topHeader = findViewById(R.id.topHeader);
+        if (topHeader == null || mainScrollView == null) {
+            return;
+        }
+        int scrollThreshold = getResources().getDimensionPixelSize(R.dimen.header_scroll_threshold);
+        int defaultStartColor = Color.parseColor("#FF000000");
+        int defaultCenterColor = Color.parseColor("#A6000000");
+        int defaultEndColor = Color.TRANSPARENT;
+        int bgShadowColor = ContextCompat.getColor(this, R.color.bg_shadow);
+        int bgLowestColor = ContextCompat.getColor(this, R.color.bg_lowest);
+
+        android.graphics.drawable.GradientDrawable headerBg = new android.graphics.drawable.GradientDrawable(
+                android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[] { defaultStartColor, defaultCenterColor, defaultEndColor }
+        );
+        topHeader.setBackground(headerBg);
+
+        mainScrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            int startColor;
+            int centerColor;
+            int endColor;
+            if (scrollY <= 0) {
+                startColor = defaultStartColor;
+                centerColor = defaultCenterColor;
+                endColor = defaultEndColor;
+            } else if (scrollY < scrollThreshold) {
+                float ratio = (float) scrollY / scrollThreshold;
+                startColor = androidx.core.graphics.ColorUtils.blendARGB(defaultStartColor, bgShadowColor, ratio);
+                centerColor = androidx.core.graphics.ColorUtils.blendARGB(defaultCenterColor, bgShadowColor, ratio);
+                endColor = androidx.core.graphics.ColorUtils.blendARGB(defaultEndColor, bgShadowColor, ratio);
+            } else {
+                float ratio = (float) (scrollY - scrollThreshold) / scrollThreshold;
+                if (ratio > 1) ratio = 1;
+                startColor = androidx.core.graphics.ColorUtils.blendARGB(bgShadowColor, bgLowestColor, ratio);
+                centerColor = androidx.core.graphics.ColorUtils.blendARGB(bgShadowColor, bgLowestColor, ratio);
+                endColor = androidx.core.graphics.ColorUtils.blendARGB(bgShadowColor, bgLowestColor, ratio);
+            }
+            headerBg.setColors(new int[] { startColor, centerColor, endColor });
         });
     }
 
