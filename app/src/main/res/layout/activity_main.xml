@@ -76,8 +76,12 @@
                     app:layout_constraintBottom_toBottomOf="parent" />
 
                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/heroCard"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_0"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     app:cardBackgroundColor="@color/bg_shadow"
                     app:cardCornerRadius="@dimen/radius_none"
                     app:layout_constraintTop_toTopOf="@id/hero_BgImage"
@@ -85,6 +89,7 @@
                     app:strokeWidth="0dp">
 
                     <LinearLayout
+                        android:id="@+id/hero_ContentLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -198,37 +203,19 @@
                             android:orientation="horizontal">
 
                             <Button
-                                android:id="@+id/heroSection_BtnPlay"
-                                android:layout_width="@dimen/size_0"
+                                android:id="@+id/hero_BtnBookmark"
+                                android:layout_width="match_parent"
                                 android:layout_height="@dimen/icon_xl"
-                                android:layout_weight="1"
                                 android:letterSpacing="@dimen/ls_wide"
-                                android:text="@string/heroSection_BtnPlayLabel"
+                                android:text="@string/detail_addToWatchlist"
                                 android:textColor="@color/text_selected"
                                 android:textStyle="bold"
                                 android:textAllCaps="true"
                                 app:backgroundTint="@color/bg_selected"
                                 app:cornerRadius="@dimen/radius_md"
-                                app:icon="@drawable/ic_play"
-                                app:iconGravity="textStart"
-                                app:iconTint="@color/icon_selected" />
-
-                            <Space
-                                android:layout_width="@dimen/spacing_3"
-                                android:layout_height="wrap_content" />
-
-                            <Button
-                                android:id="@+id/hero_BtnBookmark"
-                                android:layout_width="@dimen/icon_xl"
-                                android:layout_height="@dimen/icon_xl"
-                                app:backgroundTint="@android:color/transparent"
-                                app:cornerRadius="@dimen/radius_md"
                                 app:icon="@drawable/ic_add_to_watchlist"
                                 app:iconGravity="textStart"
-                                app:iconPadding="0dp"
-                                app:iconTint="@color/bg_selected"
-                                app:strokeColor="@color/border_default"
-                                app:strokeWidth="@dimen/stroke_width" />
+                                app:iconTint="@color/icon_selected" />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

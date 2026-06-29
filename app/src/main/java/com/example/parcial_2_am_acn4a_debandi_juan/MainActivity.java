@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -76,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
         trendingSkeletonScroll = findViewById(R.id.trendingSkeletonScroll);
         newReleasesSkeletonContainer = findViewById(R.id.newReleasesSkeletonContainer);
 
-        Button btnPlay = findViewById(R.id.heroSection_BtnPlay);
-        btnPlay.setOnClickListener(v -> {
+        findViewById(R.id.heroCard).setOnClickListener(v -> {
             if (heroMovie != null) {
                 openDetail(heroMovie);
             }
