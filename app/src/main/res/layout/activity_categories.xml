@@ -32,13 +32,21 @@
             app:iconTint="@color/text_title" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/size_0"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginStart="@dimen/spacing_2"
             android:text="@string/categories_title"
             android:textColor="@color/text_title"
             android:textSize="@dimen/text_2xl"
             android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/categories_BtnSearch"
+            android:layout_width="@dimen/icon_base"
+            android:layout_height="@dimen/icon_base"
+            android:src="@drawable/ic_search"
+            app:tint="@color/text_secondary"
+            android:contentDescription="@string/bottomNavbar_BtnSearchLabel" />
     </LinearLayout>
 
     <ProgressBar

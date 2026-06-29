@@ -39,10 +39,7 @@ public class WatchlistActivity extends AppCompatActivity {
         progress = findViewById(R.id.watchlist_Progress);
 
         findViewById(R.id.watchlist_BtnBack).setOnClickListener(v -> finish());
-        findViewById(R.id.watchlist_BtnSignout).setOnClickListener(v -> {
-            AuthService.signout();
-            finish();
-        });
+        findViewById(R.id.watchlist_BtnSearch).setOnClickListener(v -> startActivity(new Intent(this, SearchActivity.class)));
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.watchlist_root), (v, insets) -> {
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

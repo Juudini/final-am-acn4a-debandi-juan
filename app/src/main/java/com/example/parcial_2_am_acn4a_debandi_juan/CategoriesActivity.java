@@ -41,7 +41,7 @@ public class CategoriesActivity extends AppCompatActivity {
         progress = findViewById(R.id.categories_Progress);
 
         findViewById(R.id.categories_BtnBack).setOnClickListener(v -> finish());
-
+        findViewById(R.id.categories_BtnSearch).setOnClickListener(v-> startActivity(new Intent(this, SearchActivity.class)));
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.categories_root), (v, insets) -> {
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
