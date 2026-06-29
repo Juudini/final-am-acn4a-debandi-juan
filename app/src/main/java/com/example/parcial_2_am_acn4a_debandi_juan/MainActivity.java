@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         findViewById(R.id.topHeader_BtnSearch).setOnClickListener(v -> startActivity(new Intent(this, SearchActivity.class)));
+        findViewById(R.id.home_btnViewAllNewReleases).setOnClickListener(v -> startActivity(new Intent(this, NewReleasesActivity.class)));
         BottomNavbarHelper.setup(this, BottomNavbarHelper.TAB_HOME);
 
         findViewById(R.id.hero_BtnBookmark).setOnClickListener(v -> {
