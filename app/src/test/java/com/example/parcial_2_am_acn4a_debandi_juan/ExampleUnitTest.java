@@ -1,4 +1,4 @@
-package com.example.parcial_1_am_acn4a_debandi_juan;
+package com.example.parcial_2_am_acn4a_debandi_juan;
 
 import org.junit.Test;
 

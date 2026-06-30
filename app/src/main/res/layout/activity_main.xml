@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_surface"
+    android:background="@color/bg_lowest"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
@@ -16,7 +16,7 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:padding="@dimen/spacing_3"
-        android:elevation="10dp"
+        android:elevation="@dimen/elevation_header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
@@ -32,113 +32,25 @@
             android:textAllCaps="true"
             android:letterSpacing="@dimen/ls_tighter"/>
         <ImageView
+            android:id="@+id/topHeader_BtnSearch"
             android:layout_width="@dimen/icon_base"
             android:layout_height="@dimen/icon_base"
             android:src="@drawable/ic_search"
             app:tint="@color/text_secondary" />
     </LinearLayout>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/bottomNavbarWrapper"
-        android:layout_width="@dimen/size_0"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/spacing_3"
-        android:layout_marginBottom="@dimen/spacing_4"
-        app:cardBackgroundColor="@color/bg_navbar"
-        app:cardCornerRadius="@dimen/radius_2xl"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:strokeWidth="0dp">
-        <LinearLayout
-            android:id="@+id/bottomNavbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/spacing_4"
-            android:paddingVertical="@dimen/spacing_2">
-            <Button
-                android:id="@+id/bottomNavbar_BtnHome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:padding="@dimen/spacing_1"
-                android:paddingBottom="@dimen/spacing_0"
-                android:text="@string/bottomNavbar_BtnHomeLabel"
-                android:textColor="@color/text_selected"
-                android:textSize="@dimen/text_xs"
-                android:textStyle="bold"
-                app:backgroundTint="@color/bg_selected"
-                app:cornerRadius="@dimen/radius_md"
-                app:icon="@drawable/ic_home"
-                app:iconGravity="textTop"
-                app:iconPadding="@dimen/spacing_1"
-                app:iconSize="@dimen/icon_base"
-                app:iconTint="@color/icon_selected" />
-
-            <Space
-                android:layout_width="@dimen/spacing_2"
-                android:layout_height="match_parent" />
-
-            <Button
-                android:id="@+id/bottomNavbar_BtnWatchlist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:padding="@dimen/spacing_1"
-                android:text="@string/bottomNavbar_BtnWatchlistLabel"
-                android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_xs"
-                android:textStyle="bold"
-                app:backgroundTint="@android:color/transparent"
-                app:cornerRadius="@dimen/radius_md"
-                app:icon="@drawable/ic_watchlist"
-                app:iconGravity="textTop"
-                app:iconPadding="@dimen/spacing_1"
-                app:iconSize="@dimen/icon_base"
-                app:iconTint="@color/icon_default" />
-
-            <Space
-                android:layout_width="@dimen/spacing_2"
-                android:layout_height="match_parent" />
-
-            <Button
-                android:id="@+id/bottomNavbar_BtnCategories"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:padding="@dimen/spacing_1"
-                android:text="@string/bottomNavbar_BtnCategoriesLabel"
-                android:textColor="@color/text_primary"
-                android:textSize="@dimen/text_xs"
-                android:textStyle="bold"
-                app:backgroundTint="@android:color/transparent"
-                app:cornerRadius="@dimen/radius_md"
-                app:icon="@drawable/ic_categories"
-                app:iconGravity="textTop"
-                app:iconPadding="@dimen/spacing_1"
-                app:iconSize="@dimen/icon_base"
-                app:iconTint="@color/icon_default" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
     <ScrollView
         android:id="@+id/mainScrollView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_0"
+        android:clipToPadding="false"
+        android:paddingBottom="100dp"
         app:layout_constraintTop_toTopOf="@id/topHeader"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavbarWrapper">
+        app:layout_constraintBottom_toBottomOf="parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/bg_surface"
+            android:background="@color/bg_lowest"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -147,15 +59,29 @@
                <ImageView
                     android:id="@+id/hero_BgImage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/hero_height"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/img_echoes_eternity"
+                    android:visibility="invisible"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+               <!-- Hero Skeleton -->
+               <View
+                    android:id="@+id/heroSkeletonOverlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/hero_height"
+                    android:background="@color/bg_default"
+                    android:visibility="visible"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent" />
 
                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/heroCard"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="@dimen/size_0"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     app:cardBackgroundColor="@color/bg_shadow"
                     app:cardCornerRadius="@dimen/radius_none"
                     app:layout_constraintTop_toTopOf="@id/hero_BgImage"
@@ -163,6 +89,7 @@
                     app:strokeWidth="0dp">
 
                     <LinearLayout
+                        android:id="@+id/hero_ContentLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -177,13 +104,15 @@
                             android:orientation="horizontal">
 
                             <TextView
+                                android:id="@+id/heroSection_PremiereBadge"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:letterSpacing="@dimen/ls_wider"
-                                android:text="PREMIERE"
+                                android:text="@string/hero_premiere"
                                 android:textAllCaps="true"
                                 android:textColor="@color/text_title"
-                                android:textSize="@dimen/text_xs" />
+                                android:textSize="@dimen/text_xs"
+                                android:visibility="invisible" />
 
                             <Space
                                 android:layout_width="@dimen/spacing_4"
@@ -196,13 +125,32 @@
                                 app:tint="@color/bg_selected" />
 
                             <TextView
+                                android:id="@+id/heroSection_Rating"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/spacing_1"
-                                android:text="9.4"
                                 android:textColor="@color/text_title"
                                 android:textSize="@dimen/text_xs"
                                 android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- Skeleton title lines -->
+                        <LinearLayout
+                            android:id="@+id/heroSkeletonTitleLines"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/spacing_3"
+                            android:orientation="vertical"
+                            android:visibility="visible">
+                            <View
+                                android:layout_width="200dp"
+                                android:layout_height="36dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/skeleton_pulse" />
+                            <View
+                                android:layout_width="140dp"
+                                android:layout_height="36dp"
+                                android:background="@drawable/skeleton_pulse" />
                         </LinearLayout>
 
                         <TextView
@@ -210,20 +158,44 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/spacing_3"
-                            android:lineSpacingExtra="-8dp"
-                            android:text="@string/heroSection_Label"
+                            android:lineSpacingExtra="@dimen/hero_label_line_spacing"
                             android:textColor="@color/text_title"
                             android:textSize="@dimen/text_5xl"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+
+                        <!-- Skeleton description lines -->
+                        <LinearLayout
+                            android:id="@+id/heroSkeletonDescLines"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/spacing_4"
+                            android:orientation="vertical"
+                            android:visibility="visible">
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="14dp"
+                                android:layout_marginBottom="6dp"
+                                android:background="@drawable/skeleton_pulse" />
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="14dp"
+                                android:layout_marginBottom="6dp"
+                                android:background="@drawable/skeleton_pulse" />
+                            <View
+                                android:layout_width="180dp"
+                                android:layout_height="14dp"
+                                android:background="@drawable/skeleton_pulse" />
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/heroSection_Description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/spacing_4"
-                            android:text="@string/heroSection_Description"
                             android:textColor="@color/text_primary"
-                            android:textSize="@dimen/text_lg" />
+                            android:textSize="@dimen/text_lg"
+                            android:visibility="gone" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -231,37 +203,19 @@
                             android:orientation="horizontal">
 
                             <Button
-                                android:id="@+id/heroSection_BtnPlay"
-                                android:layout_width="0dp"
+                                android:id="@+id/hero_BtnBookmark"
+                                android:layout_width="match_parent"
                                 android:layout_height="@dimen/icon_xl"
-                                android:layout_weight="1"
                                 android:letterSpacing="@dimen/ls_wide"
-                                android:text="@string/heroSection_BtnPlayLabel"
+                                android:text="@string/detail_addToWatchlist"
                                 android:textColor="@color/text_selected"
                                 android:textStyle="bold"
                                 android:textAllCaps="true"
                                 app:backgroundTint="@color/bg_selected"
                                 app:cornerRadius="@dimen/radius_md"
-                                app:icon="@drawable/ic_play"
-                                app:iconGravity="textStart"
-                                app:iconTint="@color/icon_selected" />
-
-                            <Space
-                                android:layout_width="@dimen/spacing_3"
-                                android:layout_height="wrap_content" />
-
-                            <Button
-                                android:id="@+id/hero_BtnBookmark"
-                                android:layout_width="@dimen/icon_xl"
-                                android:layout_height="@dimen/icon_xl"
-                                app:backgroundTint="@android:color/transparent"
-                                app:cornerRadius="@dimen/radius_md"
                                 app:icon="@drawable/ic_add_to_watchlist"
                                 app:iconGravity="textStart"
-                                app:iconPadding="0dp"
-                                app:iconTint="@color/bg_selected"
-                                app:strokeColor="@color/border_default"
-                                app:strokeWidth="1dp" />
+                                app:iconTint="@color/icon_selected" />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -282,23 +236,50 @@
                     android:layout_marginBottom="@dimen/spacing_4">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/size_0"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Trending Now"
+                        android:text="@string/section_trending"
                         android:textColor="@color/text_title"
                         android:textSize="@dimen/text_xl"
                         android:textStyle="bold" />
+                </LinearLayout>
 
-                    <TextView
+                <!-- Trending skeleton -->
+                <HorizontalScrollView
+                    android:id="@+id/trendingSkeletonScroll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:paddingHorizontal="@dimen/spacing_4"
+                    android:clipToPadding="false"
+                    android:visibility="visible">
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="VIEW ALL"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="@dimen/text_xs"
-                        android:textStyle="bold"
-                        android:letterSpacing="@dimen/ls_wider" />
-                </LinearLayout>
+                        android:orientation="horizontal">
+                        <LinearLayout android:layout_width="110dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginEnd="16dp">
+                            <View android:layout_width="110dp" android:layout_height="160dp" android:layout_marginBottom="8dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="90dp" android:layout_height="14dp" android:layout_marginBottom="6dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="60dp" android:layout_height="12dp" android:background="@drawable/skeleton_pulse" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="110dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginEnd="16dp">
+                            <View android:layout_width="110dp" android:layout_height="160dp" android:layout_marginBottom="8dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="90dp" android:layout_height="14dp" android:layout_marginBottom="6dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="60dp" android:layout_height="12dp" android:background="@drawable/skeleton_pulse" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="110dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginEnd="16dp">
+                            <View android:layout_width="110dp" android:layout_height="160dp" android:layout_marginBottom="8dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="90dp" android:layout_height="14dp" android:layout_marginBottom="6dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="60dp" android:layout_height="12dp" android:background="@drawable/skeleton_pulse" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="110dp" android:layout_height="wrap_content" android:orientation="vertical">
+                            <View android:layout_width="110dp" android:layout_height="160dp" android:layout_marginBottom="8dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="90dp" android:layout_height="14dp" android:layout_marginBottom="6dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="60dp" android:layout_height="12dp" android:background="@drawable/skeleton_pulse" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </HorizontalScrollView>
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -310,7 +291,8 @@
                         android:id="@+id/trendingMoviesContainer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
                     </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>
@@ -330,22 +312,63 @@
                     android:layout_marginBottom="@dimen/spacing_4">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/size_0"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="New Releases"
+                        android:text="@string/section_newReleases"
                         android:textColor="@color/text_title"
                         android:textSize="@dimen/text_xl"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/home_btnViewAllNewReleases"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="VIEW ALL"
+                        android:text="@string/action_viewAll"
                         android:textColor="@color/text_secondary"
                         android:textSize="@dimen/text_xs"
                         android:textStyle="bold"
-                        android:letterSpacing="@dimen/ls_wider" />
+                        android:letterSpacing="@dimen/ls_wider"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground" />
+                </LinearLayout>
+
+                <!-- New releases skeleton -->
+                <LinearLayout
+                    android:id="@+id/newReleasesSkeletonContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="@dimen/spacing_4"
+                    android:visibility="visible">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="16dp">
+                        <View android:layout_width="80dp" android:layout_height="112dp" android:background="@drawable/skeleton_pulse" />
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="16dp" android:gravity="center_vertical">
+                            <View android:layout_width="match_parent" android:layout_height="16dp" android:layout_marginBottom="8dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="120dp" android:layout_height="12dp" android:layout_marginBottom="8dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="match_parent" android:layout_height="12dp" android:layout_marginBottom="4dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="180dp" android:layout_height="12dp" android:background="@drawable/skeleton_pulse" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="16dp">
+                        <View android:layout_width="80dp" android:layout_height="112dp" android:background="@drawable/skeleton_pulse" />
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="16dp" android:gravity="center_vertical">
+                            <View android:layout_width="match_parent" android:layout_height="16dp" android:layout_marginBottom="8dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="120dp" android:layout_height="12dp" android:layout_marginBottom="8dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="match_parent" android:layout_height="12dp" android:layout_marginBottom="4dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="180dp" android:layout_height="12dp" android:background="@drawable/skeleton_pulse" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                        <View android:layout_width="80dp" android:layout_height="112dp" android:background="@drawable/skeleton_pulse" />
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="16dp" android:gravity="center_vertical">
+                            <View android:layout_width="match_parent" android:layout_height="16dp" android:layout_marginBottom="8dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="120dp" android:layout_height="12dp" android:layout_marginBottom="8dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="match_parent" android:layout_height="12dp" android:layout_marginBottom="4dp" android:background="@drawable/skeleton_pulse" />
+                            <View android:layout_width="180dp" android:layout_height="12dp" android:background="@drawable/skeleton_pulse" />
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -353,10 +376,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/spacing_4">
+                    android:paddingHorizontal="@dimen/spacing_4"
+                    android:visibility="gone">
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
+    <include layout="@layout/layout_bottom_navbar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

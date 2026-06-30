@@ -1,9 +1,20 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.services)
 }
 
+// Secretos
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { localProperties.load(it) }
+}
+def TMDB_API_KEY = localProperties.getProperty('TMDB_API_KEY', '')
+def TMDB_BASE_URL = localProperties.getProperty('TMDB_BASE_URL', 'https://api.themoviedb.org/3/')
+def TMDB_IMAGE_BASE_URL = localProperties.getProperty('TMDB_IMAGE_BASE_URL', 'https://image.tmdb.org/t/p/w500')
+
 android {
-    namespace 'com.example.parcial_1_am_acn4a_debandi_juan'
+    namespace 'com.example.parcial_2_am_acn4a_debandi_juan'
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -11,13 +22,17 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.parcial_1_am_acn4a_debandi_juan"
+        applicationId "com.example.parcial_2_am_acn4a_debandi_juan"
         minSdk 24
         targetSdk 36
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "TMDB_API_KEY", "\"${TMDB_API_KEY}\""
+        buildConfigField "String", "TMDB_BASE_URL", "\"${TMDB_BASE_URL}\""
+        buildConfigField "String", "TMDB_IMAGE_BASE_URL", "\"${TMDB_IMAGE_BASE_URL}\""
     }
 
     buildTypes {
@@ -25,6 +40,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    buildFeatures {
+        buildConfig true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -37,6 +55,20 @@ dependencies {
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
+    // Fetch
+    implementation libs.retrofit
+    implementation libs.retrofit.converter.gson
+    implementation libs.okhttp.logging.interceptor
+
+    // Images
+    implementation libs.glide
+    annotationProcessor libs.glide.compiler
+
+    // Firebase
+    implementation platform(libs.firebase.bom)
+    implementation libs.firebase.auth
+    implementation libs.firebase.firestore
+
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core

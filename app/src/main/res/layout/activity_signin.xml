@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/signin_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_surface"
+    android:fitsSystemWindows="true">
+
+    <Button
+        android:id="@+id/signin_BtnBack"
+        android:layout_width="@dimen/icon_xl"
+        android:layout_height="@dimen/icon_xl"
+        android:layout_margin="@dimen/spacing_3"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        app:backgroundTint="@android:color/transparent"
+        app:cornerRadius="@dimen/radius_full"
+        app:icon="@drawable/ic_arrow_back"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconTint="@color/text_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/spacing_6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_2"
+            android:text="@string/signin_title"
+            android:textColor="@color/text_title"
+            android:textSize="@dimen/text_4xl"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/signin_Subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_6"
+            android:text="@string/signin_subtitle"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_base" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_3"
+            app:cardBackgroundColor="@color/bg_navbar"
+            app:cardCornerRadius="@dimen/radius_xl"
+            app:strokeWidth="0dp">
+
+            <EditText
+                android:id="@+id/signin_Email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="@string/signin_emailHint"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:padding="@dimen/spacing_4"
+                android:textColor="@color/text_title"
+                android:textColorHint="@color/text_primary"
+                android:textSize="@dimen/text_base" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_5"
+            app:cardBackgroundColor="@color/bg_navbar"
+            app:cardCornerRadius="@dimen/radius_xl"
+            app:strokeWidth="0dp">
+
+            <EditText
+                android:id="@+id/signin_Password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="@string/signin_passwordHint"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:padding="@dimen/spacing_4"
+                android:textColor="@color/text_title"
+                android:textColorHint="@color/text_primary"
+                android:textSize="@dimen/text_base" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <Button
+            android:id="@+id/signin_BtnSignin"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/icon_xl"
+            android:letterSpacing="@dimen/ls_wide"
+            android:text="@string/signin_btnSignin"
+            android:textColor="@color/text_selected"
+            android:textStyle="bold"
+            app:backgroundTint="@color/bg_selected"
+            app:cornerRadius="@dimen/radius_md" />
+
+        <Button
+            android:id="@+id/signin_BtnSignup"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/icon_xl"
+            android:layout_marginTop="@dimen/spacing_2"
+            android:text="@string/signin_btnSignup"
+            android:textColor="@color/text_secondary"
+            app:backgroundTint="@android:color/transparent"
+            app:cornerRadius="@dimen/radius_md"
+            app:strokeColor="@color/border_default"
+            app:strokeWidth="@dimen/stroke_width" />
+
+        <ProgressBar
+            android:id="@+id/signin_Progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/spacing_4"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

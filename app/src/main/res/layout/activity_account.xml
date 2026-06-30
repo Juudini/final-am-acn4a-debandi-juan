@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/account_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_surface"
+    android:fitsSystemWindows="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/spacing_6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="@dimen/icon_xl"
+            android:layout_height="@dimen/icon_xl"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/spacing_3"
+            android:src="@drawable/ic_account"
+            app:tint="@color/text_secondary" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_6"
+            android:gravity="center"
+            android:text="@string/account_title"
+            android:textColor="@color/text_title"
+            android:textSize="@dimen/text_4xl"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/account_emailLabel"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_xs"
+            android:textAllCaps="true"
+            android:letterSpacing="@dimen/ls_wider" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_2"
+            android:layout_marginBottom="@dimen/spacing_6"
+            app:cardBackgroundColor="@color/bg_navbar"
+            app:cardCornerRadius="@dimen/radius_xl"
+            app:strokeWidth="0dp">
+
+            <TextView
+                android:id="@+id/account_Email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/spacing_4"
+                android:textColor="@color/text_title"
+                android:textSize="@dimen/text_base" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <Button
+            android:id="@+id/account_BtnSignout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/icon_xl"
+            android:letterSpacing="@dimen/ls_wide"
+            android:text="@string/account_btnSignout"
+            android:textColor="@color/text_selected"
+            android:textStyle="bold"
+            app:backgroundTint="@color/bg_selected"
+            app:cornerRadius="@dimen/radius_md" />
+    </LinearLayout>
+    <include layout="@layout/layout_bottom_navbar" />
+</androidx.constraintlayout.widget.ConstraintLayout>

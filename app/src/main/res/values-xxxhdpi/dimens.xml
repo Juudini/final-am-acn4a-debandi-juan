@@ -76,4 +76,17 @@
     <dimen name="movie_card_height">200dp</dimen>
     <dimen name="newRelease_card_width">100dp</dimen>
     <dimen name="newRelease_card_height">140dp</dimen>
+
+    <!-- Hero -->
+    <dimen name="hero_height">480dp</dimen>
+
+    <!-- Home -->
+    <dimen name="header_scroll_threshold">120dp</dimen>
+    <dimen name="elevation_header">10dp</dimen>
+
+    <!-- Stroke / borders -->
+    <dimen name="stroke_width">1dp</dimen>
+
+    <!-- Line spacing -->
+    <dimen name="hero_label_line_spacing">-8dp</dimen>
 </resources>
