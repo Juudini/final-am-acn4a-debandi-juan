@@ -29,6 +29,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.final_am_acn4a_debandi_juan.data.WatchlistRepository;
 import com.example.final_am_acn4a_debandi_juan.data.model.CastMember;
 import com.example.final_am_acn4a_debandi_juan.data.model.CreditsResponse;
+import com.example.final_am_acn4a_debandi_juan.data.model.Genre;
 import com.example.final_am_acn4a_debandi_juan.data.model.Movie;
 import com.example.final_am_acn4a_debandi_juan.data.model.MovieDetail;
 import com.example.final_am_acn4a_debandi_juan.data.network.RetrofitClient;
@@ -214,7 +215,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                     currentDetail.getReleaseDate());
             List<Integer> genreIds = new ArrayList<>();
             if (currentDetail.getGenres() != null) {
-                for (com.example.final_am_acn4a_debandi_juan.data.model.Genre g : currentDetail.getGenres()) {
+                for (Genre g : currentDetail.getGenres()) {
                     genreIds.add(g.getId());
                 }
             }
