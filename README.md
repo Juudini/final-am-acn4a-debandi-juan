@@ -1,4 +1,4 @@
-# 🎬 Parcial 2 - App de Películas (Cinemapedia )
+# 🎬 Final - App de Películas (Cinemapedia )
 **Autor:** Juan Debandi  
 **Materia:** Aplicaciones Móviles (ACN4A)
 
@@ -41,7 +41,7 @@ La aplicación utiliza Firebase para la autenticación de usuarios y para guarda
 1. Ve a la [Consola de Firebase](https://console.firebase.google.com/).
 2. Crea un nuevo proyecto (o selecciona uno existente).
 3. Registra una nueva aplicación Android en el proyecto usando el nombre de paquete:
-   `com.example.parcial_2_am_acn4a_debandi_juan`
+   `final_am_acn4a_debandi_juan`
 4. Descarga el archivo `google-services.json` y colócalo en el directorio `/app/` del proyecto.
 
 ### 2. Configurar Firebase Authentication

@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "parcial-2-am-acn4a-debandi-juan"
+rootProject.name = "final-am-acn4a-debandi-juan"
 include ':app'
