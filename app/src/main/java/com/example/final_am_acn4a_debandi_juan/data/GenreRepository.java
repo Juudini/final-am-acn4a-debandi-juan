@@ -1,8 +1,8 @@
 package com.example.final_am_acn4a_debandi_juan.data;
 
-import com.example.final_am_acn4a_debandi_juan.data.model.Genre;
-import com.example.final_am_acn4a_debandi_juan.data.model.GenreResponse;
-import com.example.final_am_acn4a_debandi_juan.data.network.RetrofitClient;
+import com.example.final_am_acn4a_debandi_juan.data.models.Genre;
+import com.example.final_am_acn4a_debandi_juan.data.models.GenreResponse;
+import com.example.final_am_acn4a_debandi_juan.data.datasources.network.RetrofitClient;
 
 import java.util.HashMap;
 import java.util.List;

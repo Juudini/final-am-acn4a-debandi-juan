@@ -1,9 +1,9 @@
-package com.example.final_am_acn4a_debandi_juan.data.network;
+package com.example.final_am_acn4a_debandi_juan.data.datasources.network.api;
 
-import com.example.final_am_acn4a_debandi_juan.data.model.CreditsResponse;
-import com.example.final_am_acn4a_debandi_juan.data.model.GenreResponse;
-import com.example.final_am_acn4a_debandi_juan.data.model.MovieDetail;
-import com.example.final_am_acn4a_debandi_juan.data.model.MovieResponse;
+import com.example.final_am_acn4a_debandi_juan.data.models.CreditsResponse;
+import com.example.final_am_acn4a_debandi_juan.data.models.GenreResponse;
+import com.example.final_am_acn4a_debandi_juan.data.models.MovieDetail;
+import com.example.final_am_acn4a_debandi_juan.data.models.MovieResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

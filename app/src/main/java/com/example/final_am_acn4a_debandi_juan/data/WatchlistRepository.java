@@ -2,7 +2,7 @@ package com.example.final_am_acn4a_debandi_juan.data;
 
 import androidx.annotation.NonNull;
 
-import com.example.final_am_acn4a_debandi_juan.data.model.Movie;
+import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
 import com.example.final_am_acn4a_debandi_juan.utils.AuthService;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;

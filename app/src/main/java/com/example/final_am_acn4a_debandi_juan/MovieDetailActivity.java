@@ -27,12 +27,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.final_am_acn4a_debandi_juan.data.WatchlistRepository;
-import com.example.final_am_acn4a_debandi_juan.data.model.CastMember;
-import com.example.final_am_acn4a_debandi_juan.data.model.CreditsResponse;
-import com.example.final_am_acn4a_debandi_juan.data.model.Genre;
-import com.example.final_am_acn4a_debandi_juan.data.model.Movie;
-import com.example.final_am_acn4a_debandi_juan.data.model.MovieDetail;
-import com.example.final_am_acn4a_debandi_juan.data.network.RetrofitClient;
+import com.example.final_am_acn4a_debandi_juan.data.models.CastMember;
+import com.example.final_am_acn4a_debandi_juan.data.models.CreditsResponse;
+import com.example.final_am_acn4a_debandi_juan.data.models.Genre;
+import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
+import com.example.final_am_acn4a_debandi_juan.data.models.MovieDetail;
+import com.example.final_am_acn4a_debandi_juan.data.datasources.network.RetrofitClient;
 import com.example.final_am_acn4a_debandi_juan.utils.ImageLoader;
 import com.example.final_am_acn4a_debandi_juan.utils.AuthService;
 import com.google.android.material.button.MaterialButton;

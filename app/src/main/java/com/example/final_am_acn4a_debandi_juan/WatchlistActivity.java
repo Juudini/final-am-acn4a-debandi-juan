@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.example.final_am_acn4a_debandi_juan.data.GenreRepository;
 import com.example.final_am_acn4a_debandi_juan.data.WatchlistRepository;
-import com.example.final_am_acn4a_debandi_juan.data.model.Movie;
+import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
 import com.example.final_am_acn4a_debandi_juan.utils.AuthService;
 import com.example.final_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
 import com.example.final_am_acn4a_debandi_juan.utils.MovieViewFactory;

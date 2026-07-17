@@ -1,5 +1,7 @@
-package com.example.final_am_acn4a_debandi_juan.data.network;
+package com.example.final_am_acn4a_debandi_juan.data.datasources.network;
 import com.example.final_am_acn4a_debandi_juan.BuildConfig;
+import com.example.final_am_acn4a_debandi_juan.data.datasources.network.api.TmdbApi;
+
 import androidx.annotation.NonNull;
 
 import java.io.IOException;

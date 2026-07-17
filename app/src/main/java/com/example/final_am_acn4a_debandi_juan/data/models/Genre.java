@@ -1,4 +1,4 @@
-package com.example.final_am_acn4a_debandi_juan.data.model;
+package com.example.final_am_acn4a_debandi_juan.data.models;
 
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;

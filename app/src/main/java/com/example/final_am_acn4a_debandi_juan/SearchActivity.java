@@ -23,9 +23,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.final_am_acn4a_debandi_juan.data.model.Movie;
-import com.example.final_am_acn4a_debandi_juan.data.model.MovieResponse;
-import com.example.final_am_acn4a_debandi_juan.data.network.RetrofitClient;
+import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
+import com.example.final_am_acn4a_debandi_juan.data.models.MovieResponse;
+import com.example.final_am_acn4a_debandi_juan.data.datasources.network.RetrofitClient;
 import com.example.final_am_acn4a_debandi_juan.utils.MovieViewFactory;
 
 import java.util.List;
