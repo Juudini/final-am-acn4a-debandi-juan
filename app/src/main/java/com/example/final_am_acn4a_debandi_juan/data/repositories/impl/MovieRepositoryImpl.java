@@ -20,35 +20,35 @@ import retrofit2.Response;
 
 public final class MovieRepositoryImpl implements MovieRepository {
     private static final String NETWORK_ERROR = "Can't get the data";
-    private final TmdbDatasource networkDataSource;
+    private final TmdbDatasource networkDatasource;
 
-    public MovieRepositoryImpl(TmdbDatasource networkDataSource) {
-        this.networkDataSource = networkDataSource;
+    public MovieRepositoryImpl(TmdbDatasource networkDatasource) {
+        this.networkDatasource = networkDatasource;
     }
 
     @Override
     public void getTrending(DataCallback<List<Movie>> callback) {
-        networkDataSource.getTrending().enqueue(movieListCallback(callback));
+        networkDatasource.getTrending().enqueue(movieListCallback(callback));
     }
 
     @Override
     public void getNowPlaying(int page, DataCallback<List<Movie>> callback) {
-        networkDataSource.getNowPlaying(page).enqueue(movieListCallback(callback));
+        networkDatasource.getNowPlaying(page).enqueue(movieListCallback(callback));
     }
 
     @Override
     public void searchMovies(String query, int page, DataCallback<List<Movie>> callback) {
-        networkDataSource.searchMovies(query, page).enqueue(movieListCallback(callback));
+        networkDatasource.searchMovies(query, page).enqueue(movieListCallback(callback));
     }
 
     @Override
     public void discoverByGenre(int genreId, String sortBy, int page, DataCallback<List<Movie>> callback) {
-        networkDataSource.discoverByGenre(genreId, sortBy, page).enqueue(movieListCallback(callback));
+        networkDatasource.discoverByGenre(genreId, sortBy, page).enqueue(movieListCallback(callback));
     }
 
     @Override
     public void getMovieDetail(int movieId, DataCallback<MovieDetail> callback) {
-        networkDataSource.getMovieDetail(movieId).enqueue(new Callback<MovieDetail>() {
+        networkDatasource.getMovieDetail(movieId).enqueue(new Callback<MovieDetail>() {
             @Override
             public void onResponse(@NonNull Call<MovieDetail> call, @NonNull Response<MovieDetail> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -67,7 +67,7 @@ public final class MovieRepositoryImpl implements MovieRepository {
 
     @Override
     public void getMovieCredits(int movieId, DataCallback<List<CastMember>> callback) {
-        networkDataSource.getMovieCredits(movieId).enqueue(new Callback<CreditsResponse>() {
+        networkDatasource.getMovieCredits(movieId).enqueue(new Callback<CreditsResponse>() {
             @Override
             public void onResponse(@NonNull Call<CreditsResponse> call, @NonNull Response<CreditsResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {

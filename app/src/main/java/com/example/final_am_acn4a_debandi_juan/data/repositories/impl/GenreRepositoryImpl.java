@@ -16,14 +16,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public final class GenreRepositoryImpl implements GenreRepository {
-    private final TmdbDatasource networkDataSource;
-    public GenreRepositoryImpl(TmdbDatasource networkDataSource) {
-        this.networkDataSource = networkDataSource;
+    private final TmdbDatasource networkDatasource;
+    public GenreRepositoryImpl(TmdbDatasource networkDatasource) {
+        this.networkDatasource = networkDatasource;
     }
 
     @Override
     public void getGenres(DataCallback<List<Genre>> callback) {
-        networkDataSource.getGenres().enqueue(new Callback<GenreResponse>() {
+        networkDatasource.getGenres().enqueue(new Callback<GenreResponse>() {
             @Override
             public void onResponse(@NonNull Call<GenreResponse> call, @NonNull Response<GenreResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
