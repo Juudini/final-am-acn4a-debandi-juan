@@ -12,32 +12,29 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.final_am_acn4a_debandi_juan.di.AppModule;
+import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
+import com.example.final_am_acn4a_debandi_juan.ui.home.HomeUiState;
+import com.example.final_am_acn4a_debandi_juan.ui.home.HomeViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.example.final_am_acn4a_debandi_juan.data.GenreRepository;
 import com.example.final_am_acn4a_debandi_juan.data.WatchlistRepository;
 import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
-import com.example.final_am_acn4a_debandi_juan.data.models.MovieResponse;
-import com.example.final_am_acn4a_debandi_juan.data.datasources.network.RetrofitClient;
 import com.example.final_am_acn4a_debandi_juan.utils.AuthService;
 import com.example.final_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
 import com.example.final_am_acn4a_debandi_juan.utils.ImageLoader;
 import com.example.final_am_acn4a_debandi_juan.utils.MovieViewFactory;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,10 +63,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
-        GenreRepository.init(null);
-
         mainScrollView = findViewById(R.id.mainScrollView);
+
+        AppModule module = App.getModule(this);
+        AppViewModelFactory factory = new AppViewModelFactory(module);
+        HomeViewModel viewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
+        viewModel.getState().observe(this, this::renderState);
+
+
         setupHeaderScrollTransition();
 
         heroBgImage = findViewById(R.id.hero_BgImage);
@@ -134,10 +135,6 @@ public class MainActivity extends AppCompatActivity {
         });
         trendingMoviesContainer = findViewById(R.id.trendingMoviesContainer);
         newReleasesContainer = findViewById(R.id.newReleasesContainer);
-
-        loadTrending();
-        loadNowPlaying();
-        startSkeletonAnimations();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -218,50 +215,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadTrending() {
-        RetrofitClient.getApi().getTrending().enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
-                if (!response.isSuccessful() || response.body() == null) {
-                    showError();
-                    return;
-                }
-                List<Movie> movies = response.body().getResults();
-                if (movies == null || movies.isEmpty()) {
-                    return;
-                }
-                bindHero(movies.get(0));
-                renderTrending(movies);
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<MovieResponse> call, @NonNull Throwable t) {
-                showError();
-            }
-        });
-    }
-
-    private void loadNowPlaying() {
-        RetrofitClient.getApi().getNowPlaying(1).enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
-                if (!response.isSuccessful() || response.body() == null) {
-                    showError();
-                    return;
-                }
-                List<Movie> movies = response.body().getResults();
-                if (movies != null) {
-                    renderNewReleases(movies);
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<MovieResponse> call, @NonNull Throwable t) {
-                showError();
-            }
-        });
-    }
-
     private void bindHero(Movie movie) {
         heroMovie = movie;
         heroLabel.setText(movie.getTitle());
@@ -321,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void renderTrending(List<Movie> movies) {
+    private void bindTrending(List<Movie> movies) {
         trendingMoviesContainer.removeAllViews();
         for (Movie movie : movies) {
             View card = MovieViewFactory.createPosterCard(this, movie, this::openDetail);
@@ -332,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
         trendingMoviesContainer.setVisibility(android.view.View.VISIBLE);
     }
 
-    private void renderNewReleases(List<Movie> movies) {
+    private void bindNewReleases(List<Movie> movies) {
         newReleasesContainer.removeAllViews();
         for (Movie movie : movies) {
             View card = MovieViewFactory.createListCard(this, movie, this::openDetail);
@@ -350,7 +303,21 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void showError() {
-        Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
+    private void renderState(HomeUiState state) {
+    switch (state.getStatus()) {
+        case LOADING:
+            startSkeletonAnimations();
+            break;
+        case CONTENT:
+            bindHero(state.getHeroMovie());
+            bindTrending(state.getTrending());
+            bindNewReleases(state.getNewReleases());
+            break;
+        case ERROR:
+            Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
+            break;
+        default:
+            break;
     }
+}
 }
