@@ -34,7 +34,7 @@
             android:exported="false"
             android:parentActivityName=".ui.auth.signin.SigninActivity" />
         <activity
-            android:name=".AccountActivity"
+            android:name=".ui.account.AccountActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity

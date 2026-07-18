@@ -1,4 +1,4 @@
-package com.example.final_am_acn4a_debandi_juan;
+package com.example.final_am_acn4a_debandi_juan.ui.account;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -10,14 +10,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.example.final_am_acn4a_debandi_juan.utils.AuthService;
+import com.example.final_am_acn4a_debandi_juan.App;
+import com.example.final_am_acn4a_debandi_juan.R;
+import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
 import com.example.final_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
 
 public class AccountActivity extends AppCompatActivity {
-
     private TextView emailText;
     private Button btnSignout;
+    private AccountViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,10 @@ public class AccountActivity extends AppCompatActivity {
         emailText = findViewById(R.id.account_Email);
         btnSignout = findViewById(R.id.account_BtnSignout);
 
+        AppViewModelFactory factory = new AppViewModelFactory(App.getModule(this));
+        viewModel = new ViewModelProvider(this, factory).get(AccountViewModel.class);
+        viewModel.getState().observe(this, this::renderState);
+
         BottomNavbarHelper.setup(this, BottomNavbarHelper.TAB_ACCOUNT);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.account_root), (v, insets) -> {
@@ -37,24 +44,24 @@ public class AccountActivity extends AppCompatActivity {
         });
 
         btnSignout.setOnClickListener(v -> {
-            AuthService.signout();
             Toast.makeText(this, R.string.account_signedOut, Toast.LENGTH_SHORT).show();
-            finish();
+            viewModel.signOut();
         });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (!AuthService.isLoggedIn()) {
+        viewModel.refresh();
+    }
+
+    private void renderState(AccountUiState state) {
+        if (!state.isLoggedIn()) {
             finish();
             return;
         }
-        bindUser();
-    }
 
-    private void bindUser() {
-        String email = AuthService.getEmail();
+        String email = state.getEmail();
         emailText.setText(email != null ? email : getString(R.string.account_notAvailable));
     }
 }

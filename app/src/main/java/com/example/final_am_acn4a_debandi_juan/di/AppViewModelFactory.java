@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.final_am_acn4a_debandi_juan.ui.account.AccountViewModel;
 import com.example.final_am_acn4a_debandi_juan.ui.auth.signin.SigninViewModel;
 import com.example.final_am_acn4a_debandi_juan.ui.auth.signup.SignupViewModel;
 import com.example.final_am_acn4a_debandi_juan.ui.categories.CategoriesViewModel;
@@ -44,6 +45,10 @@ public final class AppViewModelFactory implements ViewModelProvider.Factory {
 
         if (modelClass == SignupViewModel.class) {
             return (T) new SignupViewModel(appModule.getAuthRepository());
+        }
+
+        if (modelClass == AccountViewModel.class) {
+            return (T) new AccountViewModel(appModule.getAuthRepository());
         }
 
         throw new IllegalArgumentException("Unknown ViewModel: " + modelClass.getName());
