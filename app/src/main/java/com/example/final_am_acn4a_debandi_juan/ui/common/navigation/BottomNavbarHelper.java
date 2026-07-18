@@ -21,7 +21,8 @@ public final class BottomNavbarHelper {
     public static final int TAB_ACCOUNT = 3;
     public static final int TAB_NONE = -1;
 
-    private BottomNavbarHelper() {}
+    private BottomNavbarHelper() {
+    }
 
     public static void setup(Activity activity, int activeTab) {
         activity.overridePendingTransition(0, 0);
