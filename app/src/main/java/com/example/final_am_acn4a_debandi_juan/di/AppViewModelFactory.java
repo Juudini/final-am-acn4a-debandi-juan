@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.final_am_acn4a_debandi_juan.ui.auth.signin.SigninViewModel;
+import com.example.final_am_acn4a_debandi_juan.ui.auth.signup.SignupViewModel;
 import com.example.final_am_acn4a_debandi_juan.ui.categories.CategoriesViewModel;
 import com.example.final_am_acn4a_debandi_juan.ui.home.HomeViewModel;
 import com.example.final_am_acn4a_debandi_juan.ui.newreleases.NewReleasesViewModel;
@@ -34,6 +36,14 @@ public final class AppViewModelFactory implements ViewModelProvider.Factory {
 
         if (modelClass == NewReleasesViewModel.class) {
             return (T) new NewReleasesViewModel(appModule.getMovieRepository());
+        }
+
+        if (modelClass == SigninViewModel.class) {
+            return (T) new SigninViewModel(appModule.getAuthRepository());
+        }
+
+        if (modelClass == SignupViewModel.class) {
+            return (T) new SignupViewModel(appModule.getAuthRepository());
         }
 
         throw new IllegalArgumentException("Unknown ViewModel: " + modelClass.getName());

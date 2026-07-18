@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.example.final_am_acn4a_debandi_juan.data.GenreRepository;
 import com.example.final_am_acn4a_debandi_juan.data.WatchlistRepository;
 import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
+import com.example.final_am_acn4a_debandi_juan.ui.auth.signin.SigninActivity;
 import com.example.final_am_acn4a_debandi_juan.ui.search.SearchActivity;
 import com.example.final_am_acn4a_debandi_juan.utils.AuthService;
 import com.example.final_am_acn4a_debandi_juan.utils.BottomNavbarHelper;

@@ -26,13 +26,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SigninActivity"
+            android:name=".ui.auth.signin.SigninActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".SignupActivity"
+            android:name=".ui.auth.signup.SignupActivity"
             android:exported="false"
-            android:parentActivityName=".SigninActivity" />
+            android:parentActivityName=".ui.auth.signin.SigninActivity" />
         <activity
             android:name=".AccountActivity"
             android:exported="false"

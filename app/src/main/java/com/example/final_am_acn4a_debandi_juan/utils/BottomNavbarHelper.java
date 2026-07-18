@@ -11,7 +11,7 @@ import com.example.final_am_acn4a_debandi_juan.AccountActivity;
 import com.example.final_am_acn4a_debandi_juan.ui.categories.CategoriesActivity;
 import com.example.final_am_acn4a_debandi_juan.MainActivity;
 import com.example.final_am_acn4a_debandi_juan.R;
-import com.example.final_am_acn4a_debandi_juan.SigninActivity;
+import com.example.final_am_acn4a_debandi_juan.ui.auth.signin.SigninActivity;
 import com.example.final_am_acn4a_debandi_juan.WatchlistActivity;
 
 public final class BottomNavbarHelper {
