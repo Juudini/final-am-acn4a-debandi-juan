@@ -25,6 +25,7 @@ import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
 import com.example.final_am_acn4a_debandi_juan.ui.categories.CategoriesUiState;
 import com.example.final_am_acn4a_debandi_juan.ui.categories.CategoriesViewModel;
 import com.example.final_am_acn4a_debandi_juan.ui.common.state.UiStatus;
+import com.example.final_am_acn4a_debandi_juan.ui.genremovies.GenreMoviesActivity;
 import com.example.final_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
 import com.google.android.material.card.MaterialCardView;
 import java.util.List;

@@ -55,7 +55,7 @@
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".GenreMoviesActivity"
+            android:name=".ui.genremovies.GenreMoviesActivity"
             android:exported="false"
             android:parentActivityName=".CategoriesActivity" />
         <activity

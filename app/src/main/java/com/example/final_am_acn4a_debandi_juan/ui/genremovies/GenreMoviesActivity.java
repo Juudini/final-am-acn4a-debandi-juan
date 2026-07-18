@@ -1,4 +1,4 @@
-package com.example.final_am_acn4a_debandi_juan;
+package com.example.final_am_acn4a_debandi_juan.ui.genremovies;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,35 +7,35 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.final_am_acn4a_debandi_juan.App;
+import com.example.final_am_acn4a_debandi_juan.MovieDetailActivity;
+import com.example.final_am_acn4a_debandi_juan.R;
 import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
-import com.example.final_am_acn4a_debandi_juan.data.models.MovieResponse;
-import com.example.final_am_acn4a_debandi_juan.data.datasources.network.RetrofitClient;
+import com.example.final_am_acn4a_debandi_juan.di.AppModule;
+import com.example.final_am_acn4a_debandi_juan.ui.common.state.UiStatus;
 import com.example.final_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
 import com.example.final_am_acn4a_debandi_juan.utils.MovieViewFactory;
 import java.util.List;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class GenreMoviesActivity extends AppCompatActivity {
     public static final String EXTRA_GENRE_ID = "extra_genre_id";
     public static final String EXTRA_GENRE_NAME = "extra_genre_name";
-    private static final String SORT_BY = "popularity.desc";
-
     private LinearLayout resultsContainer;
     private TextView message;
     private ProgressBar progress;
 
-    private int genreId;
-    private int currentPage = 1;
-    private boolean isLoading = false;
-    private boolean isLastPage = false;
+    private GenreMoviesViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,82 +59,89 @@ public class GenreMoviesActivity extends AppCompatActivity {
 
         String genreName = getIntent().getStringExtra(EXTRA_GENRE_NAME);
         TextView title = findViewById(R.id.genre_Title);
-        if (genreName != null) {
+        if (genreName != null && !genreName.isEmpty()) {
             title.setText(genreName);
         }
 
-        genreId = getIntent().getIntExtra(EXTRA_GENRE_ID, -1);
+        int genreId = getIntent().getIntExtra(EXTRA_GENRE_ID, -1);
+
         if (genreId <= 0) {
             finish();
             return;
         }
+
+        AppModule container = App.getModule(this);
+        ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            @SuppressWarnings("unchecked")
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new GenreMoviesViewModel(container.getMovieRepository(), genreId);
+            }
+        };
+
+        viewModel = new ViewModelProvider(this, factory).get(GenreMoviesViewModel.class);
+
+        viewModel.getState().observe(this, this::renderState);
 
         scrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             View child = scrollView.getChildAt(0);
             if (child != null) {
                 int diff = (child.getBottom() - (scrollView.getHeight() + scrollY));
                 if (diff <= 0) {
-                    loadMovies(genreId);
+                    viewModel.loadNextPage();
                 }
             }
         });
 
-        loadMovies(genreId);
+        viewModel.loadNextPage();
     }
+    private void renderState(GenreMoviesUiState state) {
+        boolean showingProgress = state.getStatus() == UiStatus.LOADING || state.isLoadingNextPage();
 
-    private void loadMovies(int genreId) {
-        if (isLoading || isLastPage) {
-            return;
-        }
-        isLoading = true;
-        if (currentPage == 1) {
-            progress.setVisibility(View.VISIBLE);
-            message.setVisibility(View.GONE);
-        }
-        RetrofitClient.getApi().discoverByGenre(genreId, SORT_BY, currentPage).enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
-                isLoading = false;
-                progress.setVisibility(View.GONE);
-                if (!response.isSuccessful() || response.body() == null) {
-                    if (currentPage == 1) {
-                        showMessage(getString(R.string.error_network));
-                    }
-                    return;
-                }
-                renderResults(response.body().getResults());
-            }
+        progress.setVisibility(showingProgress ? View.VISIBLE : View.GONE);
 
-            @Override
-            public void onFailure(@NonNull Call<MovieResponse> call, @NonNull Throwable t) {
-                isLoading = false;
-                progress.setVisibility(View.GONE);
-                if (currentPage == 1) {
-                    showMessage(getString(R.string.error_network));
+        switch (state.getStatus()) {
+            case LOADING:
+                resultsContainer.removeAllViews();
+                message.setVisibility(View.GONE);
+                break;
+
+            case CONTENT:
+                renderResults(state.getMovies());
+                if (state.getMessage() != null && !state.getMessage().isEmpty()) {
+                    Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+                break;
+
+            case EMPTY:
+                resultsContainer.removeAllViews();
+                showMessage(getString(R.string.categories_empty));
+                break;
+
+            case ERROR:
+                resultsContainer.removeAllViews();
+                showMessage(getString(R.string.error_network));
+                break;
+
+            default:
+                break;
+        }
     }
 
     private void renderResults(List<Movie> movies) {
-        if (currentPage == 1) {
-            resultsContainer.removeAllViews();
-            if (movies == null || movies.isEmpty()) {
-                showMessage(getString(R.string.categories_empty));
-                isLastPage = true;
-                return;
-            }
-        }
+        resultsContainer.removeAllViews();
         if (movies == null || movies.isEmpty()) {
-            isLastPage = true;
+            showMessage(getString(R.string.categories_empty));
             return;
         }
+
         message.setVisibility(View.GONE);
+
         for (Movie movie : movies) {
             View card = MovieViewFactory.createListCard(this, movie, this::openDetail);
             resultsContainer.addView(card);
         }
-        currentPage++;
     }
 
     private void openDetail(Movie movie) {
