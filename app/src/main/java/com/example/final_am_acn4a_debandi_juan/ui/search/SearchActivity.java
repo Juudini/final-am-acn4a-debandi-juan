@@ -1,4 +1,4 @@
-package com.example.final_am_acn4a_debandi_juan;
+package com.example.final_am_acn4a_debandi_juan.ui.search;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,12 +22,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.final_am_acn4a_debandi_juan.App;
+import com.example.final_am_acn4a_debandi_juan.MovieDetailActivity;
+import com.example.final_am_acn4a_debandi_juan.R;
 import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
 import com.example.final_am_acn4a_debandi_juan.di.AppModule;
 import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
 import com.example.final_am_acn4a_debandi_juan.ui.common.state.UiStatus;
-import com.example.final_am_acn4a_debandi_juan.ui.search.SearchUiState;
-import com.example.final_am_acn4a_debandi_juan.ui.search.SearchViewModel;
 import com.example.final_am_acn4a_debandi_juan.utils.MovieViewFactory;
 
 import java.util.List;

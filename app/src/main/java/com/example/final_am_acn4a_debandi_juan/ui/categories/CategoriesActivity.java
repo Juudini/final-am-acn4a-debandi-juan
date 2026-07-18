@@ -1,4 +1,4 @@
-package com.example.final_am_acn4a_debandi_juan;
+package com.example.final_am_acn4a_debandi_juan.ui.categories;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -19,13 +19,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.final_am_acn4a_debandi_juan.App;
+import com.example.final_am_acn4a_debandi_juan.R;
 import com.example.final_am_acn4a_debandi_juan.data.models.Genre;
 import com.example.final_am_acn4a_debandi_juan.di.AppModule;
 import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
-import com.example.final_am_acn4a_debandi_juan.ui.categories.CategoriesUiState;
-import com.example.final_am_acn4a_debandi_juan.ui.categories.CategoriesViewModel;
 import com.example.final_am_acn4a_debandi_juan.ui.common.state.UiStatus;
 import com.example.final_am_acn4a_debandi_juan.ui.genremovies.GenreMoviesActivity;
+import com.example.final_am_acn4a_debandi_juan.ui.search.SearchActivity;
 import com.example.final_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
 import com.google.android.material.card.MaterialCardView;
 import java.util.List;

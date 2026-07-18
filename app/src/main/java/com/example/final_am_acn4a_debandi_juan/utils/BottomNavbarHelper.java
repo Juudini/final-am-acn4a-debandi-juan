@@ -8,7 +8,7 @@ import com.google.android.material.button.MaterialButton;
 import androidx.core.content.ContextCompat;
 
 import com.example.final_am_acn4a_debandi_juan.AccountActivity;
-import com.example.final_am_acn4a_debandi_juan.CategoriesActivity;
+import com.example.final_am_acn4a_debandi_juan.ui.categories.CategoriesActivity;
 import com.example.final_am_acn4a_debandi_juan.MainActivity;
 import com.example.final_am_acn4a_debandi_juan.R;
 import com.example.final_am_acn4a_debandi_juan.SigninActivity;

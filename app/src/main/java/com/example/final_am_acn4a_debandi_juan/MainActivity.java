@@ -16,6 +16,7 @@ import com.example.final_am_acn4a_debandi_juan.di.AppModule;
 import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
 import com.example.final_am_acn4a_debandi_juan.ui.home.HomeUiState;
 import com.example.final_am_acn4a_debandi_juan.ui.home.HomeViewModel;
+import com.example.final_am_acn4a_debandi_juan.ui.search.SearchActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
