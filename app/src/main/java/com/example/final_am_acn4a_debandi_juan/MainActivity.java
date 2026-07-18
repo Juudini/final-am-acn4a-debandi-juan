@@ -17,6 +17,7 @@ import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
 import com.example.final_am_acn4a_debandi_juan.ui.auth.signin.SigninActivity;
 import com.example.final_am_acn4a_debandi_juan.ui.home.HomeUiState;
 import com.example.final_am_acn4a_debandi_juan.ui.home.HomeViewModel;
+import com.example.final_am_acn4a_debandi_juan.ui.moviedetail.MovieDetailActivity;
 import com.example.final_am_acn4a_debandi_juan.ui.newreleases.NewReleasesActivity;
 import com.example.final_am_acn4a_debandi_juan.ui.search.SearchActivity;
 import com.google.android.material.button.MaterialButton;

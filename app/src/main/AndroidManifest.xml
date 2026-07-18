@@ -42,7 +42,7 @@
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".MovieDetailActivity"
+            android:name=".ui.moviedetail.MovieDetailActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity

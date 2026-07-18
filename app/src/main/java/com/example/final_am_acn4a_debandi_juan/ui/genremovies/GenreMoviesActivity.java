@@ -19,7 +19,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.final_am_acn4a_debandi_juan.App;
-import com.example.final_am_acn4a_debandi_juan.MovieDetailActivity;
+import com.example.final_am_acn4a_debandi_juan.ui.moviedetail.MovieDetailActivity;
 import com.example.final_am_acn4a_debandi_juan.R;
 import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
 import com.example.final_am_acn4a_debandi_juan.di.AppModule;

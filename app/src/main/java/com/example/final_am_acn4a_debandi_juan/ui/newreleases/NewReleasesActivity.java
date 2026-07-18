@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -18,21 +17,15 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.final_am_acn4a_debandi_juan.App;
-import com.example.final_am_acn4a_debandi_juan.MovieDetailActivity;
+import com.example.final_am_acn4a_debandi_juan.ui.moviedetail.MovieDetailActivity;
 import com.example.final_am_acn4a_debandi_juan.R;
 import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
-import com.example.final_am_acn4a_debandi_juan.data.models.MovieResponse;
-import com.example.final_am_acn4a_debandi_juan.data.datasources.network.RetrofitClient;
 import com.example.final_am_acn4a_debandi_juan.di.AppModule;
 import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
 import com.example.final_am_acn4a_debandi_juan.ui.common.state.UiStatus;
 import com.example.final_am_acn4a_debandi_juan.utils.MovieViewFactory;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class NewReleasesActivity extends AppCompatActivity {
     private LinearLayout resultsContainer;
