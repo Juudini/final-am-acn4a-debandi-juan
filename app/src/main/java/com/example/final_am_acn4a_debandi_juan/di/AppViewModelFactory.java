@@ -3,6 +3,8 @@ package com.example.final_am_acn4a_debandi_juan.di;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.example.final_am_acn4a_debandi_juan.ui.categories.CategoriesViewModel;
 import com.example.final_am_acn4a_debandi_juan.ui.home.HomeViewModel;
 import com.example.final_am_acn4a_debandi_juan.ui.search.SearchViewModel;
 
@@ -23,6 +25,10 @@ public final class AppViewModelFactory implements ViewModelProvider.Factory {
 
         if (modelClass == SearchViewModel.class) {
             return (T) new SearchViewModel(appModule.getMovieRepository());
+        }
+
+        if (modelClass == CategoriesViewModel.class) {
+            return (T) new CategoriesViewModel(appModule.getGenreRepository());
         }
 
         throw new IllegalArgumentException("Unknown ViewModel: " + modelClass.getName());
