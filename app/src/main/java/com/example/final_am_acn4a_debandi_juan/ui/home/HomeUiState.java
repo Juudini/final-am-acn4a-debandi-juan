@@ -10,32 +10,51 @@ public final class HomeUiState {
     private final UiStatus status;
     private final List<Movie> trending;
     private final List<Movie> newReleases;
+    private final boolean heroInWatchlist;
+    private final boolean watchlistLoading;
     private final String message;
 
-    public HomeUiState(UiStatus status, List<Movie> trending, List<Movie> newReleases, String message) {
+    public HomeUiState(
+        UiStatus status,
+        List<Movie> trending,
+        List<Movie> newReleases,
+        boolean heroInWatchlist,
+        boolean watchlistLoading,
+        String message
+    ) {
         this.status = status;
         this.trending = trending != null ? trending : Collections.emptyList();
         this.newReleases = newReleases != null ? newReleases : Collections.emptyList();
+        this.heroInWatchlist = heroInWatchlist;
+        this.watchlistLoading = watchlistLoading;
         this.message = message;
     }
 
-    public static HomeUiState loading() {
-        return new HomeUiState(UiStatus.LOADING, null, null, null);
+    public UiStatus getStatus() {
+        return status;
     }
 
-    public static HomeUiState content(List<Movie> trending, List<Movie> releases) {
-        return new HomeUiState(UiStatus.CONTENT, trending, releases, null);
+    public List<Movie> getTrending() {
+        return trending;
     }
 
-    public static HomeUiState error(String message) {
-        return new HomeUiState(UiStatus.ERROR, null, null, message);
+    public List<Movie> getNewReleases() {
+        return newReleases;
     }
 
-    public UiStatus getStatus() { return status; }
-    public List<Movie> getTrending() { return trending; }
-    public List<Movie> getNewReleases() { return newReleases; }
-    public String getMessage() { return message; }
+    public boolean isHeroInWatchlist() {
+        return heroInWatchlist;
+    }
+
+    public boolean isWatchlistLoading() {
+        return watchlistLoading;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
     public Movie getHeroMovie() {
-        return newReleases.isEmpty() ? new Movie() : newReleases.get(0);
+        return newReleases.isEmpty() ? null : newReleases.get(0);
     }
 }

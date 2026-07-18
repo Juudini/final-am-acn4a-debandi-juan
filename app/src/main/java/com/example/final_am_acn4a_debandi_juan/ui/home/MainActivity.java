@@ -1,9 +1,9 @@
-package com.example.final_am_acn4a_debandi_juan;
+package com.example.final_am_acn4a_debandi_juan.ui.home;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,17 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.final_am_acn4a_debandi_juan.di.AppModule;
-import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
-import com.example.final_am_acn4a_debandi_juan.ui.auth.signin.SigninActivity;
-import com.example.final_am_acn4a_debandi_juan.ui.home.HomeUiState;
-import com.example.final_am_acn4a_debandi_juan.ui.home.HomeViewModel;
-import com.example.final_am_acn4a_debandi_juan.ui.moviedetail.MovieDetailActivity;
-import com.example.final_am_acn4a_debandi_juan.ui.newreleases.NewReleasesActivity;
-import com.example.final_am_acn4a_debandi_juan.ui.search.SearchActivity;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,12 +20,20 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.final_am_acn4a_debandi_juan.data.WatchlistRepository;
+import com.example.final_am_acn4a_debandi_juan.App;
+import com.example.final_am_acn4a_debandi_juan.R;
 import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
-import com.example.final_am_acn4a_debandi_juan.utils.AuthService;
-import com.example.final_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
-import com.example.final_am_acn4a_debandi_juan.utils.ImageLoader;
-import com.example.final_am_acn4a_debandi_juan.utils.MovieViewFactory;
+import com.example.final_am_acn4a_debandi_juan.di.AppModule;
+import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
+import com.example.final_am_acn4a_debandi_juan.ui.auth.signin.SigninActivity;
+import com.example.final_am_acn4a_debandi_juan.ui.common.image.ImageLoader;
+import com.example.final_am_acn4a_debandi_juan.ui.common.movie.MovieViewFactory;
+import com.example.final_am_acn4a_debandi_juan.ui.common.navigation.BottomNavbarHelper;
+import com.example.final_am_acn4a_debandi_juan.ui.moviedetail.MovieDetailActivity;
+import com.example.final_am_acn4a_debandi_juan.ui.newreleases.NewReleasesActivity;
+import com.example.final_am_acn4a_debandi_juan.ui.search.SearchActivity;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -45,16 +42,14 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout trendingMoviesContainer;
     private LinearLayout newReleasesContainer;
     private ScrollView mainScrollView;
+    private HomeViewModel viewModel;
 
-    // Hero
     private ImageView heroBgImage;
     private TextView heroLabel;
     private TextView heroDescription;
     private TextView heroRating;
     private Movie heroMovie;
-    private boolean heroInWatchlist;
 
-    // Skeletons
     private View heroSkeletonOverlay;
     private View heroSkeletonTitleLines;
     private View heroSkeletonDescLines;
@@ -71,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
 
         AppModule module = App.getModule(this);
         AppViewModelFactory factory = new AppViewModelFactory(module);
-        HomeViewModel viewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
+        viewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
         viewModel.getState().observe(this, this::renderState);
-
+        viewModel.getEvent().observe(this, this::handleEvent);
 
         setupHeaderScrollTransition();
 
@@ -87,58 +82,24 @@ public class MainActivity extends AppCompatActivity {
         heroPremiereBadge = findViewById(R.id.heroSection_PremiereBadge);
         trendingSkeletonScroll = findViewById(R.id.trendingSkeletonScroll);
         newReleasesSkeletonContainer = findViewById(R.id.newReleasesSkeletonContainer);
+        trendingMoviesContainer = findViewById(R.id.trendingMoviesContainer);
+        newReleasesContainer = findViewById(R.id.newReleasesContainer);
 
         findViewById(R.id.heroCard).setOnClickListener(v -> {
             if (heroMovie != null) {
                 openDetail(heroMovie);
             }
         });
-        findViewById(R.id.topHeader_BtnSearch).setOnClickListener(v -> startActivity(new Intent(this, SearchActivity.class)));
-        findViewById(R.id.home_btnViewAllNewReleases).setOnClickListener(v -> startActivity(new Intent(this, NewReleasesActivity.class)));
+        findViewById(R.id.topHeader_BtnSearch).setOnClickListener(
+            v -> startActivity(new Intent(this, SearchActivity.class))
+        );
+        findViewById(R.id.home_btnViewAllNewReleases).setOnClickListener(
+            v -> startActivity(new Intent(this, NewReleasesActivity.class))
+        );
+        findViewById(R.id.hero_BtnBookmark).setOnClickListener(
+            v -> viewModel.toggleHeroWatchlist()
+        );
         BottomNavbarHelper.setup(this, BottomNavbarHelper.TAB_HOME);
-
-        findViewById(R.id.hero_BtnBookmark).setOnClickListener(v -> {
-            if (!AuthService.isLoggedIn()) {
-                startActivity(new Intent(this, SigninActivity.class));
-                return;
-            }
-            if (heroMovie == null) {
-                return;
-            }
-            if (heroInWatchlist) {
-                WatchlistRepository.remove(heroMovie.getId(), success -> {
-                    if (success) {
-                        heroInWatchlist = false;
-                        updateHeroBookmarkUi();
-                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.watchlist_removed, Snackbar.LENGTH_SHORT);
-                        View anchor = findViewById(R.id.bottomNavbarWrapper);
-                        if (anchor != null) {
-                            snackbar.setAnchorView(anchor);
-                        }
-                        snackbar.show();
-                    } else {
-                        Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } else {
-                WatchlistRepository.add(heroMovie, success -> {
-                    if (success) {
-                        heroInWatchlist = true;
-                        updateHeroBookmarkUi();
-                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.watchlist_added, Snackbar.LENGTH_SHORT);
-                        View anchor = findViewById(R.id.bottomNavbarWrapper);
-                        if (anchor != null) {
-                            snackbar.setAnchorView(anchor);
-                        }
-                        snackbar.show();
-                    } else {
-                        Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-        trendingMoviesContainer = findViewById(R.id.trendingMoviesContainer);
-        newReleasesContainer = findViewById(R.id.newReleasesContainer);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -149,9 +110,16 @@ public class MainActivity extends AppCompatActivity {
                 int paddingBase = getResources().getDimensionPixelSize(R.dimen.spacing_3);
                 topHeaderView.setPadding(paddingBase, paddingBase + systemBars.top, paddingBase, paddingBase);
             }
-
             return insets;
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (viewModel != null) {
+            viewModel.refreshHeroWatchlist();
+        }
     }
 
     private void setupHeaderScrollTransition() {
@@ -234,40 +202,34 @@ public class MainActivity extends AppCompatActivity {
         heroLabel.setVisibility(android.view.View.VISIBLE);
         heroDescription.setVisibility(android.view.View.VISIBLE);
 
-        refreshHeroWatchlistState();
+        heroSkeletonOverlay.setVisibility(View.GONE);
+        heroSkeletonTitleLines.setVisibility(View.GONE);
+        heroSkeletonDescLines.setVisibility(View.GONE);
+        heroBgImage.setVisibility(View.VISIBLE);
+        heroPremiereBadge.setVisibility(View.VISIBLE);
+        heroLabel.setVisibility(View.VISIBLE);
+        heroDescription.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        refreshHeroWatchlistState();
-    }
-
-    private void refreshHeroWatchlistState() {
-        if (heroMovie == null) return;
-        if (AuthService.isLoggedIn()) {
-            WatchlistRepository.isInWatchlist(heroMovie.getId(), result -> {
-                heroInWatchlist = result;
-                updateHeroBookmarkUi();
-            });
-        } else {
-            heroInWatchlist = false;
-            updateHeroBookmarkUi();
+    private void updateHeroBookmarkUi(boolean inWatchlist, boolean loading) {
+        MaterialButton button = findViewById(R.id.hero_BtnBookmark);
+        if (button == null) {
+            return;
         }
-    }
 
-    private void updateHeroBookmarkUi() {
-        MaterialButton btn = findViewById(R.id.hero_BtnBookmark);
-        if (btn == null) return;
-
-        if (heroInWatchlist) {
-            btn.setText(R.string.detail_inWatchlist);
-            btn.setIconResource(R.drawable.ic_watchlist);
-            btn.setBackgroundTintList(ColorStateList.valueOf(Color.TRANSPARENT));
-            btn.setTextColor(ContextCompat.getColor(this, R.color.text_title));
-            btn.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.text_title)));
-            btn.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.border_default)));
-            btn.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.stroke_width));
+        button.setEnabled(heroMovie != null && !loading);
+        if (inWatchlist) {
+            button.setText(R.string.detail_inWatchlist);
+            button.setIconResource(R.drawable.ic_watchlist);
+            button.setBackgroundTintList(ColorStateList.valueOf(Color.TRANSPARENT));
+            button.setTextColor(ContextCompat.getColor(this, R.color.text_title));
+            button.setIconTint(
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.text_title))
+            );
+            button.setStrokeColor(
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.border_default))
+            );
+            button.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.stroke_width));
         } else {
             btn.setText(R.string.detail_addToWatchlist);
             btn.setIconResource(R.drawable.ic_add_to_watchlist);
@@ -285,8 +247,8 @@ public class MainActivity extends AppCompatActivity {
             trendingMoviesContainer.addView(card);
         }
 
-        trendingSkeletonScroll.setVisibility(android.view.View.GONE);
-        trendingMoviesContainer.setVisibility(android.view.View.VISIBLE);
+        trendingSkeletonScroll.setVisibility(View.GONE);
+        trendingMoviesContainer.setVisibility(View.VISIBLE);
     }
 
     private void bindNewReleases(List<Movie> movies) {
@@ -296,8 +258,8 @@ public class MainActivity extends AppCompatActivity {
             newReleasesContainer.addView(card);
         }
 
-        newReleasesSkeletonContainer.setVisibility(android.view.View.GONE);
-        newReleasesContainer.setVisibility(android.view.View.VISIBLE);
+        newReleasesSkeletonContainer.setVisibility(View.GONE);
+        newReleasesContainer.setVisibility(View.VISIBLE);
     }
 
     private void openDetail(Movie movie) {
@@ -308,20 +270,61 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void renderState(HomeUiState state) {
-    switch (state.getStatus()) {
-        case LOADING:
-            startSkeletonAnimations();
-            break;
-        case CONTENT:
-            bindHero(state.getHeroMovie());
-            bindTrending(state.getTrending());
-            bindNewReleases(state.getNewReleases());
-            break;
-        case ERROR:
-            Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
-            break;
-        default:
-            break;
+        switch (state.getStatus()) {
+            case LOADING:
+                startSkeletonAnimations();
+                break;
+            case CONTENT:
+                Movie hero = state.getHeroMovie();
+                if (hero != null) {
+                    bindHero(hero);
+                }
+                bindTrending(state.getTrending());
+                bindNewReleases(state.getNewReleases());
+                break;
+            case ERROR:
+                Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+        updateHeroBookmarkUi(state.isHeroInWatchlist(), state.isWatchlistLoading());
     }
-}
+
+    private void handleEvent(HomeViewModel.Event event) {
+        if (event == null) {
+            return;
+        }
+
+        switch (event) {
+            case NAVIGATE_TO_SIGNIN:
+                startActivity(new Intent(this, SigninActivity.class));
+                break;
+            case ADDED_TO_WATCHLIST:
+                showWatchlistSnackbar(R.string.watchlist_added);
+                break;
+            case REMOVED_FROM_WATCHLIST:
+                showWatchlistSnackbar(R.string.watchlist_removed);
+                break;
+            case WATCHLIST_ERROR:
+                Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+        viewModel.consumeEvent();
+    }
+
+    private void showWatchlistSnackbar(int messageRes) {
+        Snackbar snackbar = Snackbar.make(
+            findViewById(android.R.id.content),
+            messageRes,
+            Snackbar.LENGTH_SHORT
+        );
+        View anchor = findViewById(R.id.bottomNavbarWrapper);
+        if (anchor != null) {
+            snackbar.setAnchorView(anchor);
+        }
+        snackbar.show();
+    }
 }
