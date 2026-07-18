@@ -59,7 +59,7 @@
             android:exported="false"
             android:parentActivityName=".ui.categories.CategoriesActivity" />
         <activity
-            android:name=".NewReleasesActivity"
+            android:name=".ui.newreleases.NewReleasesActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
     </application>

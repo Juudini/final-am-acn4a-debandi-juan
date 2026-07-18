@@ -1,4 +1,4 @@
-package com.example.final_am_acn4a_debandi_juan;
+package com.example.final_am_acn4a_debandi_juan.ui.newreleases;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -14,10 +15,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.final_am_acn4a_debandi_juan.App;
+import com.example.final_am_acn4a_debandi_juan.MovieDetailActivity;
+import com.example.final_am_acn4a_debandi_juan.R;
 import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
 import com.example.final_am_acn4a_debandi_juan.data.models.MovieResponse;
 import com.example.final_am_acn4a_debandi_juan.data.datasources.network.RetrofitClient;
+import com.example.final_am_acn4a_debandi_juan.di.AppModule;
+import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
+import com.example.final_am_acn4a_debandi_juan.ui.common.state.UiStatus;
 import com.example.final_am_acn4a_debandi_juan.utils.MovieViewFactory;
 
 import java.util.List;
@@ -27,14 +35,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class NewReleasesActivity extends AppCompatActivity {
-
     private LinearLayout resultsContainer;
     private TextView message;
     private ProgressBar progress;
-
-    private int currentPage = 1;
-    private boolean isLoading = false;
-    private boolean isLastPage = false;
+    private NewReleasesViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,7 @@ public class NewReleasesActivity extends AppCompatActivity {
         ScrollView scrollView = findViewById(R.id.genre_Scroll);
 
         findViewById(R.id.genre_BtnBack).setOnClickListener(v -> finish());
+
         View bottomNavbar = findViewById(R.id.bottomNavbarWrapper);
         if (bottomNavbar != null) {
             bottomNavbar.setVisibility(View.GONE);
@@ -62,72 +67,68 @@ public class NewReleasesActivity extends AppCompatActivity {
         TextView title = findViewById(R.id.genre_Title);
         title.setText(R.string.section_newReleases);
 
+        AppModule module = App.getModule(this);
+        AppViewModelFactory factory = new AppViewModelFactory(module);
+        viewModel = new ViewModelProvider(this, factory).get(NewReleasesViewModel.class);
+        viewModel.getState().observe(this, this::renderState);
+
         scrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             View child = scrollView.getChildAt(0);
             if (child != null) {
                 int diff = (child.getBottom() - (scrollView.getHeight() + scrollY));
                 if (diff <= 0) {
-                    loadNewReleases();
+                    viewModel.loadNextPage();
                 }
             }
         });
-
-        loadNewReleases();
     }
 
-    private void loadNewReleases() {
-        if (isLoading || isLastPage) {
-            return;
-        }
-        isLoading = true;
-        if (currentPage == 1) {
-            progress.setVisibility(View.VISIBLE);
-            message.setVisibility(View.GONE);
-        }
-        RetrofitClient.getApi().getNowPlaying(currentPage).enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
-                isLoading = false;
-                progress.setVisibility(View.GONE);
-                if (!response.isSuccessful() || response.body() == null) {
-                    if (currentPage == 1) {
-                        showMessage(getString(R.string.error_network));
-                    }
-                    return;
-                }
-                renderResults(response.body().getResults());
-            }
+    private void renderState(NewReleasesUiState state) {
+        boolean showingProgress = state.getStatus() == UiStatus.LOADING || state.isLoadingNextPage();
 
-            @Override
-            public void onFailure(@NonNull Call<MovieResponse> call, @NonNull Throwable t) {
-                isLoading = false;
-                progress.setVisibility(View.GONE);
-                if (currentPage == 1) {
-                    showMessage(getString(R.string.error_network));
+        progress.setVisibility(showingProgress ? View.VISIBLE : View.GONE);
+
+        switch (state.getStatus()) {
+            case LOADING:
+                resultsContainer.removeAllViews();
+                message.setVisibility(View.GONE);
+                break;
+
+            case CONTENT:
+                renderResults(state.getMovies());
+                if (state.getMessage() != null && !state.getMessage().isEmpty()) {
+                    Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+                break;
+
+            case EMPTY:
+                resultsContainer.removeAllViews();
+                showMessage(getString(R.string.categories_empty));
+                break;
+
+            case ERROR:
+                resultsContainer.removeAllViews();
+                showMessage(getString(R.string.error_network));
+                break;
+
+            default:
+                break;
+        }
     }
 
     private void renderResults(List<Movie> movies) {
-        if (currentPage == 1) {
-            resultsContainer.removeAllViews();
-            if (movies == null || movies.isEmpty()) {
-                showMessage(getString(R.string.categories_empty));
-                isLastPage = true;
-                return;
-            }
-        }
+        resultsContainer.removeAllViews();
+
         if (movies == null || movies.isEmpty()) {
-            isLastPage = true;
+            showMessage(getString(R.string.categories_empty));
             return;
         }
+
         message.setVisibility(View.GONE);
         for (Movie movie : movies) {
             View card = MovieViewFactory.createListCard(this, movie, this::openDetail);
             resultsContainer.addView(card);
         }
-        currentPage++;
     }
 
     private void openDetail(Movie movie) {
