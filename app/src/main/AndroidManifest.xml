@@ -38,7 +38,7 @@
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".WatchlistActivity"
+            android:name=".ui.watchlist.WatchlistActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity

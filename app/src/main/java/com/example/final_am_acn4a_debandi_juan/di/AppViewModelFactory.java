@@ -11,6 +11,7 @@ import com.example.final_am_acn4a_debandi_juan.ui.categories.CategoriesViewModel
 import com.example.final_am_acn4a_debandi_juan.ui.home.HomeViewModel;
 import com.example.final_am_acn4a_debandi_juan.ui.newreleases.NewReleasesViewModel;
 import com.example.final_am_acn4a_debandi_juan.ui.search.SearchViewModel;
+import com.example.final_am_acn4a_debandi_juan.ui.watchlist.WatchlistViewModel;
 
 public final class AppViewModelFactory implements ViewModelProvider.Factory {
     private final AppModule appModule;
@@ -49,6 +50,10 @@ public final class AppViewModelFactory implements ViewModelProvider.Factory {
 
         if (modelClass == AccountViewModel.class) {
             return (T) new AccountViewModel(appModule.getAuthRepository());
+        }
+
+        if (modelClass == WatchlistViewModel.class) {
+            return (T) new WatchlistViewModel(appModule.getWatchlistRepository(), appModule.getAuthRepository());
         }
 
         throw new IllegalArgumentException("Unknown ViewModel: " + modelClass.getName());
