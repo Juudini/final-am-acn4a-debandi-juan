@@ -1,40 +1,26 @@
 package com.example.final_am_acn4a_debandi_juan.data.models;
 
-import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
-
+import java.util.Locale;
 
 public class Movie implements Serializable {
-
-    @SerializedName("id")
     private int id;
-
-    @SerializedName("title")
     private String title;
-
-    @SerializedName("overview")
     private String overview;
-
-    @SerializedName("poster_path")
     private String posterPath;
-
-    @SerializedName("backdrop_path")
     private String backdropPath;
-
-    @SerializedName("vote_average")
     private double voteAverage;
-
-    @SerializedName("release_date")
     private String releaseDate;
-
-    @SerializedName("genre_ids")
     private List<Integer> genreIds;
 
     public Movie() {
     }
 
-    public Movie(int id, String title, String overview, String posterPath, String backdropPath, double voteAverage, String releaseDate) {
+    public Movie(
+        int id, String title, String overview, String posterPath, String backdropPath,
+        double voteAverage, String releaseDate
+    ) {
         this.id = id;
         this.title = title;
         this.overview = overview;
@@ -44,37 +30,14 @@ public class Movie implements Serializable {
         this.releaseDate = releaseDate;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public String getPosterPath() {
-        return posterPath;
-    }
-
-    public String getBackdropPath() {
-        return backdropPath;
-    }
-
-    public double getVoteAverage() {
-        return voteAverage;
-    }
-
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    public List<Integer> getGenreIds() {
-        return genreIds;
-    }
+    public int getId() { return id; }
+    public String getTitle() { return title; }
+    public String getOverview() { return overview; }
+    public String getPosterPath() { return posterPath; }
+    public String getBackdropPath() { return backdropPath; }
+    public double getVoteAverage() { return voteAverage; }
+    public String getReleaseDate() { return releaseDate; }
+    public List<Integer> getGenreIds() { return genreIds; }
 
     public void setGenreIds(List<Integer> genreIds) {
         this.genreIds = genreIds;
@@ -88,6 +51,6 @@ public class Movie implements Serializable {
     }
 
     public String getFormattedRating() {
-        return String.format(java.util.Locale.US, "%.1f", voteAverage / 2.0);
+        return String.format(Locale.US, "%.1f", voteAverage / 2.0);
     }
 }

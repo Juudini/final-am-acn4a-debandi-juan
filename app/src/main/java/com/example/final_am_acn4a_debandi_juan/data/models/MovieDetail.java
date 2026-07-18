@@ -1,80 +1,48 @@
 package com.example.final_am_acn4a_debandi_juan.data.models;
 
-import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
 public class MovieDetail implements Serializable {
-    @SerializedName("id")
     private int id;
-
-    @SerializedName("title")
     private String title;
-
-    @SerializedName("overview")
     private String overview;
-
-    @SerializedName("poster_path")
     private String posterPath;
-
-    @SerializedName("backdrop_path")
     private String backdropPath;
-
-    @SerializedName("vote_average")
     private double voteAverage;
-
-    @SerializedName("release_date")
     private String releaseDate;
-
-    @SerializedName("runtime")
     private int runtime;
-
-    @SerializedName("tagline")
     private String tagline;
-
-    @SerializedName("genres")
     private List<Genre> genres;
 
-    public int getId() {
-        return id;
+    public MovieDetail(
+        int id, String title, String overview, String posterPath,
+        String backdropPath, double voteAverage, String releaseDate,
+        int runtime, String tagline, List<Genre> genres
+    ) {
+        this.id = id;
+        this.title = title;
+        this.overview = overview;
+        this.posterPath = posterPath;
+        this.backdropPath = backdropPath;
+        this.voteAverage = voteAverage;
+        this.releaseDate = releaseDate;
+        this.runtime = runtime;
+        this.tagline = tagline;
+        this.genres = genres;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public String getPosterPath() {
-        return posterPath;
-    }
-
-    public String getBackdropPath() {
-        return backdropPath;
-    }
-
-    public double getVoteAverage() {
-        return voteAverage;
-    }
-
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    public int getRuntime() {
-        return runtime;
-    }
-
-    public String getTagline() {
-        return tagline;
-    }
-
-    public List<Genre> getGenres() {
-        return genres;
-    }
+    public int getId() { return id; }
+    public String getTitle() { return title; }
+    public String getOverview() { return overview; }
+    public String getPosterPath() { return posterPath; }
+    public String getBackdropPath() { return backdropPath; }
+    public double getVoteAverage() { return voteAverage; }
+    public String getReleaseDate() { return releaseDate; }
+    public int getRuntime() { return runtime; }
+    public String getTagline() { return tagline; }
+    public List<Genre> getGenres() { return genres; }
 
     public String getReleaseYear() {
         if (releaseDate != null && releaseDate.length() >= 4) {
@@ -103,13 +71,13 @@ public class MovieDetail implements Serializable {
         if (genres == null || genres.isEmpty()) {
             return "";
         }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < genres.size(); i++) {
-            if (i > 0) {
-                sb.append(" • ");
+        StringBuilder label = new StringBuilder();
+        for (int index = 0; index < genres.size(); index++) {
+            if (index > 0) {
+                label.append(" • ");
             }
-            sb.append(genres.get(i).getName().toUpperCase(Locale.US));
+            label.append(genres.get(index).getName().toUpperCase(Locale.US));
         }
-        return sb.toString();
+        return label.toString();
     }
 }

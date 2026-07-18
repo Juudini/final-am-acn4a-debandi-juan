@@ -2,19 +2,16 @@ package com.example.final_am_acn4a_debandi_juan.data;
 
 import androidx.annotation.NonNull;
 
+import com.example.final_am_acn4a_debandi_juan.data.mappers.FirestoreMovieMapper;
 import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
 import com.example.final_am_acn4a_debandi_juan.utils.AuthService;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public final class WatchlistRepository {
-
     public interface ActionCallback {
         void onComplete(boolean success);
     }
@@ -25,9 +22,10 @@ public final class WatchlistRepository {
 
     public interface ListCallback {
         void onResult(List<Movie> movies);
-
         void onError(String message);
     }
+
+    private static final FirestoreMovieMapper mapper = new FirestoreMovieMapper();
 
     private WatchlistRepository() {
     }
@@ -43,87 +41,60 @@ public final class WatchlistRepository {
                 .collection("watchlist");
     }
 
-    public static void add(@NonNull Movie movie, @NonNull ActionCallback callback) {
-        CollectionReference ref = watchlistRef();
-        if (ref == null) {
+    public static void add(@NonNull Movie movie,
+                           @NonNull ActionCallback callback) {
+        CollectionReference reference = watchlistRef();
+        if (reference == null) {
             callback.onComplete(false);
             return;
         }
-        Map<String, Object> data = new HashMap<>();
-        data.put("id", movie.getId());
-        data.put("title", movie.getTitle());
-        data.put("overview", movie.getOverview());
-        data.put("posterPath", movie.getPosterPath());
-        data.put("backdropPath", movie.getBackdropPath());
-        data.put("voteAverage", movie.getVoteAverage());
-        data.put("releaseDate", movie.getReleaseDate());
-        data.put("genreIds", movie.getGenreIds());
-        ref.document(String.valueOf(movie.getId()))
-                .set(data)
-                .addOnSuccessListener(unused -> callback.onComplete(true))
-                .addOnFailureListener(e -> callback.onComplete(false));
+        reference.document(String.valueOf(movie.getId()))
+                .set(mapper.toDocument(movie))
+                .addOnSuccessListener(ignored -> callback.onComplete(true))
+                .addOnFailureListener(error -> callback.onComplete(false));
     }
 
-    public static void remove(int movieId, @NonNull ActionCallback callback) {
-        CollectionReference ref = watchlistRef();
-        if (ref == null) {
+    public static void remove(int movieId,
+                              @NonNull ActionCallback callback) {
+        CollectionReference reference = watchlistRef();
+        if (reference == null) {
             callback.onComplete(false);
             return;
         }
-        ref.document(String.valueOf(movieId))
+        reference.document(String.valueOf(movieId))
                 .delete()
-                .addOnSuccessListener(unused -> callback.onComplete(true))
-                .addOnFailureListener(e -> callback.onComplete(false));
+                .addOnSuccessListener(ignored -> callback.onComplete(true))
+                .addOnFailureListener(error -> callback.onComplete(false));
     }
 
-    public static void isInWatchlist(int movieId, @NonNull CheckCallback callback) {
-        CollectionReference ref = watchlistRef();
-        if (ref == null) {
+    public static void isInWatchlist(int movieId,
+                                     @NonNull CheckCallback callback) {
+        CollectionReference reference = watchlistRef();
+        if (reference == null) {
             callback.onResult(false);
             return;
         }
-        ref.document(String.valueOf(movieId))
+        reference.document(String.valueOf(movieId))
                 .get()
-                .addOnSuccessListener(doc -> callback.onResult(doc.exists()))
-                .addOnFailureListener(e -> callback.onResult(false));
+                .addOnSuccessListener(document ->
+                        callback.onResult(document.exists()))
+                .addOnFailureListener(error -> callback.onResult(false));
     }
 
     public static void getAll(@NonNull ListCallback callback) {
-        CollectionReference ref = watchlistRef();
-        if (ref == null) {
+        CollectionReference reference = watchlistRef();
+        if (reference == null) {
             callback.onError(null);
             return;
         }
-        ref.get()
+        reference.get()
                 .addOnSuccessListener(snapshot -> {
                     List<Movie> movies = new ArrayList<>();
-                    for (DocumentSnapshot doc : snapshot.getDocuments()) {
-                        movies.add(toMovie(doc));
-                    }
+                    snapshot.getDocuments().forEach(
+                            document -> movies.add(mapper.fromDocument(document)));
                     callback.onResult(movies);
                 })
-                .addOnFailureListener(e -> callback.onError(e.getMessage()));
-    }
-
-    private static Movie toMovie(DocumentSnapshot doc) {
-        Long id = doc.getLong("id");
-        Double vote = doc.getDouble("voteAverage");
-        List<Long> ids = (List<Long>) doc.get("genreIds");
-        List<Integer> intIds = new ArrayList<>();
-        if (ids != null) {
-            for (Long idVal : ids) {
-                intIds.add(idVal.intValue());
-            }
-        }
-        Movie movie = new Movie(
-                id != null ? id.intValue() : 0,
-                doc.getString("title"),
-                doc.getString("overview"),
-                doc.getString("posterPath"),
-                doc.getString("backdropPath"),
-                vote != null ? vote : 0.0,
-                doc.getString("releaseDate"));
-        movie.setGenreIds(intIds);
-        return movie;
+                .addOnFailureListener(error ->
+                        callback.onError(error.getMessage()));
     }
 }

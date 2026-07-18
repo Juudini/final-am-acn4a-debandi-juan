@@ -1,13 +1,9 @@
 package com.example.final_am_acn4a_debandi_juan.data.models;
 
-import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
-public class Genre implements Serializable{
-    @SerializedName("id")
+public class Genre implements Serializable {
     private int id;
-
-    @SerializedName("name")
     private String name;
 
     public Genre() {
@@ -18,13 +14,8 @@ public class Genre implements Serializable{
         this.name = name;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
+    public int getId() { return id; }
+    public String getName() { return name; }
 
     @Override
     public String toString() {

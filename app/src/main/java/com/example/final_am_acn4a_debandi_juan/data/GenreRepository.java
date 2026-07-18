@@ -1,8 +1,9 @@
 package com.example.final_am_acn4a_debandi_juan.data;
 
-import com.example.final_am_acn4a_debandi_juan.data.models.Genre;
-import com.example.final_am_acn4a_debandi_juan.data.models.GenreResponse;
 import com.example.final_am_acn4a_debandi_juan.data.datasources.network.RetrofitClient;
+import com.example.final_am_acn4a_debandi_juan.data.datasources.network.dtos.GenreResponseDto;
+import com.example.final_am_acn4a_debandi_juan.data.mappers.TmdbGenreMapper;
+import com.example.final_am_acn4a_debandi_juan.data.models.Genre;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import retrofit2.Response;
 
 public final class GenreRepository {
     private static final Map<Integer, String> cache = new HashMap<>();
+    private static final TmdbGenreMapper mapper = new TmdbGenreMapper();
 
     private GenreRepository() {
     }
@@ -25,27 +27,22 @@ public final class GenreRepository {
             }
             return;
         }
-        RetrofitClient.getApi().getGenres().enqueue(new Callback<GenreResponse>() {
+        RetrofitClient.getApi().getGenres().enqueue(new Callback<GenreResponseDto>() {
             @Override
-            public void onResponse(Call<GenreResponse> call, Response<GenreResponse> response) {
+            public void onResponse(Call<GenreResponseDto> call,
+                                   Response<GenreResponseDto> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Genre> genres = response.body().getGenres();
-                    if (genres != null) {
-                        for (Genre g : genres) {
-                            cache.put(g.getId(), g.getName());
-                        }
+                    List<Genre> genres = mapper.toModels(response.body().getGenres());
+                    for (Genre genre : genres) {
+                        cache.put(genre.getId(), genre.getName());
                     }
                 }
-                if (onComplete != null) {
-                    onComplete.run();
-                }
+                complete(onComplete);
             }
 
             @Override
-            public void onFailure(Call<GenreResponse> call, Throwable t) {
-                if (onComplete != null) {
-                    onComplete.run();
-                }
+            public void onFailure(Call<GenreResponseDto> call, Throwable error) {
+                complete(onComplete);
             }
         });
     }
@@ -66,5 +63,11 @@ public final class GenreRepository {
         }
         int limit = Math.min(names.size(), 2);
         return android.text.TextUtils.join(", ", names.subList(0, limit));
+    }
+
+    private static void complete(Runnable onComplete) {
+        if (onComplete != null) {
+            onComplete.run();
+        }
     }
 }

@@ -8,6 +8,10 @@ import com.example.final_am_acn4a_debandi_juan.data.datasources.network.Retrofit
 import com.example.final_am_acn4a_debandi_juan.data.datasources.network.TmdbDatasource;
 import com.example.final_am_acn4a_debandi_juan.data.datasources.network.TmdbDatasourceImpl;
 import com.example.final_am_acn4a_debandi_juan.data.datasources.network.api.TmdbApi;
+import com.example.final_am_acn4a_debandi_juan.data.mappers.FirestoreMovieMapper;
+import com.example.final_am_acn4a_debandi_juan.data.mappers.TmdbCastMapper;
+import com.example.final_am_acn4a_debandi_juan.data.mappers.TmdbGenreMapper;
+import com.example.final_am_acn4a_debandi_juan.data.mappers.TmdbMovieMapper;
 import com.example.final_am_acn4a_debandi_juan.data.repositories.AuthRepository;
 import com.example.final_am_acn4a_debandi_juan.data.repositories.GenreRepository;
 import com.example.final_am_acn4a_debandi_juan.data.repositories.MovieRepository;
@@ -26,31 +30,31 @@ public class AppModule {
     private final WatchlistRepository watchlistRepository;
 
     public AppModule() {
-        AuthDatasource authDatasource = new FirebaseAuthDatasource(FirebaseAuth.getInstance());
+        TmdbGenreMapper genreMapper = new TmdbGenreMapper();
+        TmdbMovieMapper movieMapper = new TmdbMovieMapper(genreMapper);
+        TmdbCastMapper castMapper = new TmdbCastMapper();
+        FirestoreMovieMapper firestoreMovieMapper = new FirestoreMovieMapper();
+
+        AuthDatasource authDatasource =
+                new FirebaseAuthDatasource(FirebaseAuth.getInstance());
         authRepository = new AuthRepositoryImpl(authDatasource);
 
-        WatchlistDatasource watchlistDatasource = new FirestoreWatchlistDatasource(FirebaseFirestore.getInstance());
-        watchlistRepository = new WatchlistRepositoryImpl(watchlistDatasource, authRepository);
+        WatchlistDatasource watchlistDatasource =
+                new FirestoreWatchlistDatasource(
+                        FirebaseFirestore.getInstance(),
+                        firestoreMovieMapper);
+        watchlistRepository =
+                new WatchlistRepositoryImpl(watchlistDatasource, authRepository);
 
         TmdbApi api = RetrofitClient.getApi();
         TmdbDatasource networkDatasource = new TmdbDatasourceImpl(api);
-        movieRepository = new MovieRepositoryImpl(networkDatasource);
-        genreRepository = new GenreRepositoryImpl(networkDatasource);
+        movieRepository =
+                new MovieRepositoryImpl(networkDatasource, movieMapper, castMapper);
+        genreRepository = new GenreRepositoryImpl(networkDatasource, genreMapper);
     }
 
-    public AuthRepository getAuthRepository() {
-        return authRepository;
-    }
-
-    public WatchlistRepository getWatchlistRepository() {
-        return watchlistRepository;
-    }
-
-    public MovieRepository getMovieRepository() {
-        return movieRepository;
-    }
-
-    public GenreRepository getGenreRepository() {
-        return genreRepository;
-    }
+    public AuthRepository getAuthRepository() { return authRepository; }
+    public WatchlistRepository getWatchlistRepository() { return watchlistRepository; }
+    public MovieRepository getMovieRepository() { return movieRepository; }
+    public GenreRepository getGenreRepository() { return genreRepository; }
 }
