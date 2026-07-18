@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.final_am_acn4a_debandi_juan.App;
 import com.example.final_am_acn4a_debandi_juan.ui.moviedetail.MovieDetailActivity;
 import com.example.final_am_acn4a_debandi_juan.R;
-import com.example.final_am_acn4a_debandi_juan.data.GenreRepository;
 import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
 import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
 import com.example.final_am_acn4a_debandi_juan.ui.auth.signin.SigninActivity;
@@ -39,8 +38,6 @@ public class WatchlistActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_watchlist);
-
-        GenreRepository.init(null);
 
         container = findViewById(R.id.watchlist_Container);
         message = findViewById(R.id.watchlist_Message);

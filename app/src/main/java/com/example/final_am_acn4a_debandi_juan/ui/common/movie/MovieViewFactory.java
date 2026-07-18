@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.final_am_acn4a_debandi_juan.R;
-import com.example.final_am_acn4a_debandi_juan.data.GenreRepository;
 import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
 import com.example.final_am_acn4a_debandi_juan.ui.common.image.ImageLoader;
 import com.google.android.material.button.MaterialButton;
@@ -171,7 +170,12 @@ public final class MovieViewFactory {
         tvMeta.setTypeface(null, Typeface.BOLD);
 
 
-        String categoriesText = GenreRepository.getGenresLabel(movie.getGenreIds());
+        List<String> genreNames = movie.getGenreNames();
+        String categoriesText = "";
+        if (genreNames != null && !genreNames.isEmpty()) {
+            int genreLimit = Math.min(genreNames.size(), 2);
+            categoriesText = TextUtils.join(", ", genreNames.subList(0, genreLimit));
+        }
         TextView tvCategories = new TextView(context);
         LinearLayout.LayoutParams catParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         catParams.topMargin = dp(context, R.dimen.spacing_1);

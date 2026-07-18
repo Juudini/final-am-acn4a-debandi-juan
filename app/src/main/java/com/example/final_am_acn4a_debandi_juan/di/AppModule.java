@@ -35,20 +35,41 @@ public class AppModule {
         TmdbCastMapper castMapper = new TmdbCastMapper();
         FirestoreMovieMapper firestoreMovieMapper = new FirestoreMovieMapper();
 
+        TmdbApi api = RetrofitClient.getApi();
+        TmdbDatasource networkDatasource = new TmdbDatasourceImpl(api);
+        genreRepository = new GenreRepositoryImpl(networkDatasource, genreMapper);
+
         AuthDatasource authDatasource = new FirebaseAuthDatasource(FirebaseAuth.getInstance());
         authRepository = new AuthRepositoryImpl(authDatasource);
 
         WatchlistDatasource watchlistDatasource = new FirestoreWatchlistDatasource(FirebaseFirestore.getInstance(), firestoreMovieMapper);
-        watchlistRepository = new WatchlistRepositoryImpl(watchlistDatasource, authRepository);
+        watchlistRepository = new WatchlistRepositoryImpl(
+            watchlistDatasource,
+            authRepository,
+            genreRepository
+        );
 
-        TmdbApi api = RetrofitClient.getApi();
-        TmdbDatasource networkDatasource = new TmdbDatasourceImpl(api);
-        movieRepository = new MovieRepositoryImpl(networkDatasource, movieMapper, castMapper);
-        genreRepository = new GenreRepositoryImpl(networkDatasource, genreMapper);
+        movieRepository = new MovieRepositoryImpl(
+            networkDatasource,
+            movieMapper,
+            castMapper,
+            genreRepository
+        );
     }
 
-    public AuthRepository getAuthRepository() { return authRepository; }
-    public WatchlistRepository getWatchlistRepository() { return watchlistRepository; }
-    public MovieRepository getMovieRepository() { return movieRepository; }
-    public GenreRepository getGenreRepository() { return genreRepository; }
+    public AuthRepository getAuthRepository() {
+        return authRepository;
+    }
+
+    public WatchlistRepository getWatchlistRepository() {
+        return watchlistRepository;
+    }
+
+    public MovieRepository getMovieRepository() {
+        return movieRepository;
+    }
+
+    public GenreRepository getGenreRepository() {
+        return genreRepository;
+    }
 }

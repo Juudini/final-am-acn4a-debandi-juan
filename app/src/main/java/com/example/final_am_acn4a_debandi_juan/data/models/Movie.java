@@ -1,6 +1,8 @@
 package com.example.final_am_acn4a_debandi_juan.data.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -12,7 +14,8 @@ public class Movie implements Serializable {
     private String backdropPath;
     private double voteAverage;
     private String releaseDate;
-    private List<Integer> genreIds;
+    private List<Integer> genreIds = Collections.emptyList();
+    private List<String> genreNames = Collections.emptyList();
 
     public Movie() {
     }
@@ -38,9 +41,14 @@ public class Movie implements Serializable {
     public double getVoteAverage() { return voteAverage; }
     public String getReleaseDate() { return releaseDate; }
     public List<Integer> getGenreIds() { return genreIds; }
+    public List<String> getGenreNames() { return genreNames; }
 
     public void setGenreIds(List<Integer> genreIds) {
-        this.genreIds = genreIds;
+        this.genreIds = genreIds != null ? new ArrayList<>(genreIds) : Collections.emptyList();
+    }
+
+    public void setGenreNames(List<String> genreNames) {
+        this.genreNames = genreNames != null ? new ArrayList<>(genreNames) : Collections.emptyList();
     }
 
     public String getReleaseYear() {

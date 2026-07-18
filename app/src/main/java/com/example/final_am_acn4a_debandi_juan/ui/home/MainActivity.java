@@ -192,15 +192,10 @@ public class MainActivity extends AppCompatActivity {
         heroLabel.setText(movie.getTitle());
         heroDescription.setText(movie.getOverview());
         heroRating.setText(movie.getFormattedRating() + " / 5");
-        ImageLoader.load(heroBgImage, movie.getBackdropPath() != null ? movie.getBackdropPath() : movie.getPosterPath());
-
-        heroSkeletonOverlay.setVisibility(android.view.View.GONE);
-        heroSkeletonTitleLines.setVisibility(android.view.View.GONE);
-        heroSkeletonDescLines.setVisibility(android.view.View.GONE);
-        heroBgImage.setVisibility(android.view.View.VISIBLE);
-        heroPremiereBadge.setVisibility(android.view.View.VISIBLE);
-        heroLabel.setVisibility(android.view.View.VISIBLE);
-        heroDescription.setVisibility(android.view.View.VISIBLE);
+        ImageLoader.load(
+            heroBgImage,
+            movie.getBackdropPath() != null ? movie.getBackdropPath() : movie.getPosterPath()
+        );
 
         heroSkeletonOverlay.setVisibility(View.GONE);
         heroSkeletonTitleLines.setVisibility(View.GONE);
