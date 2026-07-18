@@ -12,21 +12,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.final_am_acn4a_debandi_juan.data.models.Genre;
-import com.example.final_am_acn4a_debandi_juan.data.models.GenreResponse;
-import com.example.final_am_acn4a_debandi_juan.data.datasources.network.RetrofitClient;
+import com.example.final_am_acn4a_debandi_juan.di.AppModule;
+import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
+import com.example.final_am_acn4a_debandi_juan.ui.categories.CategoriesUiState;
+import com.example.final_am_acn4a_debandi_juan.ui.categories.CategoriesViewModel;
+import com.example.final_am_acn4a_debandi_juan.ui.common.state.UiStatus;
 import com.example.final_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
 import com.google.android.material.card.MaterialCardView;
 import java.util.List;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CategoriesActivity extends AppCompatActivity {
     private LinearLayout container;
@@ -49,28 +50,38 @@ public class CategoriesActivity extends AppCompatActivity {
             return insets;
         });
 
-        loadGenres();
+        AppModule module = App.getModule(this);
+        AppViewModelFactory factory = new AppViewModelFactory(module);
+        CategoriesViewModel viewModel = new ViewModelProvider(this, factory).get(CategoriesViewModel.class);
+        viewModel.getState().observe(this, this::renderState);
     }
 
-    private void loadGenres() {
-        progress.setVisibility(View.VISIBLE);
-        RetrofitClient.getApi().getGenres().enqueue(new Callback<GenreResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<GenreResponse> call, @NonNull Response<GenreResponse> response) {
-                progress.setVisibility(View.GONE);
-                if (!response.isSuccessful() || response.body() == null || response.body().getGenres() == null) {
-                    Toast.makeText(CategoriesActivity.this, R.string.error_network, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                renderGenres(response.body().getGenres());
-            }
+    private void renderState(CategoriesUiState state) {
+        progress.setVisibility(state.getStatus() == UiStatus.LOADING ? View.VISIBLE : View.GONE);
 
-            @Override
-            public void onFailure(@NonNull Call<GenreResponse> call, @NonNull Throwable t) {
-                progress.setVisibility(View.GONE);
-                Toast.makeText(CategoriesActivity.this, R.string.error_network, Toast.LENGTH_SHORT).show();
-            }
-        });
+        switch (state.getStatus()) {
+            case LOADING:
+                container.removeAllViews();
+                break;
+
+            case CONTENT:
+                renderGenres(state.getGenres());
+                break;
+
+            case EMPTY:
+                container.removeAllViews();
+
+                Toast.makeText(this, R.string.categories_empty, Toast.LENGTH_SHORT).show();
+                break;
+
+            case ERROR:
+                container.removeAllViews();
+                Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
+                break;
+
+            default:
+                break;
+        }
     }
 
     private void renderGenres(List<Genre> genres) {
