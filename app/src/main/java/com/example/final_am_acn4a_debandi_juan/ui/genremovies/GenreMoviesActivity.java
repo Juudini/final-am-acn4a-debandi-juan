@@ -93,8 +93,6 @@ public class GenreMoviesActivity extends AppCompatActivity {
                 }
             }
         });
-
-        viewModel.loadNextPage();
     }
     private void renderState(GenreMoviesUiState state) {
         boolean showingProgress = state.getStatus() == UiStatus.LOADING || state.isLoadingNextPage();
