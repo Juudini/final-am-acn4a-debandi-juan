@@ -48,7 +48,8 @@
         <activity
             android:name=".SearchActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize"/>
         <activity
             android:name=".CategoriesActivity"
             android:exported="false"

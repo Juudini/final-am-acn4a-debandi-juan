@@ -3,8 +3,6 @@ package com.example.final_am_acn4a_debandi_juan;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -15,38 +13,31 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
-import com.example.final_am_acn4a_debandi_juan.data.models.MovieResponse;
-import com.example.final_am_acn4a_debandi_juan.data.datasources.network.RetrofitClient;
+import com.example.final_am_acn4a_debandi_juan.di.AppModule;
+import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
+import com.example.final_am_acn4a_debandi_juan.ui.common.state.UiStatus;
+import com.example.final_am_acn4a_debandi_juan.ui.search.SearchUiState;
+import com.example.final_am_acn4a_debandi_juan.ui.search.SearchViewModel;
 import com.example.final_am_acn4a_debandi_juan.utils.MovieViewFactory;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class SearchActivity extends AppCompatActivity {
     private EditText input;
     private LinearLayout resultsContainer;
     private TextView message;
     private ProgressBar progress;
-
-    private final Handler searchHandler = new Handler(Looper.getMainLooper());
-    private Runnable searchRunnable;
-
-    private int currentPage = 1;
-    private boolean isLoading = false;
-    private boolean isLastPage = false;
-    private String currentQuery = "";
+    private SearchViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +49,15 @@ public class SearchActivity extends AppCompatActivity {
         resultsContainer = findViewById(R.id.search_ResultsContainer);
         message = findViewById(R.id.search_Message);
         progress = findViewById(R.id.search_Progress);
+
         View btnClear = findViewById(R.id.search_BtnClear);
         ScrollView scrollView = findViewById(R.id.search_Scroll);
 
+        AppModule module = App.getModule(this);
+        AppViewModelFactory factory = new AppViewModelFactory(module);
+        viewModel = new ViewModelProvider(this, factory).get(SearchViewModel.class);
+
+        btnClear.setVisibility(input.length() > 0 ? View.VISIBLE : View.GONE);
         findViewById(R.id.search_BtnBack).setOnClickListener(v -> finish());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.search_root), (v, insets) -> {
@@ -71,150 +68,105 @@ public class SearchActivity extends AppCompatActivity {
 
         input.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                btnClear.setVisibility(s.length() > 0 ? View.VISIBLE : View.GONE);
-                if (searchRunnable != null) {
-                    searchHandler.removeCallbacks(searchRunnable);
-                }
-                if (s.toString().trim().isEmpty()) {
-                    resultsContainer.removeAllViews();
-                    progress.setVisibility(View.GONE);
-                    showMessage(getString(R.string.search_prompt));
-                    currentPage = 1;
-                    isLastPage = false;
-                    isLoading = false;
-                    currentQuery = "";
-                } else {
-                    searchRunnable = () -> performSearch(false);
-                    searchHandler.postDelayed(searchRunnable, 600);
-                }
+            public void afterTextChanged(Editable editable) {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                btnClear.setVisibility(input.length() > 0 ? View.VISIBLE : View.GONE);
+                viewModel.onQueryChanged(charSequence.toString());
+            }
+
         });
 
         input.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                if (searchRunnable != null) {
-                    searchHandler.removeCallbacks(searchRunnable);
-                }
-                performSearch(true);
+                hideKeyboard();
+                viewModel.searchNow(input.getText().toString());
                 return true;
             }
+
             return false;
         });
 
-        btnClear.setOnClickListener(v -> {
-            input.setText("");
-            if (searchRunnable != null) {
-                searchHandler.removeCallbacks(searchRunnable);
-            }
-            resultsContainer.removeAllViews();
-            progress.setVisibility(View.GONE);
-            showMessage(getString(R.string.search_prompt));
-            currentPage = 1;
-            isLastPage = false;
-            isLoading = false;
-            currentQuery = "";
-        });
+        btnClear.setOnClickListener(v -> {input.setText("");});
 
-        scrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            View child = scrollView.getChildAt(0);
-            if (child != null) {
-                int diff = (child.getBottom() - (scrollView.getHeight() + scrollY));
-                if (diff <= 0) {
-                    performSearch(false);
+        scrollView.setOnScrollChangeListener(
+                (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+                    if (scrollY > oldScrollY) {
+                      hideKeyboard();
+                    }
+
+                    View child = scrollView.getChildAt(0);
+
+                    if (child == null) {
+                        return;
+                    }
+
+                    int difference = child.getBottom() - (scrollView.getHeight() + scrollY);
+
+                    if (difference <= 0) {
+                        viewModel.loadNextPage();
+                    }
                 }
-            }
-        });
+          );
 
+        viewModel.getState().observe(this, this::renderState);
         input.requestFocus();
     }
 
-    private void performSearch(boolean hideKeyboard) {
-        String query = input.getText().toString().trim();
-        if (query.isEmpty()) {
-            resultsContainer.removeAllViews();
-            progress.setVisibility(View.GONE);
-            showMessage(getString(R.string.search_prompt));
-            currentPage = 1;
-            isLastPage = false;
-            isLoading = false;
-            currentQuery = "";
-            return;
-        }
+    private void renderState(SearchUiState state) {
+        boolean showingProgress = state.getStatus() == UiStatus.LOADING || state.isLoadingNextPage();
+        progress.setVisibility(showingProgress ? View.VISIBLE : View.GONE);
 
-        if (!query.equals(currentQuery)) {
-            currentPage = 1;
-            isLastPage = false;
-            isLoading = false;
-            currentQuery = query;
-        }
+        switch (state.getStatus()) {
+            case IDLE:
+                resultsContainer.removeAllViews();
+                showMessage(getString(R.string.search_prompt));
+                break;
 
-        if (isLoading || isLastPage) {
-            return;
-        }
+            case LOADING:
+                resultsContainer.removeAllViews();
+                message.setVisibility(View.GONE);
+                break;
 
-        isLoading = true;
-
-        if (hideKeyboard) {
-            hideKeyboard();
-        }
-
-        if (currentPage == 1) {
-            resultsContainer.removeAllViews();
-            message.setVisibility(View.GONE);
-            progress.setVisibility(View.VISIBLE);
-        }
-
-        RetrofitClient.getApi().searchMovies(query, currentPage).enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
-                isLoading = false;
-                progress.setVisibility(View.GONE);
-                if (!response.isSuccessful() || response.body() == null) {
-                    if (currentPage == 1) {
-                        showMessage(getString(R.string.error_network));
-                    }
-                    return;
+            case CONTENT:
+                renderResults(state.getMovies());
+                if (state.getMessage() != null && !state.getMessage().isEmpty()) {
+                  Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
                 }
-                renderResults(response.body().getResults());
-            }
+                break;
 
-            @Override
-            public void onFailure(@NonNull Call<MovieResponse> call, @NonNull Throwable t) {
-                isLoading = false;
-                progress.setVisibility(View.GONE);
-                if (currentPage == 1) {
-                    showMessage(getString(R.string.error_network));
-                }
-            }
-        });
+            case EMPTY:
+                resultsContainer.removeAllViews();
+                showMessage(getString(R.string.search_empty));
+            break;
+
+            case ERROR:
+                resultsContainer.removeAllViews();
+                showMessage(getString(R.string.error_network));
+            break;
+        }
     }
 
     private void renderResults(List<Movie> movies) {
-        if (currentPage == 1) {
-            resultsContainer.removeAllViews();
-            if (movies == null || movies.isEmpty()) {
-                showMessage(getString(R.string.search_empty));
-                isLastPage = true;
-                return;
-            }
-        }
+        resultsContainer.removeAllViews();
         if (movies == null || movies.isEmpty()) {
-            isLastPage = true;
+            showMessage(getString(R.string.search_empty));
             return;
         }
+
         message.setVisibility(View.GONE);
+
         for (Movie movie : movies) {
             View card = MovieViewFactory.createListCard(this, movie, this::openDetail);
             resultsContainer.addView(card);
         }
-        currentPage++;
     }
 
     private void openDetail(Movie movie) {
@@ -230,9 +182,10 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null && getCurrentFocus() != null) {
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null && getCurrentFocus() != null) {
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
+        input.clearFocus();
     }
 }
