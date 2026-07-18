@@ -1,18 +1,17 @@
-package com.example.final_am_acn4a_debandi_juan.utils;
+package com.example.final_am_acn4a_debandi_juan.ui.common.navigation;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import com.google.android.material.button.MaterialButton;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.final_am_acn4a_debandi_juan.R;
 import com.example.final_am_acn4a_debandi_juan.ui.account.AccountActivity;
 import com.example.final_am_acn4a_debandi_juan.ui.categories.CategoriesActivity;
-import com.example.final_am_acn4a_debandi_juan.MainActivity;
-import com.example.final_am_acn4a_debandi_juan.R;
-import com.example.final_am_acn4a_debandi_juan.ui.auth.signin.SigninActivity;
+import com.example.final_am_acn4a_debandi_juan.ui.home.MainActivity;
 import com.example.final_am_acn4a_debandi_juan.ui.watchlist.WatchlistActivity;
+import com.google.android.material.button.MaterialButton;
 
 public final class BottomNavbarHelper {
 
@@ -48,15 +47,13 @@ public final class BottomNavbarHelper {
 
         btnWatchlist.setOnClickListener(v -> {
             if (activeTab != TAB_WATCHLIST) {
-                if (AuthService.isLoggedIn()) {
-                    Intent intent = new Intent(activity, WatchlistActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    activity.startActivity(intent);
-                } else {
-                    activity.startActivity(new Intent(activity, SigninActivity.class));
-                }
+                Intent intent = new Intent(activity, WatchlistActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                activity.startActivity(intent);
                 activity.overridePendingTransition(0, 0);
-                if (activeTab != TAB_HOME) activity.finish();
+                if (activeTab != TAB_HOME) {
+                    activity.finish();
+                }
             }
         });
 
@@ -66,28 +63,36 @@ public final class BottomNavbarHelper {
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 activity.startActivity(intent);
                 activity.overridePendingTransition(0, 0);
-                if (activeTab != TAB_HOME) activity.finish();
+                if (activeTab != TAB_HOME) {
+                    activity.finish();
+                }
             }
         });
 
         btnAccount.setOnClickListener(v -> {
             if (activeTab != TAB_ACCOUNT) {
-                if (AuthService.isLoggedIn()) {
-                    Intent intent = new Intent(activity, AccountActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    activity.startActivity(intent);
-                } else {
-                    activity.startActivity(new Intent(activity, SigninActivity.class));
-                }
+                Intent intent = new Intent(activity, AccountActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                activity.startActivity(intent);
                 activity.overridePendingTransition(0, 0);
-                if (activeTab != TAB_HOME) activity.finish();
+                if (activeTab != TAB_HOME) {
+                    activity.finish();
+                }
             }
         });
 
-        if (activeTab == TAB_HOME) applySelected(activity, btnHome);
-        if (activeTab == TAB_WATCHLIST) applySelected(activity, btnWatchlist);
-        if (activeTab == TAB_CATEGORIES) applySelected(activity, btnCategories);
-        if (activeTab == TAB_ACCOUNT) applySelected(activity, btnAccount);
+        if (activeTab == TAB_HOME) {
+            applySelected(activity, btnHome);
+        }
+        if (activeTab == TAB_WATCHLIST) {
+            applySelected(activity, btnWatchlist);
+        }
+        if (activeTab == TAB_CATEGORIES) {
+            applySelected(activity, btnCategories);
+        }
+        if (activeTab == TAB_ACCOUNT) {
+            applySelected(activity, btnAccount);
+        }
     }
 
     private static void applySelected(Activity activity, MaterialButton btn) {

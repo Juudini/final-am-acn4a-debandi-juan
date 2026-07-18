@@ -1,4 +1,4 @@
-package com.example.final_am_acn4a_debandi_juan.utils;
+package com.example.final_am_acn4a_debandi_juan.ui.common.movie;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -19,6 +19,7 @@ import java.util.List;
 import com.example.final_am_acn4a_debandi_juan.R;
 import com.example.final_am_acn4a_debandi_juan.data.GenreRepository;
 import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
+import com.example.final_am_acn4a_debandi_juan.ui.common.image.ImageLoader;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 

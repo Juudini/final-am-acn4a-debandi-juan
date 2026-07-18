@@ -35,21 +35,15 @@ public class AppModule {
         TmdbCastMapper castMapper = new TmdbCastMapper();
         FirestoreMovieMapper firestoreMovieMapper = new FirestoreMovieMapper();
 
-        AuthDatasource authDatasource =
-                new FirebaseAuthDatasource(FirebaseAuth.getInstance());
+        AuthDatasource authDatasource = new FirebaseAuthDatasource(FirebaseAuth.getInstance());
         authRepository = new AuthRepositoryImpl(authDatasource);
 
-        WatchlistDatasource watchlistDatasource =
-                new FirestoreWatchlistDatasource(
-                        FirebaseFirestore.getInstance(),
-                        firestoreMovieMapper);
-        watchlistRepository =
-                new WatchlistRepositoryImpl(watchlistDatasource, authRepository);
+        WatchlistDatasource watchlistDatasource = new FirestoreWatchlistDatasource(FirebaseFirestore.getInstance(), firestoreMovieMapper);
+        watchlistRepository = new WatchlistRepositoryImpl(watchlistDatasource, authRepository);
 
         TmdbApi api = RetrofitClient.getApi();
         TmdbDatasource networkDatasource = new TmdbDatasourceImpl(api);
-        movieRepository =
-                new MovieRepositoryImpl(networkDatasource, movieMapper, castMapper);
+        movieRepository = new MovieRepositoryImpl(networkDatasource, movieMapper, castMapper);
         genreRepository = new GenreRepositoryImpl(networkDatasource, genreMapper);
     }
 

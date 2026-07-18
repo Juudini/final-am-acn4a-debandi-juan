@@ -29,7 +29,7 @@ import com.example.final_am_acn4a_debandi_juan.data.models.Movie;
 import com.example.final_am_acn4a_debandi_juan.di.AppModule;
 import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
 import com.example.final_am_acn4a_debandi_juan.ui.common.state.UiStatus;
-import com.example.final_am_acn4a_debandi_juan.utils.MovieViewFactory;
+import com.example.final_am_acn4a_debandi_juan.ui.common.movie.MovieViewFactory;
 
 import java.util.List;
 

@@ -35,7 +35,7 @@ import com.example.final_am_acn4a_debandi_juan.data.models.MovieDetail;
 import com.example.final_am_acn4a_debandi_juan.di.AppModule;
 import com.example.final_am_acn4a_debandi_juan.ui.auth.signin.SigninActivity;
 import com.example.final_am_acn4a_debandi_juan.ui.common.state.UiStatus;
-import com.example.final_am_acn4a_debandi_juan.utils.ImageLoader;
+import com.example.final_am_acn4a_debandi_juan.ui.common.image.ImageLoader;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;

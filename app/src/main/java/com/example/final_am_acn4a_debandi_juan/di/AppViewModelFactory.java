@@ -25,7 +25,11 @@ public final class AppViewModelFactory implements ViewModelProvider.Factory {
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass == HomeViewModel.class) {
-            return (T) new HomeViewModel(appModule.getMovieRepository());
+            return (T) new HomeViewModel(
+                appModule.getMovieRepository(),
+                appModule.getWatchlistRepository(),
+                appModule.getAuthRepository()
+            );
         }
 
         if (modelClass == SearchViewModel.class) {
@@ -53,7 +57,10 @@ public final class AppViewModelFactory implements ViewModelProvider.Factory {
         }
 
         if (modelClass == WatchlistViewModel.class) {
-            return (T) new WatchlistViewModel(appModule.getWatchlistRepository(), appModule.getAuthRepository());
+            return (T) new WatchlistViewModel(
+                appModule.getWatchlistRepository(),
+                appModule.getAuthRepository()
+            );
         }
 
         throw new IllegalArgumentException("Unknown ViewModel: " + modelClass.getName());

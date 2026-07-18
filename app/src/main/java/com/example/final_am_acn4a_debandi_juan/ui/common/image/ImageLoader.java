@@ -1,4 +1,4 @@
-package com.example.final_am_acn4a_debandi_juan.utils;
+package com.example.final_am_acn4a_debandi_juan.ui.common.image;
 
 import android.widget.ImageView;
 import androidx.annotation.Nullable;

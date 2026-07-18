@@ -1,5 +1,6 @@
 package com.example.final_am_acn4a_debandi_juan.ui.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,12 +16,14 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.final_am_acn4a_debandi_juan.App;
 import com.example.final_am_acn4a_debandi_juan.R;
 import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
-import com.example.final_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
+import com.example.final_am_acn4a_debandi_juan.ui.auth.signin.SigninActivity;
+import com.example.final_am_acn4a_debandi_juan.ui.common.navigation.BottomNavbarHelper;
 
 public class AccountActivity extends AppCompatActivity {
     private TextView emailText;
     private Button btnSignout;
     private AccountViewModel viewModel;
+    private boolean signingOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class AccountActivity extends AppCompatActivity {
         });
 
         btnSignout.setOnClickListener(v -> {
+            signingOut = true;
             Toast.makeText(this, R.string.account_signedOut, Toast.LENGTH_SHORT).show();
             viewModel.signOut();
         });
@@ -57,6 +61,9 @@ public class AccountActivity extends AppCompatActivity {
 
     private void renderState(AccountUiState state) {
         if (!state.isLoggedIn()) {
+            if (!signingOut) {
+                startActivity(new Intent(this, SigninActivity.class));
+            }
             finish();
             return;
         }

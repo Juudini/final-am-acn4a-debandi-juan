@@ -23,8 +23,8 @@ import com.example.final_am_acn4a_debandi_juan.di.AppViewModelFactory;
 import com.example.final_am_acn4a_debandi_juan.ui.auth.signin.SigninActivity;
 import com.example.final_am_acn4a_debandi_juan.ui.common.state.UiStatus;
 import com.example.final_am_acn4a_debandi_juan.ui.search.SearchActivity;
-import com.example.final_am_acn4a_debandi_juan.utils.BottomNavbarHelper;
-import com.example.final_am_acn4a_debandi_juan.utils.MovieViewFactory;
+import com.example.final_am_acn4a_debandi_juan.ui.common.navigation.BottomNavbarHelper;
+import com.example.final_am_acn4a_debandi_juan.ui.common.movie.MovieViewFactory;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.List;
 
