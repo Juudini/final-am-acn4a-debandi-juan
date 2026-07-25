@@ -226,12 +226,12 @@ public class MainActivity extends AppCompatActivity {
             );
             button.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.stroke_width));
         } else {
-            btn.setText(R.string.detail_addToWatchlist);
-            btn.setIconResource(R.drawable.ic_add_to_watchlist);
-            btn.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.bg_selected)));
-            btn.setTextColor(ContextCompat.getColor(this, R.color.text_selected));
-            btn.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.icon_selected)));
-            btn.setStrokeWidth(0);
+            button.setText(R.string.detail_addToWatchlist);
+            button.setIconResource(R.drawable.ic_add_to_watchlist);
+            button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.bg_selected)));
+            button.setTextColor(ContextCompat.getColor(this, R.color.text_selected));
+            button.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.icon_selected)));
+            button.setStrokeWidth(0);
         }
     }
 
